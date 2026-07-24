@@ -155,4 +155,36 @@ export const builtInInstanceIcons: BuiltInInstanceIcon[] = [
 		}),
 		url: new URL('../assets/instance-icons/water-bucket.png', import.meta.url).href,
 	},
+	{
+		id: 'anvil',
+		name: defineMessage({
+			id: 'app.instance.icon-picker.icon.anvil',
+			defaultMessage: 'Anvil',
+		}),
+		url: new URL('../assets/instance-icons/anvil.png', import.meta.url).href,
+	},
+	{
+		id: 'fabric',
+		name: defineMessage({
+			id: 'app.instance.icon-picker.icon.fabric',
+			defaultMessage: 'Fabric',
+		}),
+		url: new URL('../assets/instance-icons/Fabric.png', import.meta.url).href,
+	},
+	{
+		id: 'neoforge',
+		name: defineMessage({
+			id: 'app.instance.icon-picker.icon.neoforge',
+			defaultMessage: 'NeoForge',
+		}),
+		url: new URL('../assets/instance-icons/NeoForge.png', import.meta.url).href,
+	},
+	{
+		id: 'quilt',
+		name: defineMessage({
+			id: 'app.instance.icon-picker.icon.quilt',
+			defaultMessage: 'Quilt',
+		}),
+		url: new URL('../assets/instance-icons/Quilt.png', import.meta.url).href,
+	},
 ]

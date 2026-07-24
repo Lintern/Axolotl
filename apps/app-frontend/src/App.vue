@@ -1569,7 +1569,10 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		@create-anyway="handleModpackDuplicateCreateAnyway"
 		@go-to-instance="handleModpackDuplicateGoToInstance"
 	/>
-	<AddServerToInstanceModal ref="addServerToInstanceModal" :symlink-target="addServerSymlinkTarget" />
+	<AddServerToInstanceModal
+		ref="addServerToInstanceModal"
+		:symlink-target="addServerSymlinkTarget"
+	/>
 	<ContentUpdaterModal
 		ref="incompatibilityWarningModal"
 		mode="incompatibility-warning"

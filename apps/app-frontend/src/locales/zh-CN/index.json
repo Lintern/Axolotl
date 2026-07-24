@@ -971,6 +971,18 @@
 	"app.instance.icon-picker.icon.water-bucket": {
 		"message": "水桶"
 	},
+	"app.instance.icon-picker.icon.anvil": {
+		"message": "铁砧"
+	},
+	"app.instance.icon-picker.icon.fabric": {
+		"message": "Fabric"
+	},
+	"app.instance.icon-picker.icon.neoforge": {
+		"message": "NeoForge"
+	},
+	"app.instance.icon-picker.icon.quilt": {
+		"message": "Quilt"
+	},
 	"app.instance.icon-picker.load-error": {
 		"message": "无法加载内置图标。"
 	},

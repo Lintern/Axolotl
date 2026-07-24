@@ -15,5 +15,19 @@ export const loaderDisplayNames: Record<string, string> = {
 	vanilla: 'Vanilla',
 }
 
-export const formatLoaderLabel = (item: string) =>
-	loaderDisplayNames[item] ?? item.charAt(0).toUpperCase() + item.slice(1)
+export const loaderMessages: Record<string, { id: string; defaultMessage: string }> = {
+	vanilla: {
+		id: 'loader.vanilla',
+		defaultMessage: 'None',
+	},
+}
+
+export const formatLoaderLabel = (
+	item: string,
+	formatMessage?: (msg: { id: string; defaultMessage: string }) => string,
+) => {
+	if (formatMessage && loaderMessages[item]) {
+		return formatMessage(loaderMessages[item])
+	}
+	return loaderDisplayNames[item] ?? item.charAt(0).toUpperCase() + item.slice(1)
+}

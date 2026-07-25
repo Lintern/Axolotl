@@ -157,7 +157,8 @@ async fn set_restart_after_pending_update(
 // ie: deep links or filepaths for .mrpacks
 fn main() {
     // Initialize portable mode first (checks .Axolotl folder and sets THESEUS_CONFIG_DIR)
-    portable::init_portable_mode();
+    // SAFETY: Called at the start of main() before any threads or tokio runtime are spawned
+    let _portable = unsafe { portable::init_portable_mode() };
 
     #[cfg(target_os = "windows")]
     if std::env::args_os().any(|argument| argument == "--memory-optimize") {

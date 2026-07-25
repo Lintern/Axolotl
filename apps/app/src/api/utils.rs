@@ -185,7 +185,7 @@ async fn write_zip_file(
     Ok(())
 }
 
-async fn write_zip_entry(
+pub(crate) async fn write_zip_entry(
     writer: &mut ZipFileWriter<tokio::fs::File>,
     filename: &str,
     contents: &[u8],
@@ -203,9 +203,11 @@ async fn write_zip_entry(
     Ok(())
 }
 
-fn zip_error(error: async_zip::error::ZipError) -> TheseusSerializableError {
+pub(crate) fn zip_error(
+    error: async_zip::error::ZipError,
+) -> TheseusSerializableError {
     theseus::Error::from(theseus::ErrorKind::OtherError(format!(
-        "Failed to create error log archive: {error}"
+        "Failed to create ZIP archive: {error}"
     )))
     .into()
 }

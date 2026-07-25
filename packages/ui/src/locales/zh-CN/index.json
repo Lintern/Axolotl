@@ -38,6 +38,12 @@
   "app.server-settings.failed-to-load-server": {
     "defaultMessage": "加载服务器设置失败"
   },
+  "app.symlink-warning.write.body": {
+    "defaultMessage": "此实例链接到“{path}”。更改也会影响原始文件。"
+  },
+  "app.symlink-warning.write.header": {
+    "defaultMessage": "共享实例"
+  },
   "badge.alpha": {
     "defaultMessage": "早期预览版"
   },
@@ -838,6 +844,12 @@
   },
   "creation-flow.modal.import-instance.detecting-launcher-instances": {
     "defaultMessage": "正在检测启动器实例……"
+  },
+  "creation-flow.modal.import-instance.import-as-symlink": {
+    "defaultMessage": "导入为软链接"
+  },
+  "creation-flow.modal.import-instance.import-as-symlink.tooltip": {
+    "defaultMessage": "创建指向原实例文件夹的链接，而不是复制文件。这样可以节省磁盘空间，但对实例的更改也会影响原始文件。"
   },
   "creation-flow.modal.import-instance.launcher-instances.title": {
     "defaultMessage": "启动实例"

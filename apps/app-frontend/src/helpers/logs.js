@@ -4,6 +4,7 @@
  *  and deserialized into a usable JS object.
  */
 import { invoke } from '@tauri-apps/api/core'
+import { save } from '@tauri-apps/plugin-dialog'
 
 /*
 A log is a struct containing the filename string and optional output, as follows:
@@ -71,4 +72,21 @@ export async function get_live_log_buffer(instanceId) {
 /// Clear the live log buffer for an instance on the Rust side
 export async function clear_log_buffer(instanceId) {
 	return await invoke('plugin:logs|logs_clear_live_log_buffer', { instanceId })
+}
+
+/// Collect and locally analyze the logs from an instance's latest run.
+export async function analyze_crash(instanceId) {
+	return await invoke('plugin:logs|logs_analyze_crash', { instanceId })
+}
+
+/// Export the censored files and local analysis from an instance's latest run.
+export async function export_crash_context(instanceId, instanceName) {
+	const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
+	const outputPath = await save({
+		defaultPath: `${instanceName || 'Minecraft'} crash context ${timestamp}.zip`,
+		filters: [{ name: 'ZIP archive', extensions: ['zip'] }],
+	})
+	if (!outputPath) return false
+	await invoke('plugin:logs|logs_export_crash_context', { instanceId, outputPath })
+	return true
 }

@@ -1,6 +1,10 @@
 use crate::api::Result;
+use async_zip::tokio::write::ZipFileWriter;
+use std::path::PathBuf;
 use theseus::logs::LogType;
-use theseus::logs::{self, CensoredString, LatestLogCursor, Logs};
+use theseus::logs::{
+    self, CensoredString, CrashAnalysis, LatestLogCursor, Logs,
+};
 
 /*
 A log is a struct containing the filename string, stdout, and stderr, as follows:
@@ -23,6 +27,8 @@ pub fn init<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
             logs_get_latest_log_cursor,
             logs_get_live_log_buffer,
             logs_clear_live_log_buffer,
+            logs_analyze_crash,
+            logs_export_crash_context,
         ])
         .build()
 }
@@ -95,5 +101,40 @@ pub async fn logs_get_live_log_buffer(
 #[tauri::command]
 pub async fn logs_clear_live_log_buffer(instance_id: &str) -> Result<()> {
     logs::clear_live_log_buffer(instance_id);
+    Ok(())
+}
+
+/// Collect and locally analyze the files produced by the instance's latest run.
+#[tauri::command]
+pub async fn logs_analyze_crash(instance_id: &str) -> Result<CrashAnalysis> {
+    Ok(logs::analyze_crash(instance_id).await?)
+}
+
+/// Export the latest run's censored diagnostic context as a ZIP archive.
+#[tauri::command]
+pub async fn logs_export_crash_context(
+    instance_id: &str,
+    output_path: PathBuf,
+) -> Result<()> {
+    let analysis = logs::analyze_crash(instance_id).await?;
+    let archive = tokio::fs::File::create(&output_path).await?;
+    let mut writer = ZipFileWriter::with_tokio(archive);
+    let report = serde_json::to_vec_pretty(&analysis).map_err(|error| {
+        theseus::Error::from(theseus::ErrorKind::OtherError(format!(
+            "Failed to serialize crash analysis: {error}"
+        )))
+    })?;
+    crate::api::utils::write_zip_entry(&mut writer, "analysis.json", &report)
+        .await?;
+    for source in &analysis.sources {
+        let safe_name = source.filename.replace(['/', '\\'], "_");
+        crate::api::utils::write_zip_entry(
+            &mut writer,
+            &format!("logs/{safe_name}"),
+            source.content.as_str().as_bytes(),
+        )
+        .await?;
+    }
+    writer.close().await.map_err(crate::api::utils::zip_error)?;
     Ok(())
 }

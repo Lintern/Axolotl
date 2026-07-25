@@ -27,6 +27,8 @@ use uuid::Uuid;
 
 const LAUNCHER_LOG_PATH: &str = "launcher_log.txt";
 const LOG_BUFFER_CAPACITY: usize = 50_000;
+const PROCESS_INITIALIZATION_TIMEOUT: std::time::Duration =
+    std::time::Duration::from_secs(15);
 
 struct LogRingBuffer {
     lines: VecDeque<String>,
@@ -134,17 +136,10 @@ impl ProcessManager {
                 instance_name: instance_name.to_string(),
             },
             child: mc_proc,
+            manually_killed: false,
             rpc_server,
             _main_class_keep_alive: main_class_keep_alive,
         };
-
-        if let Err(e) =
-            post_process_init(&process.metadata, &process.rpc_server).await
-        {
-            tracing::error!("Failed to run post-process init: {e}");
-            let _ = process.child.kill().await;
-            return Err(e);
-        }
 
         let metadata = process.metadata.clone();
 
@@ -213,6 +208,46 @@ impl ProcessManager {
             });
         }
 
+        let initialization_result = {
+            let initialization_metadata = process.metadata.clone();
+            let initialization_rpc = process.rpc_server.clone();
+            let initialization = post_process_init(
+                &initialization_metadata,
+                &initialization_rpc,
+            );
+            tokio::pin!(initialization);
+            tokio::select! {
+                result = &mut initialization => result,
+                exit_status = process.child.wait() => {
+                    let exit_status = exit_status.map_err(IOError::from)?;
+                    tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+                    let _ = Process::append_to_log_file(
+                        &log_path,
+                        &format!("\n# Process exited with status: {exit_status}\n"),
+                    );
+                    return Err(crate::ErrorKind::LauncherError(format!(
+                        "Minecraft exited before launcher initialization completed ({exit_status}). Check the selected Java version, wrapper command, and launcher log.",
+                    ))
+                    .as_error());
+                }
+                _ = tokio::time::sleep(PROCESS_INITIALIZATION_TIMEOUT) => {
+                    let _ = process.child.kill().await;
+                    return Err(crate::ErrorKind::LauncherError(
+                        "Minecraft launcher initialization did not respond within 15 seconds. Check the selected Java version and wrapper command."
+                            .to_string(),
+                    )
+                    .as_error());
+                }
+            }
+        };
+        if let Err(error) = initialization_result {
+            tracing::error!("Failed to run post-process init: {error}");
+            let _ = process.child.kill().await;
+            return Err(error);
+        }
+
+        self.processes.insert(process.metadata.uuid, process);
+
         tokio::spawn(Process::sequential_process_manager(
             instance_id.to_string(),
             instance_path.to_string(),
@@ -220,13 +255,12 @@ impl ProcessManager {
             metadata.uuid,
         ));
 
-        self.processes.insert(process.metadata.uuid, process);
-
         emit_process(
             instance_id,
             metadata.uuid,
             ProcessPayloadType::Launched,
             "Launched Minecraft",
+            None,
         )
         .await?;
 
@@ -268,7 +302,11 @@ impl ProcessManager {
 
     pub async fn kill(&self, id: Uuid) -> crate::Result<()> {
         if let Some(mut process) = self.processes.get_mut(&id) {
-            process.child.kill().await?;
+            process.manually_killed = true;
+            if let Err(error) = process.child.kill().await {
+                process.manually_killed = false;
+                return Err(error.into());
+            }
         }
 
         Ok(())
@@ -276,6 +314,12 @@ impl ProcessManager {
 
     fn remove(&self, id: Uuid) {
         self.processes.remove(&id);
+    }
+
+    fn was_manually_killed(&self, id: Uuid) -> bool {
+        self.processes
+            .get(&id)
+            .is_some_and(|process| process.manually_killed)
     }
 }
 
@@ -292,6 +336,7 @@ pub struct ProcessMetadata {
 struct Process {
     metadata: ProcessMetadata,
     child: Child,
+    manually_killed: bool,
     _main_class_keep_alive: TempDir,
     rpc_server: RpcServer,
 }
@@ -814,14 +859,8 @@ impl Process {
                 .await;
         }
 
+        let manually_killed = state.process_manager.was_manually_killed(uuid);
         state.process_manager.remove(uuid);
-        emit_process(
-            &instance_id,
-            uuid,
-            ProcessPayloadType::Finished,
-            "Exited process",
-        )
-        .await?;
 
         // Now fully complete- update playtime one last time
         update_playtime(&mut last_updated_playtime, &instance_id, true).await;
@@ -856,6 +895,15 @@ impl Process {
         {
             tracing::warn!("Failed to write exit status to log file: {}", e);
         }
+
+        emit_process(
+            &instance_id,
+            uuid,
+            ProcessPayloadType::Finished,
+            "Exited process",
+            Some(!mc_exit_status.success() && !manually_killed),
+        )
+        .await?;
 
         let _ = state.discord_rpc.clear_to_default(true).await;
 

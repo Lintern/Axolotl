@@ -172,11 +172,39 @@ pub async fn emit_warning(message: &str) -> crate::Result<()> {
                 "warning",
                 WarningPayload {
                     message: message.to_string(),
+                    kind: None,
+                    instance_id: None,
+                    instance_name: None,
                 },
             )
             .map_err(EventError::from)?;
     }
     tracing::warn!("{}", message);
+    Ok(())
+}
+
+pub async fn emit_minecraft_crash_warning(
+    instance_id: &str,
+    instance_name: &str,
+) -> crate::Result<()> {
+    let message = format!("Instance {instance_name} has crashed");
+    #[cfg(feature = "tauri")]
+    {
+        let event_state = crate::EventState::get()?;
+        event_state
+            .app
+            .emit(
+                "warning",
+                WarningPayload {
+                    message: message.clone(),
+                    kind: Some("minecraft_crash".to_string()),
+                    instance_id: Some(instance_id.to_string()),
+                    instance_name: Some(instance_name.to_string()),
+                },
+            )
+            .map_err(EventError::from)?;
+    }
+    tracing::warn!(instance_id = instance_id, "{}", message);
     Ok(())
 }
 
@@ -231,13 +259,14 @@ pub async fn emit_command(command: CommandPayload) -> crate::Result<()> {
     Ok(())
 }
 
-// emit_process(uuid, pid, event, message)
+// emit_process(instance_id, uuid, event, message, crashed)
 #[allow(unused_variables)]
 pub async fn emit_process(
     instance_id: &str,
     uuid: Uuid,
     event: ProcessPayloadType,
     message: &str,
+    crashed: Option<bool>,
 ) -> crate::Result<()> {
     #[cfg(feature = "tauri")]
     {
@@ -251,6 +280,7 @@ pub async fn emit_process(
                     uuid,
                     event,
                     message: message.to_string(),
+                    crashed,
                 },
             )
             .map_err(EventError::from)?;

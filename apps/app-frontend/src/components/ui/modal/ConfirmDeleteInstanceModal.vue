@@ -44,7 +44,7 @@ import { ref } from 'vue'
 
 const { formatMessage } = useVIntl()
 
-const props = defineProps<{
+defineProps<{
 	symlinkTarget?: string | null
 }>()
 

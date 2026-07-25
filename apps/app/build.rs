@@ -138,6 +138,8 @@ fn main() {
                         "logs_get_latest_log_cursor",
                         "logs_get_live_log_buffer",
                         "logs_clear_live_log_buffer",
+                        "logs_analyze_crash",
+                        "logs_export_crash_context",
                     ])
                     .default_permission(
                         DefaultPermissionRule::AllowAllCommands,

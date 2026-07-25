@@ -46,7 +46,9 @@ export function setupInstanceImportProvider(notificationManager: AbstractWebNoti
 		async importInstances(selections) {
 			for (const sel of selections) {
 				for (const instanceName of sel.instanceNames) {
-					await import_instance(sel.launcherType ?? sel.launcher, sel.path, instanceName).catch(handleError)
+					await import_instance(sel.launcherType ?? sel.launcher, sel.path, instanceName).catch(
+						handleError,
+					)
 				}
 			}
 		},

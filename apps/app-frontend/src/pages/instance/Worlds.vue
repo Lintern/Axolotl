@@ -170,6 +170,7 @@ import ConfirmRemoveWorldModal from '@/components/ui/world/modal/ConfirmRemoveWo
 import EditServerModal from '@/components/ui/world/modal/EditServerModal.vue'
 import EditWorldModal from '@/components/ui/world/modal/EditSingleplayerWorldModal.vue'
 import WorldItem from '@/components/ui/world/WorldItem.vue'
+import { useMinecraftLaunchError } from '@/composables/useMinecraftLaunchError'
 import { trackEvent } from '@/helpers/analytics'
 import { get_project, get_project_v3 } from '@/helpers/cache.js'
 import { instance_listener } from '@/helpers/events'
@@ -246,6 +247,7 @@ const messages = defineMessages({
 
 const { formatMessage } = useVIntl()
 const { handleError } = injectNotificationManager()
+const handleMinecraftLaunchError = useMinecraftLaunchError()
 const { playServerProject } = injectServerInstall()
 const route = useRoute()
 const router = useRouter()
@@ -517,8 +519,12 @@ async function deleteWorld(world: SingleplayerWorld) {
 	worlds.value = worlds.value.filter((w) => w.type !== 'singleplayer' || w.path !== world.path)
 }
 
-function handleJoinError(err: Error) {
-	handleSevereError(err, { instanceId: instance.value.id })
+async function handleJoinError(err: Error) {
+	const handled = await handleMinecraftLaunchError(err, {
+		instance_id: instance.value.id,
+		instance_name: instance.value.name,
+	})
+	if (!handled) handleSevereError(err, { instanceId: instance.value.id })
 	startingInstance.value = false
 	worldPlaying.value = undefined
 }

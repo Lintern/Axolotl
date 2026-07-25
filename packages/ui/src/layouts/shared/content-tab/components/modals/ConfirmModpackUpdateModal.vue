@@ -105,8 +105,15 @@ const messages = defineMessages({
 		id: 'content.confirm-modpack-update.confirm-button',
 		defaultMessage: '{action, select, downgrade {Downgrade} other {Update}} modpack',
 	},
-	symlinkWarningHeader: { id: 'app.symlink-warning.write.header' },
-	symlinkWarningBody: { id: 'app.symlink-warning.write.body' },
+	symlinkWarningHeader: {
+		id: 'app.symlink-warning.write.header',
+		defaultMessage: 'Shared instance',
+	},
+	symlinkWarningBody: {
+		id: 'app.symlink-warning.write.body',
+		defaultMessage:
+			'This instance is linked to "{path}". Changes will also affect the original files.',
+	},
 })
 
 const emit = defineEmits<{

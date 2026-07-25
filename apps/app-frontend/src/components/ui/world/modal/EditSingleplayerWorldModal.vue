@@ -101,7 +101,10 @@ const messages = defineMessages({
 			{{ instance.name }} <ChevronRightIcon />
 			<span class="font-extrabold text-lg text-contrast">{{ formatMessage(messages.title) }}</span>
 		</template>
-		<SymlinkInstanceWarning v-if="instance?.symlink_target" :symlink-target="instance.symlink_target" />
+		<SymlinkInstanceWarning
+			v-if="instance?.symlink_target"
+			:symlink-target="instance.symlink_target"
+		/>
 		<div class="w-[450px]">
 			<h2 class="text-lg font-extrabold text-contrast mt-0 mb-1">
 				{{ formatMessage(messages.name) }}

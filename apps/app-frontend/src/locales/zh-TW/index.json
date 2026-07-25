@@ -2456,6 +2456,9 @@
   "minecraft-account.offline-modal.create": {
     "message": "建立帳號"
   },
+  "minecraft-account.offline-modal.chinese-username-warning": {
+    "message": "Minecraft 1.18 及以上版本可能會拒絕中文使用者名稱，導致無法進入單人世界或伺服器。請在舊版本中使用此帳號，或在新版本改用英文使用者名稱。"
+  },
   "minecraft-account.offline-modal.description": {
     "message": "設定離線帳號的使用者名稱。此帳號僅能加入未啟用正版驗證的伺服器。"
   },

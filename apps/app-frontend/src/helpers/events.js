@@ -51,6 +51,7 @@ export async function loading_listener(callback) {
         pid: process ID
         event: event type ("Launched", "Finished")
         message: message to display to the user
+        crashed: whether a finished process exited unexpectedly
     }
 */
 export async function process_listener(callback) {

@@ -26,6 +26,7 @@ import ContextMenu from '@/components/ui/ContextMenu.vue'
 import Instance from '@/components/ui/Instance.vue'
 import LegacyProjectCard from '@/components/ui/LegacyProjectCard.vue'
 import ConfirmDeleteInstanceModal from '@/components/ui/modal/ConfirmDeleteInstanceModal.vue'
+import { useMinecraftLaunchError } from '@/composables/useMinecraftLaunchError'
 import { useNetworkStatus } from '@/composables/useNetworkStatus'
 import { trackEvent } from '@/helpers/analytics'
 import { install_duplicate_instance } from '@/helpers/install'
@@ -39,6 +40,7 @@ const { handleError } = injectNotificationManager()
 const { install: installVersion } = injectContentInstall()
 const { formatMessage } = useVIntl()
 const { offline } = useNetworkStatus()
+const handleMinecraftLaunchError = useMinecraftLaunchError()
 
 const messages = defineMessages({
 	addContent: { id: 'app.instances.add-content', defaultMessage: 'Add content' },
@@ -149,7 +151,13 @@ const handleProjectClick = (event, passedInstance) => {
 const handleOptionsClick = async (args) => {
 	switch (args.option) {
 		case 'play':
-			await run(args.item.id).catch((err) => handleSevereError(err, { instanceId: args.item.id }))
+			await run(args.item.id).catch(async (err) => {
+				const handled = await handleMinecraftLaunchError(err, {
+					instance_id: args.item.id,
+					instance_name: args.item.name,
+				})
+				if (!handled) handleSevereError(err, { instanceId: args.item.id })
+			})
 			trackEvent('InstanceStart', {
 				loader: args.item.loader,
 				game_version: args.item.game_version,
@@ -177,8 +185,8 @@ const handleOptionsClick = async (args) => {
 			if (args.item.install_stage == 'installed') await duplicateInstance(args.item.id)
 			break
 		case 'delete':
-		currentDeleteInstance.value = args.item
-		deleteConfirmModal.value.show()
+			currentDeleteInstance.value = args.item
+			deleteConfirmModal.value.show()
 			break
 		case 'open_folder':
 			await showInstanceInFolder(args.item.id)

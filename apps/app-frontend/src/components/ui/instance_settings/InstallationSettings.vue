@@ -16,6 +16,7 @@ import type { GameVersionTag, PlatformTag } from '@modrinth/utils'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, ref } from 'vue'
 
+import SymlinkInstanceWarning from '@/components/ui/SymlinkInstanceWarning.vue'
 import { trackEvent } from '@/helpers/analytics'
 import { get_project_versions, get_version } from '@/helpers/cache'
 import { updateManagedCurseForgeModpack } from '@/helpers/curseforge'
@@ -37,7 +38,6 @@ import { get_loader_versions } from '@/helpers/metadata'
 import { get_game_versions, get_loaders } from '@/helpers/tags'
 import { injectInstanceSettings } from '@/providers/instance-settings'
 import { useTheming } from '@/store/state'
-import SymlinkInstanceWarning from '@/components/ui/SymlinkInstanceWarning.vue'
 
 import type { Manifest } from '../../../helpers/types'
 
@@ -580,6 +580,9 @@ provideInstallationSettings({
 </script>
 
 <template>
-	<SymlinkInstanceWarning v-if="instance?.symlink_target" :symlink-target="instance.symlink_target" />
+	<SymlinkInstanceWarning
+		v-if="instance?.symlink_target"
+		:symlink-target="instance.symlink_target"
+	/>
 	<InstallationSettingsLayout />
 </template>

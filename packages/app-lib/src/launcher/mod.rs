@@ -33,12 +33,42 @@ use std::fmt::Write;
 use std::path::PathBuf;
 use tokio::process::Command;
 
+#[cfg(target_os = "windows")]
+use winreg::{RegKey, enums::HKEY_CURRENT_USER};
+
 mod args;
 
 pub mod download;
 pub mod language;
 pub mod optifine;
 pub mod quick_play_version;
+
+#[cfg(target_os = "windows")]
+fn set_high_performance_gpu_preference(
+    executable: impl AsRef<std::path::Path>,
+) -> crate::Result<()> {
+    const REGISTRY_PATH: &str =
+        "Software\\Microsoft\\DirectX\\UserGpuPreferences";
+    const REGISTRY_VALUE: &str = "GpuPreference=2;";
+
+    let current_user = RegKey::predef(HKEY_CURRENT_USER);
+    let (key, _) = current_user.create_subkey(REGISTRY_PATH)?;
+    let executable = executable.as_ref().to_string_lossy();
+
+    if key
+        .get_value::<String, _>(executable.as_ref())
+        .ok()
+        .as_deref()
+        == Some(REGISTRY_VALUE)
+    {
+        return Ok(());
+    }
+
+    key.set_value(executable.as_ref(), &REGISTRY_VALUE)?;
+    tracing::info!(%executable, "Set high-performance GPU preference");
+
+    Ok(())
+}
 
 // All nones -> disallowed
 // 1+ true -> allowed
@@ -917,6 +947,31 @@ pub async fn launch_minecraft(
     // Test jre version
     let java_version =
         crate::api::jre::check_jre(java_version.path.clone().into()).await?;
+
+    #[cfg(target_os = "windows")]
+    if crate::state::Settings::get(&state.pool)
+        .await?
+        .auto_set_java_high_performance_mode
+    {
+        if let Err(error) =
+            set_high_performance_gpu_preference(&java_version.path)
+        {
+            tracing::warn!(%error, java = %java_version.path, "Failed to set Java high-performance GPU preference");
+        }
+
+        match std::env::current_exe() {
+            Ok(launcher_path) => {
+                if let Err(error) =
+                    set_high_performance_gpu_preference(&launcher_path)
+                {
+                    tracing::warn!(%error, launcher = %launcher_path.display(), "Failed to set launcher high-performance GPU preference");
+                }
+            }
+            Err(error) => {
+                tracing::warn!(%error, "Failed to determine launcher executable for high-performance GPU preference");
+            }
+        }
+    }
 
     let client_path = state
         .directories

@@ -306,9 +306,7 @@ const manualDownloadCandidates = computed<CurseForgeManualDownloadItem[]>(() => 
 	)
 	const source = latestJob
 		? latestJob.items
-		.filter(
-				(item) => item.status === 'skipped' && item.project_id && item.version_id,
-			)
+				.filter((item) => item.status === 'skipped' && item.project_id && item.version_id)
 				.map((item) => ({
 					projectId: Number(item.project_id),
 					fileId: Number(item.version_id),
@@ -413,11 +411,7 @@ const mergedProjects = computed<ContentItem[]>(() => {
 watch(
 	[manualDownloadCandidates, installedManualDownloadItems],
 	([candidates, items]) => {
-	const remaining = removeInstalledCurseForgeManualDownloads(
-			props.instance.id,
-			candidates,
-			items,
-		)
+		const remaining = removeInstalledCurseForgeManualDownloads(props.instance.id, candidates, items)
 		const current = pendingManualDownloadsByInstance.value.get(props.instance.id)
 		if (manualDownloadsEqual(current, remaining) || (!current && remaining.length === 0)) return
 

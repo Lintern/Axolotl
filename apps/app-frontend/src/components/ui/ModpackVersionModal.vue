@@ -5,9 +5,9 @@ import { computed, ref } from 'vue'
 
 import { SwapIcon } from '@/assets/icons/index.js'
 import ModalWrapper from '@/components/ui/modal/ModalWrapper.vue'
+import SymlinkInstanceWarning from '@/components/ui/SymlinkInstanceWarning.vue'
 import { update_managed_modrinth_version } from '@/helpers/instance'
 import { releaseColor } from '@/helpers/utils'
-import SymlinkInstanceWarning from '@/components/ui/SymlinkInstanceWarning.vue'
 
 const props = defineProps({
 	versions: {
@@ -69,7 +69,10 @@ const onHide = () => {
 		:on-hide="onHide"
 	>
 		<div class="modal-body">
-			<SymlinkInstanceWarning v-if="instance?.symlink_target" :symlink-target="instance.symlink_target" />
+			<SymlinkInstanceWarning
+				v-if="instance?.symlink_target"
+				:symlink-target="instance.symlink_target"
+			/>
 			<div v-if="instance.link" class="mod-card">
 				<div class="table">
 					<div class="table-row with-columns table-head">

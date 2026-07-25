@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { LinkIcon } from '@modrinth/assets'
-import { defineMessages, useVIntl } from '@modrinth/ui'
-import { Admonition } from '@modrinth/ui'
+import { Admonition, defineMessages, useVIntl } from '@modrinth/ui'
 import { computed } from 'vue'
 
 import { injectSymlinkWarningDismiss } from '@/composables/useSymlinkWarningDismiss'
@@ -58,15 +57,21 @@ function handleDismissPermanently() {
 const messages = defineMessages({
 	writeHeader: {
 		id: 'app.symlink-warning.write.header',
+		defaultMessage: 'Shared instance',
 	},
 	writeBody: {
 		id: 'app.symlink-warning.write.body',
+		defaultMessage:
+			'This instance is linked to "{path}". Changes will also affect the original files.',
 	},
 	deleteHeader: {
 		id: 'app.symlink-warning.delete.header',
+		defaultMessage: 'Delete shared instance',
 	},
 	deleteBody: {
 		id: 'app.symlink-warning.delete.body',
+		defaultMessage:
+			'Deleting this instance removes only the launcher entry. The original files at "{path}" will remain.',
 	},
 	dismissPermanently: {
 		id: 'app.symlink-warning.dismiss-permanently',

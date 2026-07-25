@@ -1,5 +1,10 @@
 <template>
-	<NewModal ref="modal" fade="danger" :header="formatMessage(isBulk ? messages.bulkHeader : messages.header)" max-width="500px">
+	<NewModal
+		ref="modal"
+		fade="danger"
+		:header="formatMessage(isBulk ? messages.bulkHeader : messages.header)"
+		max-width="500px"
+	>
 		<div class="flex flex-col gap-4">
 			<Admonition
 				v-if="symlinkTarget"
@@ -18,7 +23,9 @@
 					isBulk
 						? formatMessage(messages.bulkWarning)
 						: formatMessage(
-								item?.type === 'directory' ? messages.deleteFolderWarning : messages.deleteFileWarning,
+								item?.type === 'directory'
+									? messages.deleteFolderWarning
+									: messages.deleteFileWarning,
 							)
 				}}
 			</Admonition>
@@ -84,8 +91,7 @@ const messages = defineMessages({
 	},
 	bulkWarning: {
 		id: 'files.delete-modal.bulk-warning',
-		defaultMessage:
-			'The selected items will be permanently deleted. This action cannot be undone.',
+		defaultMessage: 'The selected items will be permanently deleted. This action cannot be undone.',
 	},
 	symlinkWarningHeader: {
 		id: 'files.delete-modal.symlink-warning-header',
@@ -98,7 +104,7 @@ const messages = defineMessages({
 	},
 })
 
-const props = defineProps<{
+defineProps<{
 	item: Pick<FileItem, 'name' | 'type'> | null
 	symlinkTarget?: string | null
 }>()

@@ -1122,7 +1122,7 @@
 		"message": "分享实例"
 	},
 	"app.instance.starting": {
-		"message": "正在启动……"
+		"message": "正在启动…… {seconds, number} 秒"
 	},
 	"app.instance.stopping": {
 		"message": "正在停止……"
@@ -1345,6 +1345,111 @@
 	},
 	"app.minecraft-auth.what-happened": {
 		"message": "我们推测的原因"
+	},
+	"app.minecraft-crash.body": {
+		"message": "寻求帮助时不要发送此窗口截图。请导出错误报告，这样对方才能同时检查崩溃报告、游戏日志、调试日志和 JVM 信息。"
+	},
+	"app.minecraft-crash.analyzing": {
+		"message": "正在分析本次启动留下的日志……"
+	},
+	"app.minecraft-crash.diagnosis.forge-java.action": {
+		"message": "可以尝试使用此 Forge 版本所需的 Java，或更新 Forge。"
+	},
+	"app.minecraft-crash.diagnosis.forge-java.title": {
+		"message": "可能的问题：Forge 与所选 Java 版本不兼容"
+	},
+	"app.minecraft-crash.diagnosis.java-11-required.action": {
+		"message": "可以尝试选择 Java 11，或安装支持当前 Java 版本的对应模组版本。"
+	},
+	"app.minecraft-crash.diagnosis.java-11-required.title": {
+		"message": "可能的问题：有模组需要 Java 11"
+	},
+	"app.minecraft-crash.diagnosis.java-32bit.action": {
+		"message": "可以尝试安装并选择 64 位 Java，然后重新启动。"
+	},
+	"app.minecraft-crash.diagnosis.java-32bit.title": {
+		"message": "可能的问题：32 位 Java 无法分配足够内存"
+	},
+	"app.minecraft-crash.diagnosis.java-incompatible.action": {
+		"message": "可以尝试选择下方错误所要求的 Java 版本，或改用与当前 Java 兼容的模组版本。"
+	},
+	"app.minecraft-crash.diagnosis.java-incompatible.title": {
+		"message": "可能的问题：Java 版本不兼容"
+	},
+	"app.minecraft-crash.diagnosis.java-too-new.action": {
+		"message": "可以尝试选择此 Minecraft 与模组加载器版本所需的 Java 大版本，然后重新启动。"
+	},
+	"app.minecraft-crash.diagnosis.java-too-new.title": {
+		"message": "可能的问题：所选 Java 版本过高"
+	},
+	"app.minecraft-crash.diagnosis.jdk-runtime.action": {
+		"message": "可以尝试为此 Minecraft 版本选择标准的 HotSpot Java 运行时。"
+	},
+	"app.minecraft-crash.diagnosis.jdk-runtime.title": {
+		"message": "可能的问题：所选 JDK 与实例不兼容"
+	},
+	"app.minecraft-crash.diagnosis.jvm-arguments.action": {
+		"message": "可以尝试从实例设置中删除下方显示的 JVM 参数，然后重新启动。"
+	},
+	"app.minecraft-crash.diagnosis.jvm-arguments.title": {
+		"message": "可能的问题：JVM 参数有误"
+	},
+	"app.minecraft-crash.diagnosis.known-failure.action": {
+		"message": "这是自动推测，不代表一定准确。处理前请打开日志分析查看完整上下文，再参考建议修复。"
+	},
+	"app.minecraft-crash.diagnosis.known-failure.title": {
+		"message": "可能的问题：检测到特定启动异常"
+	},
+	"app.minecraft-crash.diagnosis.openj9.action": {
+		"message": "可以尝试选择基于 HotSpot 的 Java 运行时，例如 Minecraft 自带运行时或 Eclipse Temurin。"
+	},
+	"app.minecraft-crash.diagnosis.openj9.title": {
+		"message": "可能的问题：OpenJ9 与此实例不兼容"
+	},
+	"app.minecraft-crash.diagnosis.out-of-memory.action": {
+		"message": "可以尝试增加实例内存分配，或移除占用内存较多的模组与资源包。"
+	},
+	"app.minecraft-crash.diagnosis.out-of-memory.title": {
+		"message": "可能的问题：Minecraft 内存不足"
+	},
+	"app.minecraft-crash.evidence": {
+		"message": "参考证据：{evidence}"
+	},
+	"app.minecraft-crash.exited-before-initialization": {
+		"message": "Java 进程尚未连接到启动器便已退出。最可能的原因是所选 Java 版本与当前 Minecraft 或模组加载器不兼容。请选择该实例所需的 Java 版本，然后重试。"
+	},
+	"app.minecraft-crash.export-context": {
+		"message": "导出 Minecraft 错误报告"
+	},
+	"app.minecraft-crash.initialization-timed-out": {
+		"message": "Java 进程已经启动，但在 15 秒内未能连接到启动器。请检查所选 Java 版本和包装器命令，然后重试。"
+	},
+	"app.minecraft-crash.launch-failed-summary": {
+		"message": "Minecraft 在启动准备阶段失败。"
+	},
+	"app.minecraft-crash.launch-failed-title": {
+		"message": "{instanceName} 无法启动"
+	},
+	"app.minecraft-crash.launch-failure-hint": {
+		"message": "打开 Minecraft 日志可以查看已捕获的 Java 输出。寻求帮助时，请导出并发送完整的 Minecraft 诊断包。"
+	},
+	"app.minecraft-crash.preparation-timed-out": {
+		"message": "启动准备在 60 秒内未能完成，现已取消。请检查 Java 路径、启动前命令、包装器命令和网络连接，然后重试。"
+	},
+	"app.minecraft-crash.preview-instance": {
+		"message": "Minecraft 测试实例"
+	},
+	"app.minecraft-crash.summary": {
+		"message": "Minecraft 意外停止运行。"
+	},
+	"app.minecraft-crash.support-hint": {
+		"message": "这里显示的是可能原因，不一定准确。寻求帮助时请发送导出的 ZIP，不要只发送此窗口截图，因为截图中没有完整证据。"
+	},
+	"app.minecraft-crash.title": {
+		"message": "{instanceName} 已崩溃"
+	},
+	"app.minecraft-crash.view-logs": {
+		"message": "查看日志与分析"
 	},
 	"app.minecraft.playing-as": {
 		"message": "当前游玩账号："
@@ -1745,6 +1850,9 @@
 	"app.settings.about.product-title": {
 		"message": "关于 {productName}"
 	},
+	"app.settings.about.preview-minecraft-crash-modal": {
+		"message": "预览 Minecraft 崩溃窗口"
+	},
 	"app.settings.about.project-website": {
 		"message": "访问项目网站"
 	},
@@ -1885,6 +1993,12 @@
 	},
 	"app.settings.java.location": {
 		"message": "Java {version} 位置"
+	},
+	"app.settings.java.auto-high-performance-mode": {
+		"message": "自动为 Java 使用高性能显卡"
+	},
+	"app.settings.java.auto-high-performance-mode-description": {
+		"message": "启动 Minecraft 时，自动在 Windows 图形设置中将启动器和 Java 设为使用高性能显卡。仅支持 Windows。"
 	},
 	"app.settings.resources.app-cache": {
 		"message": "应用缓存"
@@ -2978,36 +3092,6 @@
 	"unknown-pack-warning-modal.warning.title": {
 		"message": "未知文件警告"
 	},
-	"app.downloads.download-resumed": {
-		"message": "已续传 {bytes}"
-	},
-	"app.downloads.source.tencent-maven": {
-		"message": "腾讯 Maven"
-	},
-	"app.settings.resources.source-health": {
-		"message": "下载源健康状态"
-	},
-	"app.settings.resources.source-health-cooling-down": {
-		"message": "冷却中"
-	},
-	"app.settings.resources.source-health-description": {
-		"message": "连接质量仅根据本机已完成的下载进行学习，数据不会上传。"
-	},
-	"app.settings.resources.source-health-empty": {
-		"message": "尚未收集到下载测量数据。"
-	},
-	"app.settings.resources.source-health-refresh": {
-		"message": "刷新"
-	},
-	"app.settings.resources.source-health-range-splitting-disabled": {
-		"message": "Range 分片已停用"
-	},
-	"app.settings.resources.source-health-reset": {
-		"message": "重置学习数据"
-	},
-	"app.settings.resources.source-health-stats": {
-		"message": "TTFB {ttfb} · {speed} · 成功 {successes} 次 / 失败 {failures} 次"
-	},
 	"app.instance.confirm-delete.symlink-warning": {
 		"message": "这是一个链接到“{path}”的共享实例。仅会删除链接，原始文件不会被删除。"
 	},
@@ -3029,17 +3113,8 @@
 	"app.symlink-warning.shared-badge": {
 		"message": "共享"
 	},
-	"creation-flow.modal.import-instance.import-as-symlink": {
-		"message": "以共享实例导入"
-	},
-	"creation-flow.modal.import-instance.import-as-symlink.tooltip": {
-		"message": "通过软链接，直接使用原始实例文件夹，共享一份文件。所有的更改都将同步到原始实例。"
-	},
 	"app.symlink-capability.unsupported": {
 		"message": "系统不支持软链接。"
-	},
-	"app.symlink-capability.requires-admin": {
-		"message": "创建软链接需要管理员权限。请以管理员身份重新启动启动器。"
 	},
 	"app.symlink-capability.unsupported.title": {
 		"message": "软链接不支持"

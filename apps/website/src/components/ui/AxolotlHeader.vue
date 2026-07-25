@@ -22,6 +22,7 @@ const messages = defineMessages({
 	mobile: { id: 'axolotl-site.navigation.mobile', defaultMessage: 'Mobile navigation' },
 	features: { id: 'axolotl-site.navigation.features', defaultMessage: 'Features' },
 	faq: { id: 'axolotl-site.navigation.faq', defaultMessage: 'FAQ' },
+	changelog: { id: 'axolotl-site.navigation.changelog', defaultMessage: 'Changelog' },
 	openSource: { id: 'axolotl-site.navigation.open-source', defaultMessage: 'Open source' },
 	download: { id: 'axolotl-site.navigation.download', defaultMessage: 'Download' },
 	openSettings: {
@@ -51,10 +52,13 @@ function openSettings() {
 
 			<nav class="desktop-navigation" :aria-label="formatMessage(messages.primary)">
 				<ButtonStyled type="transparent">
-					<a href="#features">{{ formatMessage(messages.features) }}</a>
+					<NuxtLink to="/#features">{{ formatMessage(messages.features) }}</NuxtLink>
 				</ButtonStyled>
 				<ButtonStyled type="transparent">
-					<a href="#faq">{{ formatMessage(messages.faq) }}</a>
+					<NuxtLink to="/#faq">{{ formatMessage(messages.faq) }}</NuxtLink>
+				</ButtonStyled>
+				<ButtonStyled type="transparent">
+					<NuxtLink to="/changelog">{{ formatMessage(messages.changelog) }}</NuxtLink>
 				</ButtonStyled>
 				<ButtonStyled type="transparent">
 					<a href="https://github.com/Mystic-Stars/Axolotl" target="_blank" rel="noopener">
@@ -95,12 +99,15 @@ function openSettings() {
 				class="mobile-navigation"
 				:aria-label="formatMessage(messages.mobile)"
 			>
-				<a href="#features" @click="mobileMenuOpen = false">
+				<NuxtLink to="/#features" @click="mobileMenuOpen = false">
 					{{ formatMessage(messages.features) }}
-				</a>
-				<a href="#faq" @click="mobileMenuOpen = false">
+				</NuxtLink>
+				<NuxtLink to="/#faq" @click="mobileMenuOpen = false">
 					{{ formatMessage(messages.faq) }}
-				</a>
+				</NuxtLink>
+				<NuxtLink to="/changelog" @click="mobileMenuOpen = false">
+					{{ formatMessage(messages.changelog) }}
+				</NuxtLink>
 				<a
 					href="https://github.com/Mystic-Stars/Axolotl"
 					target="_blank"

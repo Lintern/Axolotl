@@ -15,6 +15,12 @@ use crate::{
     util::io::{self, IOError},
 };
 
+mod crash_analysis;
+pub use crash_analysis::{
+    CrashAnalysis, CrashAnalysisEvidence, CrashAnalysisFinding,
+    CrashAnalysisMod, CrashAnalysisSource, analyze_crash,
+};
+
 #[derive(Serialize, Debug)]
 pub struct Logs {
     pub log_type: LogType,
@@ -68,6 +74,10 @@ impl CensoredString {
         }
 
         Self(s)
+    }
+
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 }
 
@@ -292,7 +302,7 @@ pub async fn get_logs_from_type(
                 entry.map_err(|e| IOError::with_path(e, &logs_folder))?;
             let age = entry
                 .metadata()?
-                .created()
+                .modified()
                 .unwrap_or(SystemTime::UNIX_EPOCH);
             let path = entry.path();
             if !path.is_file() {
@@ -360,7 +370,7 @@ pub async fn get_logs_by_filename(
     .join(&filename);
 
     let metadata = std::fs::metadata(&path)?;
-    let age = metadata.created().unwrap_or(SystemTime::UNIX_EPOCH);
+    let age = metadata.modified().unwrap_or(SystemTime::UNIX_EPOCH);
 
     Logs::build(log_type, age, &instance_path, filename, Some(true)).await
 }

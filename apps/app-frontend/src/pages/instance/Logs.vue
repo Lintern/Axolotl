@@ -14,9 +14,14 @@ import {
 import { computed, onUnmounted, ref, shallowRef, triggerRef, watch, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { useCrashAnalysis } from '@/composables/useCrashAnalysis'
 import { useInstanceConsole } from '@/composables/useInstanceConsole'
 import { log_listener, process_listener } from '@/helpers/events.js'
-import { delete_logs_by_filename, get_output_by_filename } from '@/helpers/logs.js'
+import {
+	delete_logs_by_filename,
+	export_crash_context,
+	get_output_by_filename,
+} from '@/helpers/logs.js'
 
 const client = injectModrinthClient()
 const { handleError } = injectNotificationManager()
@@ -56,6 +61,12 @@ const props = defineProps({
 })
 
 const instanceId = computed(() => route.params.id)
+const {
+	analysis: localCrashAnalysis,
+	loading: crashAnalysisLoading,
+	refresh: refreshCrashAnalysis,
+	clear: clearCrashAnalysis,
+} = useCrashAnalysis(instanceId.value)
 const {
 	liveConsole,
 	historicalConsole,
@@ -121,18 +132,23 @@ watchEffect(() => {
 const crashAnalysis = ref(null)
 
 async function analyseForCrash() {
-	const lines = liveConsole.output.value
-	if (lines.length === 0) return
-
-	const content = lines.map((l) => l.text).join('\n')
+	const localAnalysis = await refreshCrashAnalysis().catch((error) => {
+		handleError(error)
+		return null
+	})
+	if (!localAnalysis?.crashed || !localAnalysis.combined_log || props.offline) return
 	try {
-		const data = await client.mclogs.insights_v1.analyse(content)
+		const data = await client.mclogs.insights_v1.analyse(localAnalysis.combined_log)
 		if (data.analysis?.problems?.length > 0) {
 			crashAnalysis.value = data
 		}
-	} catch {
-		// Crash analysis is best-effort
+	} catch (error) {
+		handleError(error)
 	}
+}
+
+async function exportCrashContext() {
+	await export_crash_context(props.instance.id, props.instance.name).catch(handleError)
 }
 
 const selectedLog = computed(() => filteredLogs.value[selectedLogIndex.value])
@@ -168,6 +184,9 @@ provideConsoleManager({
 	deleteDisabledTooltip: 'Cannot delete latest.log while the instance is running',
 	shareDisabled: computed(() => props.offline),
 	emptyStateType: 'instance',
+	localCrashAnalysis,
+	crashAnalysisLoading,
+	onExportCrashContext: exportCrashContext,
 	crashAnalysis,
 	onDismissCrash: () => {
 		crashAnalysis.value = null
@@ -215,6 +234,8 @@ const unlistenProcesses = await process_listener(async (e) => {
 	if (e.instance_id !== instanceId.value) return
 	if (e.event === 'launched') {
 		liveConsole.clear()
+		clearCrashAnalysis()
+		crashAnalysis.value = null
 		invalidate()
 		selectedLogIndex.value = 0
 	}

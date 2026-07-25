@@ -61,6 +61,7 @@ import ErrorModal from '@/components/ui/ErrorModal.vue'
 import AddServerToInstanceModal from '@/components/ui/install_flow/AddServerToInstanceModal.vue'
 import UnknownPackWarningModal from '@/components/ui/install_flow/UnknownPackWarningModal.vue'
 import MinecraftAuthErrorModal from '@/components/ui/minecraft-auth-error-modal/MinecraftAuthErrorModal.vue'
+import MinecraftCrashModal from '@/components/ui/MinecraftCrashModal.vue'
 import AppSettingsModal from '@/components/ui/modal/AppSettingsModal.vue'
 import AuthGrantFlowWaitModal from '@/components/ui/modal/AuthGrantFlowWaitModal.vue'
 import CommunityAnnouncementModal from '@/components/ui/modal/CommunityAnnouncementModal.vue'
@@ -76,6 +77,7 @@ import QuickInstanceSwitcher from '@/components/ui/QuickInstanceSwitcher.vue'
 import SplashScreen from '@/components/ui/SplashScreen.vue'
 import WindowControls from '@/components/ui/WindowControls.vue'
 import { useCheckDisableMouseover } from '@/composables/macCssFix.js'
+import { minecraftLaunchErrorKey } from '@/composables/useMinecraftLaunchError'
 import { useNetworkStatus } from '@/composables/useNetworkStatus'
 import { AxolotlBrandConfig, config, getOfficialLabrinthBaseUrl } from '@/config'
 import { debugAnalytics, initAnalytics, trackEvent } from '@/helpers/analytics'
@@ -83,7 +85,7 @@ import { check_reachable } from '@/helpers/auth.js'
 import { get_user, get_version } from '@/helpers/cache.js'
 import { command_listener, warning_listener } from '@/helpers/events.js'
 import { install_create_modpack_instance, install_get_modpack_preview } from '@/helpers/install'
-import { run } from '@/helpers/instance'
+import { get as getInstance, run } from '@/helpers/instance'
 import { cancelLogin, get as getCreds, login, logout } from '@/helpers/mr_auth.ts'
 import { mergeUrlQuery, parseModrinthLink } from '@/helpers/project-links.ts'
 import { get as getSettings, getUpdateSource, set as setSettings } from '@/helpers/settings.ts'
@@ -229,6 +231,7 @@ const isDevEnvironment = ref(false)
 const stateInitialized = ref(false)
 const communityAnnouncementModal = ref()
 const updateAnnouncementModal = ref()
+const minecraftCrashModal = ref()
 const pendingUpdateAnnouncementVersion = ref(null)
 const updateAnnouncementShowing = ref(false)
 
@@ -276,7 +279,6 @@ onUnmounted(async () => {
 	document.querySelector('body').removeEventListener('auxclick', handleAuxClick)
 	unsubscribeSidebarToggle()
 	clearDelayedUpdatePopup()
-
 	await unlistenUpdateDownload?.()
 	downloadManager.dispose()
 })
@@ -457,13 +459,18 @@ async function setupApp() {
 		document.getElementsByTagName('html')[0].classList.add('windows')
 	}
 
-	await warning_listener((e) =>
+	await warning_listener(async (e) => {
+		if (e.kind === 'minecraft_crash') {
+			await minecraftCrashModal.value?.handleWarning(e)
+			return
+		}
+
 		addNotification({
 			title: formatMessage(messages.warning),
 			text: e.message,
 			type: 'warn',
-		}),
-	)
+		})
+	})
 
 	get_opening_command().then(handleCommand)
 	fetchCredentials()
@@ -546,6 +553,12 @@ async function scheduleStartupDialogs() {
 }
 
 provide('replayOnboarding', replayOnboarding)
+provide(
+	minecraftLaunchErrorKey,
+	async (launchError, payload) =>
+		(await minecraftCrashModal.value?.handleLaunchError(launchError, payload)) ?? false,
+)
+provide('previewMinecraftCrashModal', () => minecraftCrashModal.value?.showPreview())
 provide('previewUpdateAnnouncement', (version = null) => {
 	const previewVersion = version ?? pendingUpdateAnnouncementVersion.value
 	if (previewVersion) updateAnnouncementModal.value?.show(previewVersion)
@@ -667,6 +680,14 @@ watch(
 )
 
 const error = useError()
+error.setMinecraftLaunchErrorHandler((launchError, context) => {
+	if (!minecraftCrashModal.value?.isLaunchFailure(launchError) || !context?.instanceId) return false
+	void minecraftCrashModal.value.handleLaunchError(launchError, {
+		instance_id: context.instanceId,
+		instance_name: 'Minecraft',
+	})
+	return true
+})
 const errorModal = ref()
 const minecraftAuthErrorModal = ref()
 
@@ -843,12 +864,23 @@ async function handleCommand(e) {
 			})
 		}
 	} else if (e.event === 'LaunchInstance') {
+		const instance = await getInstance(e.id).catch(() => null)
+		const handleLaunchCommandError = async (launchError) => {
+			const handled =
+				(await minecraftCrashModal.value?.handleLaunchError(launchError, {
+					instance_id: e.id,
+					instance_name: instance?.name || 'Minecraft',
+				})) ?? false
+			if (!handled) handleError(launchError)
+		}
 		if (e.server) {
-			await start_join_server(e.id, e.server).catch(handleError)
+			await start_join_server(e.id, e.server).catch(handleLaunchCommandError)
 		} else if (e.singleplayer_world) {
-			await start_join_singleplayer_world(e.id, e.singleplayer_world).catch(handleError)
+			await start_join_singleplayer_world(e.id, e.singleplayer_world).catch(
+				handleLaunchCommandError,
+			)
 		} else {
-			await run(e.id).catch(handleError)
+			await run(e.id).catch(handleLaunchCommandError)
 		}
 	} else if (e.event === 'InstallServer') {
 		await router.push(`/project/${e.id}`)
@@ -1543,6 +1575,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		:on-error-action="exportNotificationErrorLogs"
 		:error-action-label="formatMessage(messages.exportErrorLogs)"
 	/>
+	<MinecraftCrashModal ref="minecraftCrashModal" @error="handleError" />
 	<CommunityAnnouncementModal ref="communityAnnouncementModal" />
 	<UpdateAnnouncementModal ref="updateAnnouncementModal" @closed="handleUpdateAnnouncementClosed" />
 	<ErrorModal ref="errorModal" />

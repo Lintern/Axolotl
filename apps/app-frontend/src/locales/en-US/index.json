@@ -35,9 +35,6 @@
 	"app.action-bar.install.summary.bad-modpack-file": {
 		"message": "Couldn't read modpack"
 	},
-	"app.action-bar.install.summary.unrecognized-format": {
-		"message": "This does not appear to be a modpack archive"
-	},
 	"app.action-bar.install.summary.canceled": {
 		"message": "Canceled"
 	},
@@ -94,6 +91,9 @@
 	},
 	"app.action-bar.install.summary.unexpected-error": {
 		"message": "Something went wrong"
+	},
+	"app.action-bar.install.summary.unrecognized-format": {
+		"message": "This does not appear to be a modpack archive"
 	},
 	"app.action-bar.install.unknown-instance": {
 		"message": "Unknown instance"
@@ -881,6 +881,9 @@
 	"app.instance.confirm-delete.header": {
 		"message": "Delete instance"
 	},
+	"app.instance.confirm-delete.symlink-warning": {
+		"message": "This is a shared instance linked to \"{path}\". Only the link will be removed; the original files will not be deleted."
+	},
 	"app.instance.copy-links": {
 		"message": "Copy links"
 	},
@@ -1122,7 +1125,7 @@
 		"message": "Share instance"
 	},
 	"app.instance.starting": {
-		"message": "Starting..."
+		"message": "Starting... {seconds, number}s"
 	},
 	"app.instance.stopping": {
 		"message": "Stopping..."
@@ -1304,6 +1307,36 @@
 	"app.library.title": {
 		"message": "Library"
 	},
+	"app.memory-display.available": {
+		"message": "{memory} available"
+	},
+	"app.memory-display.game": {
+		"message": "Game allocation"
+	},
+	"app.memory-display.optimization-description": {
+		"message": "Free unused Windows working sets and standby memory."
+	},
+	"app.memory-display.optimize": {
+		"message": "Optimize memory"
+	},
+	"app.memory-display.optimized": {
+		"message": "Memory optimization complete"
+	},
+	"app.memory-display.optimizing": {
+		"message": "Optimizing..."
+	},
+	"app.memory-display.reclaimed": {
+		"message": "Freed {memory} of memory."
+	},
+	"app.memory-display.remaining": {
+		"message": "Remaining after allocation"
+	},
+	"app.memory-display.unsupported": {
+		"message": "Memory optimization is only available on Windows."
+	},
+	"app.memory-display.used": {
+		"message": "Memory in use"
+	},
 	"app.minecraft-auth.contact-support": {
 		"message": "Contact support"
 	},
@@ -1345,6 +1378,111 @@
 	},
 	"app.minecraft-auth.what-happened": {
 		"message": "What we think happened"
+	},
+	"app.minecraft-crash.analyzing": {
+		"message": "Analyzing the logs from this launch..."
+	},
+	"app.minecraft-crash.body": {
+		"message": "Do not send a screenshot of this window when asking for help. Export the error report instead so the crash report, game logs, debug log, and JVM details can be checked together."
+	},
+	"app.minecraft-crash.diagnosis.forge-java.action": {
+		"message": "You can try using the Java version expected by this Forge release, or updating Forge."
+	},
+	"app.minecraft-crash.diagnosis.forge-java.title": {
+		"message": "Possible issue: Forge is not compatible with the selected Java version"
+	},
+	"app.minecraft-crash.diagnosis.java-11-required.action": {
+		"message": "You can try selecting Java 11, or installing a build of the affected Mod that supports the current Java version."
+	},
+	"app.minecraft-crash.diagnosis.java-11-required.title": {
+		"message": "Possible issue: a Mod requires Java 11"
+	},
+	"app.minecraft-crash.diagnosis.java-32bit.action": {
+		"message": "You can try installing and selecting a 64-bit Java runtime, then launch again."
+	},
+	"app.minecraft-crash.diagnosis.java-32bit.title": {
+		"message": "Possible issue: 32-bit Java cannot allocate enough memory"
+	},
+	"app.minecraft-crash.diagnosis.java-incompatible.action": {
+		"message": "You can try selecting the Java version requested in the error below, or using a compatible build of the affected Mod."
+	},
+	"app.minecraft-crash.diagnosis.java-incompatible.title": {
+		"message": "Possible issue: the Java version is incompatible"
+	},
+	"app.minecraft-crash.diagnosis.java-too-new.action": {
+		"message": "You can try selecting the Java major version required by this Minecraft and Mod loader version, then launch again."
+	},
+	"app.minecraft-crash.diagnosis.java-too-new.title": {
+		"message": "Possible issue: the selected Java version is too new"
+	},
+	"app.minecraft-crash.diagnosis.jdk-runtime.action": {
+		"message": "You can try selecting a standard HotSpot Java runtime for this Minecraft version."
+	},
+	"app.minecraft-crash.diagnosis.jdk-runtime.title": {
+		"message": "Possible issue: the selected JDK is not compatible"
+	},
+	"app.minecraft-crash.diagnosis.jvm-arguments.action": {
+		"message": "You can try removing the JVM argument shown below from the instance settings, then launch again."
+	},
+	"app.minecraft-crash.diagnosis.jvm-arguments.title": {
+		"message": "Possible issue: the JVM arguments are invalid"
+	},
+	"app.minecraft-crash.diagnosis.known-failure.action": {
+		"message": "This is an automatic guess, not a guaranteed diagnosis. Open the log analysis for the full context before applying the suggested fix."
+	},
+	"app.minecraft-crash.diagnosis.known-failure.title": {
+		"message": "Possible issue: a specific launch problem was detected"
+	},
+	"app.minecraft-crash.diagnosis.openj9.action": {
+		"message": "You can try selecting a HotSpot-based Java runtime, such as the bundled Minecraft runtime or Eclipse Temurin."
+	},
+	"app.minecraft-crash.diagnosis.openj9.title": {
+		"message": "Possible issue: OpenJ9 is not compatible with this instance"
+	},
+	"app.minecraft-crash.diagnosis.out-of-memory.action": {
+		"message": "You can try increasing the instance memory allocation, or removing memory-heavy Mods and resource packs."
+	},
+	"app.minecraft-crash.diagnosis.out-of-memory.title": {
+		"message": "Possible issue: Minecraft ran out of memory"
+	},
+	"app.minecraft-crash.evidence": {
+		"message": "Reference evidence: {evidence}"
+	},
+	"app.minecraft-crash.exited-before-initialization": {
+		"message": "The Java process exited before it could connect to the launcher. The selected Java version is probably incompatible with this Minecraft or Mod loader version. Select the Java version required by the instance, then try again."
+	},
+	"app.minecraft-crash.export-context": {
+		"message": "Export Minecraft error report"
+	},
+	"app.minecraft-crash.initialization-timed-out": {
+		"message": "The Java process started but did not connect to the launcher within 15 seconds. Check the selected Java version and any wrapper command, then try again."
+	},
+	"app.minecraft-crash.launch-failed-summary": {
+		"message": "Minecraft failed during launch preparation."
+	},
+	"app.minecraft-crash.launch-failed-title": {
+		"message": "{instanceName} could not start"
+	},
+	"app.minecraft-crash.launch-failure-hint": {
+		"message": "Open the Minecraft logs to view the captured Java output. When asking for help, export and send the complete Minecraft diagnostic package."
+	},
+	"app.minecraft-crash.preparation-timed-out": {
+		"message": "Launch preparation did not finish within 60 seconds and was cancelled. Check the Java path, launch hooks, wrapper command, and network connection, then try again."
+	},
+	"app.minecraft-crash.preview-instance": {
+		"message": "Minecraft test instance"
+	},
+	"app.minecraft-crash.summary": {
+		"message": "Minecraft stopped unexpectedly."
+	},
+	"app.minecraft-crash.support-hint": {
+		"message": "When asking for help, send the exported ZIP. Do not send only a screenshot of this window because it does not contain the diagnostic evidence."
+	},
+	"app.minecraft-crash.title": {
+		"message": "{instanceName} crashed"
+	},
+	"app.minecraft-crash.view-logs": {
+		"message": "View logs and analysis"
 	},
 	"app.minecraft.playing-as": {
 		"message": "Playing as"
@@ -1742,6 +1880,9 @@
 	"app.settings.about.pcl-source": {
 		"message": "View the Plain Craft Launcher source and license"
 	},
+	"app.settings.about.preview-minecraft-crash-modal": {
+		"message": "Preview Minecraft crash window"
+	},
 	"app.settings.about.product-title": {
 		"message": "About {productName}"
 	},
@@ -1768,6 +1909,12 @@
 	},
 	"app.settings.about.version": {
 		"message": "Version {version}"
+	},
+	"app.settings.defaults.automatic-memory": {
+		"message": "Automatically allocate memory at launch"
+	},
+	"app.settings.defaults.automatic-memory-description": {
+		"message": "Adjusts memory for each launch based on available RAM and installed mods."
 	},
 	"app.settings.defaults.environment-variables": {
 		"message": "Environment variables"
@@ -1799,44 +1946,8 @@
 	"app.settings.defaults.memory": {
 		"message": "Memory allocated"
 	},
-	"app.settings.defaults.automatic-memory": {
-		"message": "Automatically allocate memory at launch"
-	},
-	"app.settings.defaults.automatic-memory-description": {
-		"message": "Adjusts memory for each launch based on available RAM and installed mods."
-	},
 	"app.settings.defaults.memory-description": {
 		"message": "The memory allocated to each instance when it is run."
-	},
-	"app.memory-display.available": {
-		"message": "{memory} available"
-	},
-	"app.memory-display.game": {
-		"message": "Game allocation"
-	},
-	"app.memory-display.optimize": {
-		"message": "Optimize memory"
-	},
-	"app.memory-display.optimized": {
-		"message": "Memory optimization complete"
-	},
-	"app.memory-display.optimizing": {
-		"message": "Optimizing..."
-	},
-	"app.memory-display.optimization-description": {
-		"message": "Free unused Windows working sets and standby memory."
-	},
-	"app.memory-display.remaining": {
-		"message": "Remaining after allocation"
-	},
-	"app.memory-display.reclaimed": {
-		"message": "Freed {memory} of memory."
-	},
-	"app.memory-display.unsupported": {
-		"message": "Memory optimization is only available on Windows."
-	},
-	"app.memory-display.used": {
-		"message": "Memory in use"
 	},
 	"app.settings.defaults.post-exit-description": {
 		"message": "Run after the game closes."
@@ -1882,6 +1993,12 @@
 	},
 	"app.settings.feature-flags.reset-to-default": {
 		"message": "Reset to default"
+	},
+	"app.settings.java.auto-high-performance-mode": {
+		"message": "Automatically use high-performance GPU for Java"
+	},
+	"app.settings.java.auto-high-performance-mode-description": {
+		"message": "Sets the launcher and Java to use the high-performance GPU in Windows graphics settings when Minecraft launches. Windows only."
 	},
 	"app.settings.java.location": {
 		"message": "Java {version} location"
@@ -2218,6 +2335,42 @@
 	},
 	"app.splash.updating-app-directory": {
 		"message": "Updating app directory..."
+	},
+	"app.symlink-capability.cancel": {
+		"message": "Cancel"
+	},
+	"app.symlink-capability.requires-admin.description": {
+		"message": "Windows Developer Mode is disabled, so the launcher must restart as administrator to create a shared instance."
+	},
+	"app.symlink-capability.requires-admin.restart-button": {
+		"message": "Restart as administrator"
+	},
+	"app.symlink-capability.requires-admin.title": {
+		"message": "Administrator permission required"
+	},
+	"app.symlink-capability.unsupported": {
+		"message": "This system does not support creating symbolic links."
+	},
+	"app.symlink-capability.unsupported.title": {
+		"message": "Shared instances are unavailable"
+	},
+	"app.symlink-warning.delete.body": {
+		"message": "Deleting this instance removes only the launcher entry. The original files at \"{path}\" will remain."
+	},
+	"app.symlink-warning.delete.header": {
+		"message": "Delete shared instance"
+	},
+	"app.symlink-warning.dismiss-permanently": {
+		"message": "Don't show again for this instance"
+	},
+	"app.symlink-warning.shared-badge": {
+		"message": "Shared"
+	},
+	"app.symlink-warning.write.body": {
+		"message": "This instance is linked to \"{path}\". Changes will also affect the original files."
+	},
+	"app.symlink-warning.write.header": {
+		"message": "Shared instance"
 	},
 	"app.translation-settings.api-key": {
 		"message": "API key"
@@ -2705,6 +2858,9 @@
 	"instance.settings.tabs.java": {
 		"message": "Java and memory"
 	},
+	"instance.settings.tabs.java.automatic-memory": {
+		"message": "Automatically allocate memory at launch"
+	},
 	"instance.settings.tabs.java.custom-environment-variables": {
 		"message": "Custom environment variables"
 	},
@@ -2716,9 +2872,6 @@
 	},
 	"instance.settings.tabs.java.custom-memory-allocation": {
 		"message": "Custom memory allocation"
-	},
-	"instance.settings.tabs.java.automatic-memory": {
-		"message": "Automatically allocate memory at launch"
 	},
 	"instance.settings.tabs.java.enter-environment-variables": {
 		"message": "Enter environmental variables..."
@@ -2977,83 +3130,5 @@
 	},
 	"unknown-pack-warning-modal.warning.title": {
 		"message": "Unknown file warning"
-	},
-	"app.downloads.download-resumed": {
-		"message": "{bytes} resumed"
-	},
-	"app.downloads.source.tencent-maven": {
-		"message": "Tencent Maven"
-	},
-	"app.settings.resources.source-health": {
-		"message": "Source health"
-	},
-	"app.settings.resources.source-health-cooling-down": {
-		"message": "Cooling down"
-	},
-	"app.settings.resources.source-health-description": {
-		"message": "Connection quality is learned locally from completed downloads and is never uploaded."
-	},
-	"app.settings.resources.source-health-empty": {
-		"message": "No download measurements have been collected yet."
-	},
-	"app.settings.resources.source-health-range-splitting-disabled": {
-		"message": "Range splitting disabled"
-	},
-	"app.settings.resources.source-health-refresh": {
-		"message": "Refresh"
-	},
-	"app.settings.resources.source-health-reset": {
-		"message": "Reset learned data"
-	},
-	"app.settings.resources.source-health-stats": {
-		"message": "{ttfb} TTFB · {speed} · {successes} successful / {failures} failed"
-	},
-	"app.instance.confirm-delete.symlink-warning": {
-		"message": "This is a shared instance linked to \"{path}\". Only the link will be removed; the original files will not be deleted."
-	},
-	"app.symlink-warning.write.header": {
-		"message": "Shared instance"
-	},
-	"app.symlink-warning.write.body": {
-		"message": "This is a shared instance. Any changes will also affect {path}."
-	},
-	"app.symlink-warning.delete.header": {
-		"message": "Shared instance"
-	},
-	"app.symlink-warning.delete.body": {
-		"message": "This is a shared instance. This action will delete the shared files at {path}."
-	},
-	"app.symlink-warning.dismiss-permanently": {
-		"message": "Don't show again for this instance"
-	},
-	"app.symlink-warning.shared-badge": {
-		"message": "Shared"
-	},
-	"creation-flow.modal.import-instance.import-as-symlink": {
-		"message": "Import as shared instance"
-	},
-	"creation-flow.modal.import-instance.import-as-symlink.tooltip": {
-		"message": "Uses a symlink to directly reference the original instance folder, sharing one copy of files. All changes will sync to the original instance."
-	},
-	"app.symlink-capability.unsupported": {
-		"message": "Symbolic links are not supported on this system."
-	},
-	"app.symlink-capability.requires-admin": {
-		"message": "Symbolic links require administrator privileges. Please restart the launcher as an administrator."
-	},
-	"app.symlink-capability.unsupported.title": {
-		"message": "Symbolic links not supported"
-	},
-	"app.symlink-capability.requires-admin.title": {
-		"message": "Administrator privileges required"
-	},
-	"app.symlink-capability.requires-admin.restart-button": {
-		"message": "Restart as admin"
-	},
-	"app.symlink-capability.requires-admin.description": {
-		"message": "Creating shared instances requires administrator privileges. Would you like to restart the launcher as an administrator?"
-	},
-	"app.symlink-capability.cancel": {
-		"message": "Cancel"
 	}
 }

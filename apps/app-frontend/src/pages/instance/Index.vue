@@ -195,7 +195,10 @@
 							color="brand"
 							size="large"
 						>
-							<button disabled>{{ formatMessage(messages.starting) }}</button>
+							<button disabled>
+								<SpinnerIcon class="animate-spin" />
+								{{ formatMessage(messages.starting, { seconds: launchElapsedSeconds }) }}
+							</button>
 						</ButtonStyled>
 						<ButtonStyled circular size="large">
 							<button
@@ -334,6 +337,7 @@ import {
 	PlusIcon,
 	ServerIcon,
 	SettingsIcon,
+	SpinnerIcon,
 	StopCircleIcon,
 	TerminalSquareIcon,
 	UpdatedIcon,
@@ -365,22 +369,23 @@ import { useRoute, useRouter } from 'vue-router'
 
 import ContextMenu from '@/components/ui/ContextMenu.vue'
 import ExportModal from '@/components/ui/ExportModal.vue'
-import SymlinkInstanceWarning from '@/components/ui/SymlinkInstanceWarning.vue'
 import InstanceIcon from '@/components/ui/InstanceIcon.vue'
 import InstanceSettingsModal from '@/components/ui/modal/InstanceSettingsModal.vue'
 import UpdateToPlayModal from '@/components/ui/modal/UpdateToPlayModal.vue'
+import SymlinkInstanceWarning from '@/components/ui/SymlinkInstanceWarning.vue'
 import {
 	fetchCachedServerStatus,
 	getFreshCachedServerStatus,
 } from '@/composables/instances/use-server-status-query'
 import { useInstanceConsole } from '@/composables/useInstanceConsole'
+import { useMinecraftLaunchError } from '@/composables/useMinecraftLaunchError'
 import { useNetworkStatus } from '@/composables/useNetworkStatus'
 import { useSymlinkWarningDismiss } from '@/composables/useSymlinkWarningDismiss'
 import { trackEvent } from '@/helpers/analytics'
 import { get_project_v3 } from '@/helpers/cache.js'
 import { instance_listener, process_listener } from '@/helpers/events'
 import { install_existing_instance, install_pack_to_existing_instance } from '@/helpers/install'
-import { get, get_full_path, kill, run, allow_symlink_target } from '@/helpers/instance'
+import { allow_symlink_target, get, get_full_path, kill, run } from '@/helpers/instance'
 import { get_by_instance_id } from '@/helpers/process'
 import type { GameInstance } from '@/helpers/types'
 import { createInstanceShortcut, showInstanceInFolder } from '@/helpers/utils.js'
@@ -404,7 +409,7 @@ const messages = defineMessages({
 	stopping: { id: 'app.instance.stopping', defaultMessage: 'Stopping...' },
 	joinServer: { id: 'app.instance.join-server', defaultMessage: 'Join server' },
 	launchInstance: { id: 'app.instance.launch-instance', defaultMessage: 'Launch instance' },
-	starting: { id: 'app.instance.starting', defaultMessage: 'Starting...' },
+	starting: { id: 'app.instance.starting', defaultMessage: 'Starting... {seconds, number}s' },
 	instanceSettings: { id: 'app.instance.settings', defaultMessage: 'Instance settings' },
 	shareInstance: { id: 'app.instance.share', defaultMessage: 'Share instance' },
 	createServer: { id: 'app.instance.create-server', defaultMessage: 'Create a server' },
@@ -440,6 +445,7 @@ const router = useRouter()
 const displayedInstanceRoute = shallowRef(router.currentRoute.value)
 const breadcrumbs = useBreadcrumbs()
 const themeStore = useTheming()
+const handleMinecraftLaunchError = useMinecraftLaunchError()
 const showInstancePlayTime = computed(() => themeStore.getFeatureFlag('show_instance_play_time'))
 const { offline } = useNetworkStatus()
 
@@ -448,10 +454,12 @@ const instanceId = computed(() => instance.value?.id)
 const symlinkWarning = useSymlinkWarningDismiss(instanceId)
 const playing = ref(false)
 const loading = ref(false)
+const launchElapsedSeconds = ref(0)
 const subpagePending = ref(false)
 const stopping = ref(false)
 const exportModal = ref<InstanceType<typeof ExportModal>>()
 const updateToPlayModal = ref<InstanceType<typeof UpdateToPlayModal>>()
+let launchElapsedTimer: ReturnType<typeof setInterval> | undefined
 
 useLoadingBarToken(subpagePending)
 
@@ -656,13 +664,26 @@ const startInstance = async (context: string) => {
 	}
 
 	loading.value = true
+	launchElapsedSeconds.value = 0
+	launchElapsedTimer = setInterval(() => {
+		launchElapsedSeconds.value += 1
+	}, 1000)
 	try {
 		await run(route.params.id as string)
 		playing.value = true
 	} catch (err) {
-		handleSevereError(err, { instanceId: route.params.id as string })
+		const handled = await handleMinecraftLaunchError(err, {
+			instance_id: route.params.id as string,
+			instance_name: instance.value.name,
+		})
+		if (!handled) {
+			handleSevereError(err, { instanceId: route.params.id as string })
+		}
+	} finally {
+		clearInterval(launchElapsedTimer)
+		launchElapsedTimer = undefined
+		loading.value = false
 	}
-	loading.value = false
 
 	trackEvent('InstanceStart', {
 		loader: instance.value.loader,
@@ -848,6 +869,7 @@ const timePlayedHumanized = computed(() => {
 })
 
 onUnmounted(() => {
+	clearInterval(launchElapsedTimer)
 	unlistenProcesses()
 	unlistenInstances()
 	const instanceId = displayedInstanceRoute.value.params.id

@@ -83,7 +83,9 @@ const historyAnnouncements = computed(() =>
 					<template #title>
 						<div class="flex min-w-0 flex-1 items-center gap-3">
 							<div class="flex min-w-0 flex-1 flex-col gap-1">
-								<span class="truncate font-semibold text-primary transition-colors group-hover:text-contrast">
+								<span
+									class="truncate font-semibold text-primary transition-colors group-hover:text-contrast"
+								>
 									{{ getLocalizedAnnouncementText(announcement.title, locale) }}
 								</span>
 								<div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-secondary">

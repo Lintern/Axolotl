@@ -14,14 +14,13 @@ import type ModpackAlreadyInstalledModal from '@/components/ui/modal/ModpackAlre
 import { trackEvent } from '@/helpers/analytics'
 import { get_project_versions, get_search_results } from '@/helpers/cache.js'
 import { import_instance } from '@/helpers/import.js'
-import { check_symlink_capability, restart_as_admin } from '@/helpers/instance'
 import {
 	type CreatePackLocation,
 	install_create_instance,
 	install_create_modpack_instance,
 	install_get_modpack_preview,
 } from '@/helpers/install'
-import { list } from '@/helpers/instance'
+import { check_symlink_capability, list, restart_as_admin } from '@/helpers/instance'
 import { get_loader_versions as getLoaderManifest } from '@/helpers/metadata.js'
 import type { InstanceLoader } from '@/helpers/types'
 import { useTheming } from '@/store/state'
@@ -29,21 +28,28 @@ import { useTheming } from '@/store/state'
 const symlinkMessages = defineMessages({
 	unsupportedTitle: {
 		id: 'app.symlink-capability.unsupported.title',
+		defaultMessage: 'Shared instances are unavailable',
 	},
 	unsupportedBody: {
 		id: 'app.symlink-capability.unsupported',
+		defaultMessage: 'This system does not support creating symbolic links.',
 	},
 	requiresAdminTitle: {
 		id: 'app.symlink-capability.requires-admin.title',
+		defaultMessage: 'Administrator permission required',
 	},
 	requiresAdminDescription: {
 		id: 'app.symlink-capability.requires-admin.description',
+		defaultMessage:
+			'Windows Developer Mode is disabled, so the launcher must restart as administrator to create a shared instance.',
 	},
 	requiresAdminRestartButton: {
 		id: 'app.symlink-capability.requires-admin.restart-button',
+		defaultMessage: 'Restart as administrator',
 	},
 	cancel: {
 		id: 'app.symlink-capability.cancel',
+		defaultMessage: 'Cancel',
 	},
 })
 

@@ -438,10 +438,7 @@ async function refreshValues() {
 					headUrl,
 				)
 				if (selectedUser) {
-				accountHeadUrlCache.value = new Map(accountHeadUrlCache.value).set(
-					selectedUser,
-					headUrl,
-				)
+					accountHeadUrlCache.value = new Map(accountHeadUrlCache.value).set(selectedUser, headUrl)
 				}
 			} catch (error) {
 				console.warn('Failed to get head render for equipped skin:', error)

@@ -10,9 +10,9 @@ import {
 } from '@modrinth/ui'
 import { computed, ref } from 'vue'
 
+import SymlinkInstanceWarning from '@/components/ui/SymlinkInstanceWarning.vue'
 import HideFromHomeOption from '@/components/ui/world/modal/HideFromHomeOption.vue'
 import ServerModalBody from '@/components/ui/world/modal/ServerModalBody.vue'
-import SymlinkInstanceWarning from '@/components/ui/SymlinkInstanceWarning.vue'
 import type { GameInstance } from '@/helpers/types'
 import {
 	type DisplayStatus,
@@ -98,7 +98,10 @@ const titleMessage = defineMessage({
 </script>
 <template>
 	<NewModal ref="modal" :header="formatMessage(titleMessage)" width="500px" max-width="500px">
-		<SymlinkInstanceWarning v-if="props.instance?.symlink_target" :symlink-target="props.instance.symlink_target" />
+		<SymlinkInstanceWarning
+			v-if="props.instance?.symlink_target"
+			:symlink-target="props.instance.symlink_target"
+		/>
 		<ServerModalBody
 			v-model:name="name"
 			v-model:address="address"

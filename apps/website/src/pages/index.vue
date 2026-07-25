@@ -32,19 +32,25 @@ type OSType = 'Mac' | 'Windows' | 'Linux' | null
 const downloadWindows = ref<HTMLAnchorElement | null>(null)
 const downloadMac = ref<HTMLAnchorElement | null>(null)
 const downloadSection = ref<HTMLElement | null>(null)
-const windowsLink = ref<string | null>(null)
 
 const { resolvedSource } = useDownloadSource()
 const CNB_RELEASE_BASE_URL = 'https://cnb.cool/axlmc/Axolotl/-/releases/download'
+const CNB_RELEASES_URL = 'https://cnb.cool/axlmc/Axolotl/-/releases'
+const GITHUB_RELEASES_URL = 'https://github.com/Mystic-Stars/Axolotl/releases/latest'
+const releasePageUrl = computed(() =>
+	resolvedSource.value === 'cnb' ? CNB_RELEASES_URL : GITHUB_RELEASES_URL,
+)
+
+const windowsLink = ref(releasePageUrl.value)
 
 const linuxLinks = reactive({
-	appImage: null as string | null,
-	deb: null as string | null,
-	rpm: null as string | null,
+	appImage: releasePageUrl.value,
+	deb: releasePageUrl.value,
+	rpm: releasePageUrl.value,
 })
 
 const macLinks = reactive({
-	universal: null as string | null,
+	universal: releasePageUrl.value,
 })
 
 const { data: launcherRelease } = await useFetch<GitHubRelease>(
@@ -212,7 +218,7 @@ watch(
 			const asset = release?.assets.find((item) =>
 				patterns.some((pattern) => pattern.test(item.name)),
 			)
-			if (!asset) return null
+			if (!asset) return releasePageUrl.value
 
 			if (resolvedSource.value === 'cnb') {
 				return `${CNB_RELEASE_BASE_URL}/${encodeURIComponent(release.tag_name)}/${encodeURIComponent(asset.name)}`

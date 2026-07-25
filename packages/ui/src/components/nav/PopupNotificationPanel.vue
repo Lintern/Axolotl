@@ -287,7 +287,8 @@ async function handleErrorAction(notification: PopupNotification): Promise<void>
 	try {
 		await onErrorAction(notification)
 	} finally {
-		delete exporting.value[notification.id]
+		const { [notification.id]: _, ...rest } = exporting.value
+		exporting.value = rest
 	}
 }
 

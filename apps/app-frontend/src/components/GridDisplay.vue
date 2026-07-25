@@ -161,8 +161,8 @@ const handleOptionsClick = async (args) => {
 			await navigator.clipboard.writeText(args.item.instance.id)
 			break
 		case 'delete':
-		currentDeleteInstance.value = args.item.instance
-		confirmModal.value.show()
+			currentDeleteInstance.value = args.item.instance
+			confirmModal.value.show()
 			break
 	}
 }

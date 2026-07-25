@@ -1586,6 +1586,9 @@
 	"app.settings.resources.app-directory-description": {
 		"message": "啟動器用於儲存全部檔案的目錄。變更後將在重新啟動啟動器後生效。"
 	},
+	"app.settings.resources.app-directory-description-portable": {
+		"message": "您目前正在便攜模式下執行。應用程式目錄已固定，無法變更。"
+	},
 	"app.settings.resources.database-backups": {
 		"message": "應用程式資料庫備份"
 	},

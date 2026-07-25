@@ -38,6 +38,12 @@
   "app.server-settings.failed-to-load-server": {
     "defaultMessage": "Failed to load server settings"
   },
+  "app.symlink-warning.write.body": {
+    "defaultMessage": "This instance is linked to \"{path}\". Changes will also affect the original files."
+  },
+  "app.symlink-warning.write.header": {
+    "defaultMessage": "Shared instance"
+  },
   "badge.alpha": {
     "defaultMessage": "Alpha"
   },
@@ -836,6 +842,12 @@
   "creation-flow.modal.import-instance.detecting-launcher-instances": {
     "defaultMessage": "Detecting launcher instances..."
   },
+  "creation-flow.modal.import-instance.import-as-symlink": {
+    "defaultMessage": "Import as symlink"
+  },
+  "creation-flow.modal.import-instance.import-as-symlink.tooltip": {
+    "defaultMessage": "Creates a link to the original instance folder instead of copying files. Saves disk space, but changes to the instance will affect the original files."
+  },
   "creation-flow.modal.import-instance.launcher-instances.title": {
     "defaultMessage": "Launcher instances"
   },
@@ -1238,26 +1250,26 @@
   "files.create-modal.placeholder-file": {
     "defaultMessage": "e.g. config.yml"
   },
-  "files.delete-modal.deleting-name": {
-    "defaultMessage": "Deleting \"{name}\""
-  },
-  "files.delete-modal.deleting-multiple": {
-    "defaultMessage": "Deleting {count} items"
-  },
   "files.delete-modal.bulk-header": {
     "defaultMessage": "Delete multiple items"
   },
   "files.delete-modal.bulk-warning": {
     "defaultMessage": "The selected items will be permanently deleted. This action cannot be undone."
   },
-  "files.delete-modal.symlink-warning-header": {
-    "defaultMessage": "Shared instance"
+  "files.delete-modal.deleting-multiple": {
+    "defaultMessage": "Deleting {count} items"
   },
-  "files.delete-modal.symlink-warning-body": {
-    "defaultMessage": "You are modifying files in a shared instance linked to \"{path}\". Any changes will also affect the original instance."
+  "files.delete-modal.deleting-name": {
+    "defaultMessage": "Deleting \"{name}\""
   },
   "files.delete-modal.header": {
     "defaultMessage": "Delete file"
+  },
+  "files.delete-modal.symlink-warning-body": {
+    "defaultMessage": "You are modifying files in a shared instance linked to \"{path}\". Changes will affect the original instance."
+  },
+  "files.delete-modal.symlink-warning-header": {
+    "defaultMessage": "Shared instance"
   },
   "files.delete-modal.warning.file": {
     "defaultMessage": "This file will be permanently deleted. This action cannot be undone."

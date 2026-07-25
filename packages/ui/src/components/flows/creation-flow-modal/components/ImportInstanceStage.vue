@@ -118,14 +118,15 @@
 				<span
 					v-tooltip="formatMessage(messages.importAsSymlinkTooltip)"
 					class="cursor-help text-sm"
-				>{{ formatMessage(messages.importAsSymlink) }}</span>
+					>{{ formatMessage(messages.importAsSymlink) }}</span
+				>
 			</div>
 		</template>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ChevronRightIcon, FolderSearchIcon, LinkIcon, SearchIcon } from '@modrinth/assets'
+import { ChevronRightIcon, FolderSearchIcon, SearchIcon } from '@modrinth/assets'
 import { defineMessages, useVIntl } from '@modrinth/ui'
 import { computed, onMounted, ref, watch } from 'vue'
 

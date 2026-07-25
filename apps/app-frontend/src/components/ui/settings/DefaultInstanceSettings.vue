@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
-	defineMessages,
 	Checkbox,
+	defineMessages,
 	injectNotificationManager,
 	Slider,
 	StyledInput,

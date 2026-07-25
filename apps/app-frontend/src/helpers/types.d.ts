@@ -191,6 +191,7 @@ type AppSettings = {
 	force_fullscreen: boolean
 	game_resolution: [number, number]
 	hide_on_process_start: boolean
+	auto_set_java_high_performance_mode: boolean
 	hooks: Hooks
 
 	custom_dir?: string

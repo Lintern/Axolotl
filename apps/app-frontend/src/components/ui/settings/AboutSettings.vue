@@ -16,6 +16,7 @@ const isDevEnvironment = await isDev()
 const copied = ref(false)
 const { addNotification } = injectNotificationManager()
 const replayOnboarding = inject<(mode: 'main' | 'instance') => Promise<void>>('replayOnboarding')
+const previewMinecraftCrashModal = inject<() => void>('previewMinecraftCrashModal')
 
 async function copyQqGroupNumber() {
 	await navigator.clipboard.writeText(AxolotlBrandConfig.qqGroupNumber)
@@ -94,6 +95,10 @@ const messages = defineMessages({
 		id: 'app.settings.about.test-notification-error-title',
 		defaultMessage: 'Test notification error',
 	},
+	previewMinecraftCrashModal: {
+		id: 'app.settings.about.preview-minecraft-crash-modal',
+		defaultMessage: 'Preview Minecraft crash window',
+	},
 	contentSearchAttribution: {
 		id: 'app.settings.about.content-search-attribution',
 		defaultMessage:
@@ -164,6 +169,11 @@ function triggerTestNotificationError() {
 				<ButtonStyled>
 					<button @click="triggerTestNotificationError">
 						<WrenchIcon /> {{ formatMessage(messages.testNotificationError) }}
+					</button>
+				</ButtonStyled>
+				<ButtonStyled>
+					<button @click="previewMinecraftCrashModal?.()">
+						<WrenchIcon /> {{ formatMessage(messages.previewMinecraftCrashModal) }}
 					</button>
 				</ButtonStyled>
 			</div>

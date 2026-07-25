@@ -102,6 +102,7 @@ pub struct Settings {
     pub force_fullscreen: bool,
     pub game_resolution: WindowSize,
     pub hide_on_process_start: bool,
+    pub auto_set_java_high_performance_mode: bool,
     pub hooks: Hooks,
 
     pub custom_dir: Option<String>,
@@ -154,6 +155,7 @@ impl Settings {
                 onboarded, onboarding_version, onboarding_instance_tour_completed,
                 json(extra_launch_args) extra_launch_args, json(custom_env_vars) custom_env_vars,
                 mc_memory_max, mc_memory_auto, mc_force_fullscreen, mc_game_resolution_x, mc_game_resolution_y, hide_on_process_start,
+                auto_set_java_high_performance_mode,
                 hook_pre_launch, hook_wrapper, hook_post_exit,
                 custom_dir, prev_custom_dir, migrated, json(feature_flags) feature_flags, toggle_sidebar,
                 skipped_update, pending_update_toast_for_version, auto_download_updates, accent_color,
@@ -227,6 +229,9 @@ impl Settings {
                 res.mc_game_resolution_y as u16,
             ),
             hide_on_process_start: res.hide_on_process_start == 1,
+            auto_set_java_high_performance_mode: res
+                .auto_set_java_high_performance_mode
+                == 1,
             hooks: Hooks {
                 pre_launch: res.hook_pre_launch,
                 wrapper: res.hook_wrapper,
@@ -309,39 +314,40 @@ impl Settings {
                 mc_game_resolution_x = $19,
                 mc_game_resolution_y = $20,
                 hide_on_process_start = $21,
+                auto_set_java_high_performance_mode = $22,
 
-                hook_pre_launch = $22,
-                hook_wrapper = $23,
-                hook_post_exit = $24,
+                hook_pre_launch = $23,
+                hook_wrapper = $24,
+                hook_post_exit = $25,
 
-                custom_dir = $25,
-                prev_custom_dir = $26,
-                migrated = $27,
+                custom_dir = $26,
+                prev_custom_dir = $27,
+                migrated = $28,
 
-                toggle_sidebar = $28,
-                feature_flags = $29,
-                hide_nametag_skins_page = $30,
+                toggle_sidebar = $29,
+                feature_flags = $30,
+                hide_nametag_skins_page = $31,
 
-                skipped_update = $31,
-                pending_update_toast_for_version = $32,
-                auto_download_updates = $33,
-                accent_color = $34,
-                custom_background_path = $35,
-                custom_background_blur = $36,
-                custom_background_opacity = $37,
+                skipped_update = $32,
+                pending_update_toast_for_version = $33,
+                auto_download_updates = $34,
+                accent_color = $35,
+                custom_background_path = $36,
+                custom_background_blur = $37,
+                custom_background_opacity = $38,
 
-                version = $38,
-                auto_concurrent_downloads = $39,
-                minecraft_metadata_source = $40,
-                minecraft_file_source = $41,
-                modrinth_source = $42,
-                curseforge_source = $43,
-                use_minecraft_mirror = $44,
-                use_modrinth_mirror = $45,
-                use_curseforge_mirror = $46,
-                onboarding_version = $47,
-                onboarding_instance_tour_completed = $48,
-                sidebar_instance_count = $49
+                version = $39,
+                auto_concurrent_downloads = $40,
+                minecraft_metadata_source = $41,
+                minecraft_file_source = $42,
+                modrinth_source = $43,
+                curseforge_source = $44,
+                use_minecraft_mirror = $45,
+                use_modrinth_mirror = $46,
+                use_curseforge_mirror = $47,
+                onboarding_version = $48,
+                onboarding_instance_tour_completed = $49,
+                sidebar_instance_count = $50
             ",
             max_concurrent_writes,
             max_concurrent_downloads,
@@ -364,6 +370,7 @@ impl Settings {
             self.game_resolution.0,
             self.game_resolution.1,
             self.hide_on_process_start,
+            self.auto_set_java_high_performance_mode,
             self.hooks.pre_launch,
             self.hooks.wrapper,
             self.hooks.post_exit,
@@ -815,6 +822,7 @@ mod tests {
         sqlx::migrate!().run(&pool).await.unwrap();
         let settings = Settings::get(&pool).await.unwrap();
         assert!(settings.auto_concurrent_downloads);
+        assert!(settings.auto_set_java_high_performance_mode);
         assert_eq!(
             settings.minecraft_metadata_source,
             DownloadSourceMode::Auto

@@ -1,6 +1,6 @@
 use crate::State;
 use crate::event::InstancePayloadType;
-use crate::event::emit::{emit_instance, emit_warning};
+use crate::event::emit::{emit_instance, emit_minecraft_crash_warning};
 use crate::state::{
     DirectoryInfo, InstanceInstallStage, ProjectType, attached_world_data,
 };
@@ -71,14 +71,23 @@ pub async fn init_watcher() -> crate::Result<FileWatcher> {
                                 .skip_while(|x| x.as_os_str() != instance_path)
                                 .nth(1)
                                 .map(|x| x.as_os_str());
-                            if first_file_name
+                            let is_crash_report = first_file_name
                                 .as_ref()
                                 .is_some_and(|x| *x == "crash-reports")
                                 && e.path
                                     .extension()
                                     .as_ref()
-                                    .is_some_and(|x| *x == "txt")
-                            {
+                                    .is_some_and(|x| *x == "txt");
+                            let is_jvm_crash =
+                                first_file_name.as_ref().is_some_and(|x| {
+                                    x.to_string_lossy()
+                                        .starts_with("hs_err_pid")
+                                }) && e
+                                    .path
+                                    .extension()
+                                    .as_ref()
+                                    .is_some_and(|x| *x == "log");
+                            if is_crash_report || is_jvm_crash {
                                 crash_task(instance_id);
                             } else if !visited_instances.contains(&instance_id)
                             {
@@ -259,11 +268,8 @@ fn crash_task(instance_id: String) {
             };
 
             if instance.install_stage == InstanceInstallStage::Installed {
-                emit_warning(&format!(
-					"Instance {} has crashed! Visit the logs page to see a crash report.",
-					instance.name
-				))
-				.await?;
+                emit_minecraft_crash_warning(&instance_id, &instance.name)
+                    .await?;
             }
 
             Ok::<(), crate::Error>(())

@@ -6,6 +6,7 @@ export const useError = defineStore('errorsStore', {
 	state: () => ({
 		errorModal: null,
 		minecraftAuthErrorModal: null,
+		minecraftLaunchErrorHandler: null,
 	}),
 	actions: {
 		setErrorModal(ref) {
@@ -14,7 +15,11 @@ export const useError = defineStore('errorsStore', {
 		setMinecraftAuthErrorModal(ref) {
 			this.minecraftAuthErrorModal = ref
 		},
+		setMinecraftLaunchErrorHandler(handler) {
+			this.minecraftLaunchErrorHandler = handler
+		},
 		showError(error, context, closable = true, source = null) {
+			if (this.minecraftLaunchErrorHandler?.(error, context)) return
 			if (
 				error.message &&
 				(error.message.includes('Minecraft authentication error:') ||

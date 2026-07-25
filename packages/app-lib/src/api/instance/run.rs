@@ -12,6 +12,8 @@ use std::time::Duration;
 use tokio::process::Command;
 use tracing::{info, warn};
 
+const LAUNCH_PREPARATION_TIMEOUT: Duration = Duration::from_secs(60);
+
 #[derive(Debug, Clone)]
 pub enum QuickPlayType {
     None,
@@ -42,13 +44,23 @@ pub async fn run(
             .ok_or_else(|| crate::ErrorKind::NoCredentialsError.as_error())?
     };
 
-    run_credentials(
-        instance_id,
-        &default_account,
-        quick_play_type,
-        offline_mode,
+    tokio::time::timeout(
+        LAUNCH_PREPARATION_TIMEOUT,
+        run_credentials(
+            instance_id,
+            &default_account,
+            quick_play_type,
+            offline_mode,
+        ),
     )
     .await
+    .map_err(|_| {
+        crate::ErrorKind::LauncherError(
+            "Minecraft launch preparation timed out after 60 seconds"
+                .to_string(),
+        )
+        .as_error()
+    })?
 }
 
 #[tracing::instrument(skip(credentials))]
@@ -105,9 +117,9 @@ async fn run_credentials(
                     .instances_dir()
                     .join(&context.instance.path),
             )?;
-            let result = Command::new(command)
-                .args(cmd)
-                .current_dir(&full_path)
+            let mut command = Command::new(command);
+            command.args(cmd).current_dir(&full_path).kill_on_drop(true);
+            let result = command
                 .spawn()
                 .map_err(|e| IOError::with_path(e, &full_path))?
                 .wait()

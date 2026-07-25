@@ -20,6 +20,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import InstanceIcon from '@/components/ui/InstanceIcon.vue'
+import { useMinecraftLaunchError } from '@/composables/useMinecraftLaunchError'
 import { useNetworkStatus } from '@/composables/useNetworkStatus'
 import { trackEvent } from '@/helpers/analytics'
 import { process_listener } from '@/helpers/events'
@@ -32,6 +33,7 @@ import { handleSevereError } from '@/store/error.js'
 const { handleError } = injectNotificationManager()
 const formatRelativeTime = useRelativeTime()
 const { formatMessage } = useVIntl()
+const handleMinecraftLaunchError = useMinecraftLaunchError()
 const messages = defineMessages({
 	loading: { id: 'app.instance.loading', defaultMessage: 'Instance is loading...' },
 	played: { id: 'app.instance.played', defaultMessage: 'Played {time}' },
@@ -88,7 +90,13 @@ const play = async (e, context) => {
 	e?.stopPropagation()
 	loading.value = true
 	await run(props.instance.id)
-		.catch((err) => handleSevereError(err, { instanceId: props.instance.id }))
+		.catch(async (err) => {
+			const handled = await handleMinecraftLaunchError(err, {
+				instance_id: props.instance.id,
+				instance_name: props.instance.name,
+			})
+			if (!handled) handleSevereError(err, { instanceId: props.instance.id })
+		})
 		.finally(() => {
 			trackEvent('InstanceStart', {
 				loader: props.instance.loader,

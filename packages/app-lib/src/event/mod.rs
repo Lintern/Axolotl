@@ -195,6 +195,12 @@ pub struct LoadingPayload {
 #[cfg(feature = "tauri")]
 pub struct WarningPayload {
     pub message: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kind: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_name: Option<String>,
 }
 
 #[derive(Serialize, Clone)]
@@ -253,6 +259,8 @@ pub struct ProcessPayload {
     pub uuid: Uuid,
     pub event: ProcessPayloadType,
     pub message: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crashed: Option<bool>,
 }
 
 #[derive(Serialize, Clone, Debug)]

@@ -15,6 +15,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 import InstanceItem from '@/components/ui/world/InstanceItem.vue'
 import WorldItem from '@/components/ui/world/WorldItem.vue'
+import { useMinecraftLaunchError } from '@/composables/useMinecraftLaunchError'
 import { trackEvent } from '@/helpers/analytics'
 import { instance_listener, process_listener } from '@/helpers/events'
 import { kill, run } from '@/helpers/instance'
@@ -40,6 +41,7 @@ import { useTheming } from '@/store/theme.ts'
 
 const { handleError } = injectNotificationManager()
 const { formatMessage } = useVIntl()
+const handleMinecraftLaunchError = useMinecraftLaunchError()
 const messages = defineMessages({
 	jumpBackIn: { id: 'app.home.jump-back-in', defaultMessage: 'Jump back in' },
 })
@@ -187,8 +189,15 @@ function refreshServer(address: string, instanceId: string) {
 
 async function joinWorld(world: WorldWithInstance, instance?: GameInstance) {
 	console.log(`Joining world ${getWorldIdentifier(world)}`)
+	const handleQuickPlayError = async (error: unknown) => {
+		const handled = await handleMinecraftLaunchError(error, {
+			instance_id: world.instance_id,
+			instance_name: instance?.name || 'Minecraft',
+		})
+		if (!handled) handleSevereError(error, { instanceId: world.instance_id })
+	}
 	if (world.type === 'server') {
-		await start_join_server(world.instance_id, world.address).catch(handleError)
+		await start_join_server(world.instance_id, world.address).catch(handleQuickPlayError)
 		if (instance) {
 			trackEvent('InstanceStart', {
 				loader: instance.loader,
@@ -197,13 +206,19 @@ async function joinWorld(world: WorldWithInstance, instance?: GameInstance) {
 			})
 		}
 	} else if (world.type === 'singleplayer') {
-		await start_join_singleplayer_world(world.instance_id, world.path).catch(handleError)
+		await start_join_singleplayer_world(world.instance_id, world.path).catch(handleQuickPlayError)
 	}
 }
 
 async function playInstance(instance: GameInstance) {
 	await run(instance.id)
-		.catch((err) => handleSevereError(err, { instanceId: instance.id }))
+		.catch(async (err) => {
+			const handled = await handleMinecraftLaunchError(err, {
+				instance_id: instance.id,
+				instance_name: instance.name,
+			})
+			if (!handled) handleSevereError(err, { instanceId: instance.id })
+		})
 		.finally(() => {
 			trackEvent('InstanceStart', {
 				loader: instance.loader,

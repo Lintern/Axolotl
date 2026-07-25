@@ -34,8 +34,15 @@ const messages = defineMessages({
 	adding: { id: 'app.server.adding', defaultMessage: 'Adding...' },
 	added: { id: 'app.server.added', defaultMessage: 'Added' },
 	add: { id: 'app.server.add', defaultMessage: 'Add' },
-	symlinkWarningHeader: { id: 'app.symlink-warning.write.header' },
-	symlinkWarningBody: { id: 'app.symlink-warning.write.body' },
+	symlinkWarningHeader: {
+		id: 'app.symlink-warning.write.header',
+		defaultMessage: 'Shared instance',
+	},
+	symlinkWarningBody: {
+		id: 'app.symlink-warning.write.body',
+		defaultMessage:
+			'This instance is linked to "{path}". Changes will also affect the original files.',
+	},
 })
 
 defineProps({

@@ -10,8 +10,8 @@ import {
 } from '@modrinth/ui'
 import { ref } from 'vue'
 
-import ServerModalBody from '@/components/ui/world/modal/ServerModalBody.vue'
 import SymlinkInstanceWarning from '@/components/ui/SymlinkInstanceWarning.vue'
+import ServerModalBody from '@/components/ui/world/modal/ServerModalBody.vue'
 import type { GameInstance } from '@/helpers/types'
 import {
 	add_server_to_instance,
@@ -90,7 +90,10 @@ defineExpose({ show, hide })
 </script>
 <template>
 	<NewModal ref="modal" :header="formatMessage(messages.title)" width="500px" max-width="500px">
-		<SymlinkInstanceWarning v-if="props.instance?.symlink_target" :symlink-target="props.instance.symlink_target" />
+		<SymlinkInstanceWarning
+			v-if="props.instance?.symlink_target"
+			:symlink-target="props.instance.symlink_target"
+		/>
 		<ServerModalBody
 			v-model:name="name"
 			v-model:address="address"

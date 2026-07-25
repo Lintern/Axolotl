@@ -10,6 +10,7 @@ const messages = defineMessages({
 	features: { id: 'axolotl-site.navigation.features', defaultMessage: 'Features' },
 	faq: { id: 'axolotl-site.navigation.faq', defaultMessage: 'FAQ' },
 	downloads: { id: 'axolotl-site.footer.downloads', defaultMessage: 'Downloads' },
+	changelog: { id: 'axolotl-site.footer.release-history', defaultMessage: 'Changelog' },
 	sourceCode: { id: 'axolotl-site.footer.source-code', defaultMessage: 'GitHub' },
 	description: {
 		id: 'axolotl-site.footer.description',
@@ -51,9 +52,10 @@ const messages = defineMessages({
 				</div>
 
 				<nav class="footer-links" aria-label="Footer">
-					<a href="#features">{{ formatMessage(messages.features) }}</a>
-					<a href="#faq">{{ formatMessage(messages.faq) }}</a>
+					<NuxtLink to="/#features">{{ formatMessage(messages.features) }}</NuxtLink>
+					<NuxtLink to="/#faq">{{ formatMessage(messages.faq) }}</NuxtLink>
 					<a href="#download">{{ formatMessage(messages.downloads) }}</a>
+					<NuxtLink to="/changelog">{{ formatMessage(messages.changelog) }}</NuxtLink>
 					<a href="https://github.com/Mystic-Stars/Axolotl" target="_blank" rel="noopener">
 						{{ formatMessage(messages.sourceCode) }}
 					</a>

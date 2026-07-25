@@ -362,8 +362,15 @@ const messages = defineMessages({
 		id: 'instances.content-install.no-instances',
 		defaultMessage: 'No compatible instances found',
 	},
-	symlinkWarningHeader: { id: 'app.symlink-warning.write.header' },
-	symlinkWarningBody: { id: 'app.symlink-warning.write.body' },
+	symlinkWarningHeader: {
+		id: 'app.symlink-warning.write.header',
+		defaultMessage: 'Shared instance',
+	},
+	symlinkWarningBody: {
+		id: 'app.symlink-warning.write.body',
+		defaultMessage:
+			'This instance is linked to "{path}". Changes will also affect the original files.',
+	},
 })
 
 export interface ContentInstallInstance {

@@ -24,6 +24,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import InstanceIcon from '@/components/ui/InstanceIcon.vue'
+import { useMinecraftLaunchError } from '@/composables/useMinecraftLaunchError'
 import { trackEvent } from '@/helpers/analytics'
 import { get_project } from '@/helpers/cache'
 import { process_listener } from '@/helpers/events'
@@ -35,6 +36,7 @@ import { handleSevereError } from '@/store/error'
 
 const { handleError } = injectNotificationManager()
 const { formatMessage } = useVIntl()
+const handleMinecraftLaunchError = useMinecraftLaunchError()
 const formatRelativeTime = useRelativeTime()
 const formatDateTime = useFormatDateTime({
 	timeStyle: 'short',
@@ -80,7 +82,13 @@ const play = async (event: MouseEvent) => {
 	event?.stopPropagation()
 	loading.value = true
 	await run(props.instance.id)
-		.catch((err) => handleSevereError(err, { instanceId: props.instance.id }))
+		.catch(async (err) => {
+			const handled = await handleMinecraftLaunchError(err, {
+				instance_id: props.instance.id,
+				instance_name: props.instance.name,
+			})
+			if (!handled) handleSevereError(err, { instanceId: props.instance.id })
+		})
 		.finally(() => {
 			trackEvent('InstanceStart', {
 				loader: props.instance.loader,

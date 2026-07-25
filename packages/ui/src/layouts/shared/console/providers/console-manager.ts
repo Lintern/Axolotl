@@ -5,6 +5,22 @@ import { createContext } from '#ui/providers/create-context'
 
 import type { LogLine, LogSource } from '../types'
 
+export interface LocalCrashAnalysis {
+	crashed: boolean
+	sources: Array<{ filename: string; source_type: string; line_count: number }>
+	findings: Array<{
+		id: string
+		confidence: string
+		evidence: Array<{ filename: string; line: number; text: string }>
+	}>
+	mods: Array<{
+		file_name: string
+		id?: string
+		name?: string
+		matched_class?: string
+	}>
+}
+
 export interface ConsoleManagerContext {
 	logLines: Ref<LogLine[]>
 
@@ -29,6 +45,9 @@ export interface ConsoleManagerContext {
 
 	emptyStateType?: 'server' | 'instance'
 
+	localCrashAnalysis?: Ref<LocalCrashAnalysis | null>
+	crashAnalysisLoading?: Ref<boolean>
+	onExportCrashContext?: () => Promise<void>
 	crashAnalysis?: Ref<Mclogs.Insights.v1.InsightsResponse | null>
 	onDismissCrash?: () => void
 }

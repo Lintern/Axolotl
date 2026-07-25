@@ -25,7 +25,13 @@ const settings = ref(await get())
 const purgeCacheConfirmModal = ref(null)
 const { formatMessage } = useVIntl()
 
-const isPortable = ref(await invoke('is_portable_mode'))
+const isPortable = ref(false)
+
+try {
+	isPortable.value = await invoke('is_portable_mode')
+} catch (error) {
+	console.error('Failed to determine portable mode', error)
+}
 
 const messages = defineMessages({
 	selectDirectory: {

@@ -50,6 +50,9 @@
   "browse.filter-results": {
     "defaultMessage": "Filter results..."
   },
+  "browse.loading-results": {
+    "defaultMessage": "Loading results…"
+  },
   "browse.no-results": {
     "defaultMessage": "No results found for your query!"
   },
@@ -3025,6 +3028,9 @@
   },
   "pagination.go-to-page.placeholder": {
     "defaultMessage": "Page"
+  },
+  "pagination.loading-page": {
+    "defaultMessage": "Loading page…"
   },
   "payment-method.amazon_pay": {
     "defaultMessage": "Amazon Pay"

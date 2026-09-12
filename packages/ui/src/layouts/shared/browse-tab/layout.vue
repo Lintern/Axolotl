@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import type { Labrinth } from '@modrinth/api-client'
-import { SearchIcon } from '@modrinth/assets'
+import { SearchIcon, SpinnerIcon } from '@modrinth/assets'
 import { computed, ref, toValue } from 'vue'
 
 import ButtonStyled from '#ui/components/base/ButtonStyled.vue'
 import Combobox, { type ComboboxOption } from '#ui/components/base/Combobox.vue'
-import LoadingIndicator from '#ui/components/base/LoadingIndicator.vue'
 import NavTabs from '#ui/components/base/NavTabs.vue'
 import Pagination from '#ui/components/base/Pagination.vue'
 import PopoutMenu from '#ui/components/base/PopoutMenu.vue'
 import StyledInput from '#ui/components/base/StyledInput.vue'
 import ProjectCard from '#ui/components/project/card/ProjectCard.vue'
 import ProjectCardList from '#ui/components/project/ProjectCardList.vue'
+import ProjectCardSkeleton from '#ui/components/project/ProjectCardSkeleton.vue'
 import SearchFilterControl from '#ui/components/search/SearchFilterControl.vue'
 import { defineMessages, useVIntl } from '#ui/composables/i18n'
 import { useStickyObserver } from '#ui/composables/sticky-observer'
@@ -58,6 +58,10 @@ const messages = defineMessages({
 		id: 'browse.offline',
 		defaultMessage: 'You are currently offline. Connect to the internet to browse Modrinth!',
 	},
+	loadingLabel: {
+		id: 'browse.loading-results',
+		defaultMessage: 'Loading results…',
+	},
 	noResults: {
 		id: 'browse.no-results',
 		defaultMessage: 'No results found for your query!',
@@ -98,6 +102,13 @@ const sortOptions = computed<ComboboxOption<SortType>[]>(() =>
 const selectedDisplayMode = computed(() =>
 	ctx.displayModeOptions?.value.find((option) => option.id === ctx.displayMode?.value),
 )
+
+const skeletonCount = computed(() => {
+	const layout = ctx.effectiveLayout.value
+	if (layout === 'grid' || layout === 'gallery') return 6
+	const max = ctx.maxResults?.value ?? 20
+	return Math.min(Math.max(max, 4), 12)
+})
 </script>
 
 <template>
@@ -220,6 +231,7 @@ const selectedDisplayMode = computed(() =>
 				<Pagination
 					:page="ctx.currentPage.value"
 					:count="ctx.pageCount.value"
+					:loading="ctx.loading.value"
 					:class="ctx.variant === 'web' ? 'mx-auto sm:ml-auto sm:mr-0' : 'ml-auto'"
 					@switch-page="ctx.setPage"
 				/>
@@ -253,9 +265,19 @@ const selectedDisplayMode = computed(() =>
 
 	<slot name="above-results" />
 
-	<div class="search">
-		<section v-if="ctx.loading.value" class="offline">
-			<component :is="ctx.loadingComponent ?? LoadingIndicator" />
+	<div class="search" :class="{ 'pointer-events-none select-none opacity-70': ctx.loading.value }">
+		<section v-if="ctx.loading.value" class="offline" aria-busy="true" aria-live="polite">
+			<div class="flex items-center justify-center gap-2 pb-3 text-sm font-medium text-secondary">
+				<SpinnerIcon class="size-4 animate-spin" />
+				{{ formatMessage(messages.loadingLabel) }}
+			</div>
+			<ProjectCardList :layout="ctx.effectiveLayout.value">
+				<ProjectCardSkeleton
+					v-for="index in skeletonCount"
+					:key="`skeleton-${index}`"
+					:layout="ctx.effectiveLayout.value"
+				/>
+			</ProjectCardList>
 		</section>
 		<section v-else-if="ctx.offline?.value && ctx.totalHits.value === 0" class="offline">
 			{{ formatMessage(messages.offline) }}
@@ -408,6 +430,7 @@ const selectedDisplayMode = computed(() =>
 			<Pagination
 				:page="ctx.currentPage.value"
 				:count="ctx.pageCount.value"
+				:loading="ctx.loading.value"
 				:class="ctx.variant === 'web' ? 'justify-end' : 'pagination-after'"
 				@switch-page="ctx.setPage"
 			/>

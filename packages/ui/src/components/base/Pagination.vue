@@ -1,15 +1,16 @@
 <template>
-	<div v-if="count > 1" class="flex items-center gap-1">
+	<div v-if="count > 1" class="flex items-center gap-1" :class="{ 'opacity-60': loading }">
 		<ButtonStyled v-if="page > 1" circular type="transparent">
 			<a
 				v-if="linkFunction"
 				aria-label="Previous Page"
 				:href="linkFunction(page - 1)"
-				@click.prevent="switchPage(page - 1)"
+				:aria-disabled="loading"
+				@click.prevent="!loading && switchPage(page - 1)"
 			>
 				<ChevronLeftIcon />
 			</a>
-			<button v-else aria-label="Previous Page" @click="switchPage(page - 1)">
+			<button v-else aria-label="Previous Page" :disabled="loading" @click="switchPage(page - 1)">
 				<ChevronLeftIcon />
 			</button>
 		</ButtonStyled>
@@ -43,13 +44,23 @@
 					type="button"
 					class="grid h-8 w-8 place-content-center rounded-full text-secondary transition-colors hover:bg-surface-3 hover:text-contrast focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-shadow"
 					:aria-label="formatMessage(messages.goToPage)"
-					:aria-expanded="false"
+					aria-expanded="false"
+					:disabled="loading"
 					@click="openGapInput(index)"
 				>
 					<span class="rotate-90 grid place-content-center">
 						<EllipsisVerticalIcon />
 					</span>
 				</button>
+			</template>
+			<template v-else-if="loading && page === item">
+				<span
+					class="grid size-8 place-content-center rounded-full bg-button-bg text-brand"
+					:aria-label="formatMessage(messages.loadingPage)"
+					role="status"
+				>
+					<SpinnerIcon class="size-4 animate-spin" />
+				</span>
 			</template>
 			<ButtonStyled
 				v-else
@@ -61,13 +72,15 @@
 					v-if="linkFunction"
 					:href="linkFunction(item)"
 					:class="page === item ? '!text-brand' : ''"
-					@click.prevent="page !== item ? switchPage(item) : null"
+					:aria-disabled="loading"
+					@click.prevent="!loading && page !== item ? switchPage(item) : null"
 				>
 					{{ item }}
 				</a>
 				<button
 					v-else
 					:class="page === item ? '!text-brand' : ''"
+					:disabled="loading"
 					@click="page !== item ? switchPage(item) : null"
 				>
 					{{ item }}
@@ -80,18 +93,24 @@
 				v-if="linkFunction"
 				aria-label="Next Page"
 				:href="linkFunction(page + 1)"
-				@click.prevent="switchPage(page + 1)"
+				:aria-disabled="loading"
+				@click.prevent="!loading && switchPage(page + 1)"
 			>
 				<ChevronRightIcon />
 			</a>
-			<button v-else aria-label="Next Page" @click="switchPage(page + 1)">
+			<button v-else aria-label="Next Page" :disabled="loading" @click="switchPage(page + 1)">
 				<ChevronRightIcon />
 			</button>
 		</ButtonStyled>
 	</div>
 </template>
 <script setup lang="ts">
-import { ChevronLeftIcon, ChevronRightIcon, EllipsisVerticalIcon } from '@modrinth/assets'
+import {
+	ChevronLeftIcon,
+	ChevronRightIcon,
+	EllipsisVerticalIcon,
+	SpinnerIcon,
+} from '@modrinth/assets'
 import { computed, nextTick, ref, watch } from 'vue'
 
 import { defineMessages, useVIntl } from '../../composables/i18n'
@@ -105,11 +124,13 @@ const props = withDefaults(
 	defineProps<{
 		page: number
 		count: number
+		loading?: boolean
 		linkFunction?: (page: number) => string | undefined
 	}>(),
 	{
 		page: 1,
 		count: 1,
+		loading: false,
 	},
 )
 
@@ -123,6 +144,10 @@ const messages = defineMessages({
 	goToPagePlaceholder: {
 		id: 'pagination.go-to-page.placeholder',
 		defaultMessage: 'Page',
+	},
+	loadingPage: {
+		id: 'pagination.loading-page',
+		defaultMessage: 'Loading page…',
 	},
 })
 

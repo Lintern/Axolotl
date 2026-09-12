@@ -25,10 +25,13 @@ import { injectBrowseManager } from './providers/browse-manager'
 const ctx = injectBrowseManager()
 const { formatMessage } = useVIntl()
 const lockedMessages = computed(() => toValue(ctx.lockedFilterMessages))
-const stickyInstallHeaderRef = ref<HTMLElement | null>(null)
-const { isStuck: isInstallHeaderStuck } = useStickyObserver(
-	stickyInstallHeaderRef,
-	'BrowseInstallHeader',
+const stickyChromeRef = ref<HTMLElement | null>(null)
+const { isStuck: isChromeStuck } = useStickyObserver(stickyChromeRef, 'BrowseToolbarChrome')
+const showInstallHeader = computed(
+	() =>
+		!!ctx.installContext?.value &&
+		ctx.installContext.value.showInstallHeader !== false &&
+		ctx.variant !== 'web',
 )
 
 const maxResultsOptions = computed<ComboboxOption<number>[]>(() =>
@@ -98,154 +101,155 @@ const selectedDisplayMode = computed(() =>
 </script>
 
 <template>
-	<template
-		v-if="
-			ctx.installContext?.value &&
-			ctx.installContext.value.showInstallHeader !== false &&
-			ctx.variant !== 'web'
-		"
+	<div
+		ref="stickyChromeRef"
+		class="browse-toolbar-chrome sticky top-0 z-20 flex flex-col gap-3 border-b border-solid border-surface-5 bg-surface-1"
+		:class="[
+			isChromeStuck && ctx.variant !== 'web' ? 'border-t' : '',
+			ctx.variant === 'web'
+				? 'mb-3 rounded-xl p-3'
+				: '-mx-6 -mt-6 rounded-tl-[--radius-xl] rounded-tr-[--radius-xl] border-0',
+		]"
 	>
-		<div
-			ref="stickyInstallHeaderRef"
-			class="browse-install-header sticky top-0 z-20 -mx-6 -mt-6 rounded-tl-[--radius-xl] border-0 border-b border-solid bg-surface-1 p-3 border-surface-5"
-			:class="[isInstallHeaderStuck ? 'border-t' : '']"
-		>
+		<div v-if="showInstallHeader" class="p-3 pb-0">
 			<BrowseInstallHeader />
 		</div>
-	</template>
-	<SelectedProjectsFloatingBar v-if="ctx.installContext?.value && ctx.variant !== 'web'" />
+		<div class="flex flex-col gap-3" :class="ctx.variant === 'web' ? '' : 'p-3'">
+			<div class="flex min-w-0 items-center gap-2">
+				<NavTabs
+					v-if="ctx.showProjectTypeTabs.value"
+					:links="ctx.selectableProjectTypes.value"
+					class="min-w-0 flex-1"
+				/>
+				<div class="shrink-0">
+					<slot name="nav-tabs-actions" />
+				</div>
+			</div>
 
-	<div class="flex min-w-0 items-center gap-2">
-		<NavTabs
-			v-if="ctx.showProjectTypeTabs.value"
-			:links="ctx.selectableProjectTypes.value"
-			class="min-w-0 flex-1"
-		/>
-		<div class="shrink-0">
-			<slot name="nav-tabs-actions" />
-		</div>
-	</div>
+			<div class="flex items-center gap-2">
+				<StyledInput
+					v-model="ctx.query.value"
+					:icon="SearchIcon"
+					type="text"
+					autocomplete="off"
+					:placeholder="
+						formatMessage(messages.searchPlaceholder, {
+							projectType: formatProjectTypeSentence(formatMessage, ctx.projectType.value, 2),
+						})
+					"
+					clearable
+					wrapper-class="flex-1"
+					:input-class="ctx.variant === 'web' ? '!h-12' : 'h-12'"
+					@clear="ctx.clearSearch()"
+				/>
+				<slot name="search-bar-actions" />
+			</div>
 
-	<div class="flex items-center gap-2">
-		<StyledInput
-			v-model="ctx.query.value"
-			:icon="SearchIcon"
-			type="text"
-			autocomplete="off"
-			:placeholder="
-				formatMessage(messages.searchPlaceholder, {
-					projectType: formatProjectTypeSentence(formatMessage, ctx.projectType.value, 2),
-				})
-			"
-			clearable
-			wrapper-class="flex-1"
-			:input-class="ctx.variant === 'web' ? '!h-12' : 'h-12'"
-			@clear="ctx.clearSearch()"
-		/>
-		<slot name="search-bar-actions" />
-	</div>
+			<div class="flex flex-wrap items-center gap-2">
+				<Combobox
+					:model-value="ctx.effectiveCurrentSortType.value"
+					:options="sortOptions"
+					:class="
+						ctx.variant === 'web'
+							? '!w-[16rem] min-w-max max-w-full flex-grow md:flex-grow-0'
+							: '!w-[16rem] min-w-max max-w-full'
+					"
+					@update:model-value="(val: SortType) => (ctx.effectiveCurrentSortType.value = val)"
+				>
+					<template #prefix>
+						<span class="font-semibold text-primary">{{
+							formatMessage(commonMessages.sortByLabel)
+						}}</span>
+					</template>
+				</Combobox>
 
-	<div class="flex flex-wrap items-center gap-2">
-		<Combobox
-			:model-value="ctx.effectiveCurrentSortType.value"
-			:options="sortOptions"
-			:class="
-				ctx.variant === 'web'
-					? '!w-[16rem] min-w-max max-w-full flex-grow md:flex-grow-0'
-					: '!w-[16rem] min-w-max max-w-full'
-			"
-			@update:model-value="(val: SortType) => (ctx.effectiveCurrentSortType.value = val)"
-		>
-			<template #prefix>
-				<span class="font-semibold text-primary">{{
-					formatMessage(commonMessages.sortByLabel)
-				}}</span>
-			</template>
-		</Combobox>
+				<Combobox
+					:model-value="ctx.maxResults.value"
+					:options="maxResultsOptions"
+					:class="
+						ctx.variant === 'web'
+							? '!w-[9rem] min-w-max max-w-full flex-grow md:flex-grow-0'
+							: '!w-[9rem] min-w-max max-w-full'
+					"
+					:placeholder="formatMessage(commonMessages.viewLabel)"
+					@update:model-value="(val: number) => (ctx.maxResults.value = val)"
+				>
+					<template #prefix>
+						<span class="font-semibold text-primary">{{ formatMessage(messages.viewPrefix) }}</span>
+					</template>
+				</Combobox>
 
-		<Combobox
-			:model-value="ctx.maxResults.value"
-			:options="maxResultsOptions"
-			:class="
-				ctx.variant === 'web'
-					? '!w-[9rem] min-w-max max-w-full flex-grow md:flex-grow-0'
-					: '!w-[9rem] min-w-max max-w-full'
-			"
-			:placeholder="formatMessage(commonMessages.viewLabel)"
-			@update:model-value="(val: number) => (ctx.maxResults.value = val)"
-		>
-			<template #prefix>
-				<span class="font-semibold text-primary">{{ formatMessage(messages.viewPrefix) }}</span>
-			</template>
-		</Combobox>
-
-		<div v-if="ctx.filtersMenuOpen && !ctx.filtersMenuOpen.value" class="lg:hidden">
-			<ButtonStyled>
-				<button @click="ctx.filtersMenuOpen.value = true">
-					{{ formatMessage(messages.filterResults) }}
-				</button>
-			</ButtonStyled>
-		</div>
-
-		<PopoutMenu
-			v-if="ctx.displayMode && ctx.displayModeOptions?.value.length && ctx.setDisplayMode"
-			:tooltip="ctx.displayModeTooltip?.value"
-			placement="bottom-end"
-		>
-			<ButtonStyled circular>
-				<button :aria-label="ctx.displayModeTooltip?.value">
-					<component :is="selectedDisplayMode?.icon" />
-				</button>
-			</ButtonStyled>
-			<template #menu>
-				<div class="flex w-44 flex-col gap-1 p-1">
-					<ButtonStyled
-						v-for="option in ctx.displayModeOptions.value"
-						:key="option.id"
-						:type="ctx.displayMode.value === option.id ? 'filled' : 'transparent'"
-					>
-						<button
-							class="flex w-full items-center gap-2 !justify-start text-left"
-							:aria-pressed="ctx.displayMode.value === option.id"
-							@click="ctx.setDisplayMode!(option.id)"
-						>
-							<component :is="option.icon" class="h-4 w-4" />
-							<span>{{ option.label }}</span>
+				<div v-if="ctx.filtersMenuOpen && !ctx.filtersMenuOpen.value" class="lg:hidden">
+					<ButtonStyled>
+						<button @click="ctx.filtersMenuOpen.value = true">
+							{{ formatMessage(messages.filterResults) }}
 						</button>
 					</ButtonStyled>
 				</div>
-			</template>
-		</PopoutMenu>
 
-		<Pagination
-			:page="ctx.currentPage.value"
-			:count="ctx.pageCount.value"
-			:class="ctx.variant === 'web' ? 'mx-auto sm:ml-auto sm:mr-0' : 'ml-auto'"
-			@switch-page="ctx.setPage"
-		/>
+				<PopoutMenu
+					v-if="ctx.displayMode && ctx.displayModeOptions?.value.length && ctx.setDisplayMode"
+					:tooltip="ctx.displayModeTooltip?.value"
+					placement="bottom-end"
+				>
+					<ButtonStyled circular>
+						<button :aria-label="ctx.displayModeTooltip?.value">
+							<component :is="selectedDisplayMode?.icon" />
+						</button>
+					</ButtonStyled>
+					<template #menu>
+						<div class="flex w-44 flex-col gap-1 p-1">
+							<ButtonStyled
+								v-for="option in ctx.displayModeOptions.value"
+								:key="option.id"
+								:type="ctx.displayMode.value === option.id ? 'filled' : 'transparent'"
+							>
+								<button
+									class="flex w-full items-center gap-2 !justify-start text-left"
+									:aria-pressed="ctx.displayMode.value === option.id"
+									@click="ctx.setDisplayMode!(option.id)"
+								>
+									<component :is="option.icon" class="h-4 w-4" />
+									<span>{{ option.label }}</span>
+								</button>
+							</ButtonStyled>
+						</div>
+					</template>
+				</PopoutMenu>
+
+				<Pagination
+					:page="ctx.currentPage.value"
+					:count="ctx.pageCount.value"
+					:class="ctx.variant === 'web' ? 'mx-auto sm:ml-auto sm:mr-0' : 'ml-auto'"
+					@switch-page="ctx.setPage"
+				/>
+			</div>
+
+			<SearchFilterControl
+				v-if="ctx.isServerType.value"
+				v-model:selected-filters="ctx.serverCurrentFilters.value"
+				:filters="ctx.serverFilterTypes.value"
+				:provided-filters="[]"
+				:overridden-provided-filter-types="[]"
+				:project-type="ctx.projectType.value"
+			/>
+			<SearchFilterControl
+				v-else
+				v-model:selected-filters="ctx.currentFilters.value"
+				:filters="
+					ctx.filters.value.filter(
+						(f) => f.display !== 'none' && !(ctx.hiddenFilterTypes?.value ?? []).includes(f.id),
+					)
+				"
+				:provided-filters="ctx.providedFilters?.value ?? []"
+				:overridden-provided-filter-types="ctx.overriddenProvidedFilterTypes.value"
+				:project-type="ctx.projectType.value"
+				:provided-message="lockedMessages?.providedBy"
+			/>
+		</div>
 	</div>
 
-	<SearchFilterControl
-		v-if="ctx.isServerType.value"
-		v-model:selected-filters="ctx.serverCurrentFilters.value"
-		:filters="ctx.serverFilterTypes.value"
-		:provided-filters="[]"
-		:overridden-provided-filter-types="[]"
-		:project-type="ctx.projectType.value"
-	/>
-	<SearchFilterControl
-		v-else
-		v-model:selected-filters="ctx.currentFilters.value"
-		:filters="
-			ctx.filters.value.filter(
-				(f) => f.display !== 'none' && !(ctx.hiddenFilterTypes?.value ?? []).includes(f.id),
-			)
-		"
-		:provided-filters="ctx.providedFilters?.value ?? []"
-		:overridden-provided-filter-types="ctx.overriddenProvidedFilterTypes.value"
-		:project-type="ctx.projectType.value"
-		:provided-message="lockedMessages?.providedBy"
-	/>
+	<SelectedProjectsFloatingBar v-if="ctx.installContext?.value && ctx.variant !== 'web'" />
 
 	<slot name="above-results" />
 

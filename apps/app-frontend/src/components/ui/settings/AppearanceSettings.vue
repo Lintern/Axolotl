@@ -572,7 +572,7 @@ watch(
 						type="button"
 						role="radio"
 						:aria-checked="settings.accent_color === accentColor.value"
-						class="relative flex min-w-0 flex-1 basis-[5.75rem] items-center justify-center gap-2 overflow-hidden rounded-lg border border-solid px-2 py-2.5 @xl:pe-5 @4xl:px-3 @4xl:pe-5 font-semibold transition-all active:scale-[0.97]"
+						class="relative flex min-w-0 flex-1 basis-[5.75rem] items-center justify-center gap-2 overflow-hidden rounded-lg border border-solid px-2 py-2.5 @xl:pe-5 @4xl:ps-3 font-semibold transition-all active:scale-[0.97]"
 						:class="
 							settings.accent_color === accentColor.value
 								? 'border-brand bg-brand-highlight text-brand'
@@ -609,7 +609,7 @@ watch(
 									: messages.accentColorSystem,
 							)
 						"
-						class="relative flex min-w-0 flex-1 basis-[8.25rem] items-center justify-center gap-2 overflow-hidden rounded-lg border border-solid px-2 py-2.5 @xl:pe-5 @4xl:px-3 @4xl:pe-5 font-semibold transition-all enabled:active:scale-[0.97]"
+						class="relative flex min-w-0 flex-1 basis-[8.25rem] items-center justify-center gap-2 overflow-hidden rounded-lg border border-solid px-2 py-2.5 @xl:pe-5 @4xl:ps-3 font-semibold transition-all enabled:active:scale-[0.97]"
 						:class="
 							themeStore.systemAccentSupported !== true
 								? 'cursor-not-allowed border-surface-4 bg-surface-2 text-secondary opacity-60'
@@ -648,7 +648,7 @@ watch(
 						type="button"
 						role="radio"
 						:aria-checked="isCustomAccent"
-						class="relative flex min-w-0 flex-1 basis-[6.75rem] items-center justify-center gap-2 overflow-hidden rounded-lg border border-solid px-2 py-2.5 @xl:pe-5 @4xl:px-3 @4xl:pe-5 font-semibold transition-all active:scale-[0.97]"
+						class="relative flex min-w-0 flex-1 basis-[6.75rem] items-center justify-center gap-2 overflow-hidden rounded-lg border border-solid px-2 py-2.5 @xl:pe-5 @4xl:ps-3 font-semibold transition-all active:scale-[0.97]"
 						:class="
 							isCustomAccent
 								? 'border-brand bg-brand-highlight text-brand'

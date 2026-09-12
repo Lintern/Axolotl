@@ -8333,6 +8333,12 @@
   "app.translation-settings.title": {
     "message": "翻译"
   },
+  "app.translation.auto-translate-hint.text": {
+    "message": "可在「设置 → 语言与翻译」中开启自动翻译，浏览结果与项目页会自动翻译。"
+  },
+  "app.translation.auto-translate-hint.title": {
+    "message": "试试自动翻译"
+  },
   "app.translation.error.authentication": {
     "message": "翻译服务认证失败，请稍后重试。"
   },

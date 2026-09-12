@@ -2848,9 +2848,22 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			</Admonition>
 			<div class="page-transition-grid grid min-h-full">
 				<RouterView v-slot="{ Component, route }">
-					<Transition name="page-slide" :css="themeStore.getFeatureFlag('page_transitions')">
-						<div v-if="Component" :key="getPageTransitionKey(route)" class="page-transition-layer">
-							<Suspense @pending="onSuspensePending" @resolve="onSuspenseResolve">
+					<!--
+						Enter animation is keyed only on the route (see getPageTransitionKey).
+						The layer mounts as soon as the URL changes — not when the async page
+						Suspense resolves — so nav switches stay smooth while data loads.
+					-->
+					<Transition
+						name="page-slide"
+						:css="themeStore.getFeatureFlag('page_transitions')"
+						appear
+					>
+						<div :key="getPageTransitionKey(route)" class="page-transition-layer">
+							<Suspense
+								v-if="Component"
+								@pending="onSuspensePending"
+								@resolve="onSuspenseResolve"
+							>
 								<component :is="Component"></component>
 							</Suspense>
 						</div>
@@ -3258,6 +3271,9 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 	background-color: var(--color-bg);
 	border-top-left-radius: var(--radius-xl);
 	overflow: hidden;
+	// Keep sticky/fixed chrome and the page-layer stack from spilling or
+	// re-anchoring while slide/opacity transitions repaint.
+	isolation: isolate;
 	--right-bar-width: 0px;
 
 	display: grid;
@@ -3469,11 +3485,11 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 .app-contents::before {
 	z-index: 30;
 	content: '';
-	position: fixed;
-	left: var(--left-bar-width);
-	top: var(--top-bar-height);
-	right: calc(-1 * var(--left-bar-width));
-	bottom: calc(-1 * var(--left-bar-width));
+	// Absolute (not fixed) so the inset edge shadow stays glued to the content
+	// pane. Fixed coordinates recompute against the viewport and can desync
+	// from the nav/content boundary during page-layer compositing.
+	position: absolute;
+	inset: 0;
 	border-radius: var(--radius-xl);
 	box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.1) inset;
 	border-color: var(--surface-5);

@@ -125,6 +125,7 @@ import {
 	searchMcArchiveMods,
 } from '@/helpers/mcarchive'
 import { get_loader_versions as getLoaderManifest } from '@/helpers/metadata'
+import { runAfterPageTransitionSettle } from '@/helpers/page-transition'
 import {
 	planetMinecraftConnectorAvailable,
 	type PlanetMinecraftProject,
@@ -147,7 +148,11 @@ import {
 	setLastBrowseContentSource,
 } from '@/helpers/settings.ts'
 import { get_categories, get_game_versions, get_loaders } from '@/helpers/tags'
-import { translateSearchDescriptions } from '@/helpers/translation'
+import {
+	autoTranslateHintMessages,
+	noteManualTranslateClick,
+	translateSearchDescriptions,
+} from '@/helpers/translation'
 import type { GameInstance } from '@/helpers/types'
 import { get_instance_worlds } from '@/helpers/worlds'
 import i18n from '@/i18n.config'
@@ -161,7 +166,7 @@ import {
 import { useBreadcrumbs } from '@/store/breadcrumbs'
 import { useTheming } from '@/store/state'
 
-const { handleError } = injectNotificationManager()
+const { addNotification, handleError } = injectNotificationManager()
 const { formatMessage } = useVIntl()
 const { installingServerProjects, playServerProject, showAddServerToInstanceModal } =
 	injectServerInstall()
@@ -277,7 +282,15 @@ async function ensureCurseForgeCategories(projectTypeValue: ProjectType) {
 const initialCurseForgeCategoriesPromise =
 	curseForgeCapability.value.configured &&
 	(contentSource.value === 'curseforge' || contentSource.value === 'all')
-		? ensureCurseForgeCategories(projectType.value).catch(handleError)
+		? new Promise<void>((resolve) => {
+				// Defer the first category fetch so route enter animation is not
+				// competing with a large CF payload on the main thread.
+				runAfterPageTransitionSettle(() => {
+					void ensureCurseForgeCategories(projectType.value)
+						.catch(handleError)
+						.finally(() => resolve())
+				})
+			})
 		: Promise.resolve()
 if (route.query.f || route.query.g) await initialCurseForgeCategoriesPromise
 
@@ -2839,6 +2852,15 @@ async function translateCurrentHits() {
 	}
 }
 
+async function maybeHintAutoTranslate() {
+	if (!(await noteManualTranslateClick())) return
+	addNotification({
+		title: formatMessage(autoTranslateHintMessages.title),
+		text: formatMessage(autoTranslateHintMessages.text),
+		type: 'info',
+	})
+}
+
 function toggleTranslation() {
 	toggle(
 		() => {
@@ -2847,7 +2869,10 @@ function toggleTranslation() {
 			searchState.serverHits.value = originalServerHits.value
 			isUpdatingProjectHitsFromTranslation = false
 		},
-		() => void translateCurrentHits(),
+		() => {
+			void maybeHintAutoTranslate()
+			void translateCurrentHits()
+		},
 	)
 }
 
@@ -2977,8 +3002,13 @@ onMounted(() => {
 	if (instanceHideInstalled.value) initialSearchDependencies.push(initialInstalledProjectsPromise)
 	void Promise.allSettled(initialSearchDependencies).then(() => {
 		if (isUnmounted) return
-		restoreBrowseReturnPage()
-		void searchState.refreshSearch()
+		// First search waits until the page-slide opacity transition has painted
+		// so switching nav pages does not hitch mid-animation.
+		runAfterPageTransitionSettle(() => {
+			if (isUnmounted) return
+			restoreBrowseReturnPage()
+			void searchState.refreshSearch()
+		})
 	})
 
 	instance_listener(async (event: { event: string; instance_id: string }) => {

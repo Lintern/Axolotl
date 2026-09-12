@@ -8315,6 +8315,12 @@
   "app.translation-settings.title": {
     "message": "Translation"
   },
+  "app.translation.auto-translate-hint.text": {
+    "message": "You can turn this on in Settings → Language & translation so browse results and project pages translate for you."
+  },
+  "app.translation.auto-translate-hint.title": {
+    "message": "Use automatic translation"
+  },
   "app.translation.error.authentication": {
     "message": "The translation service could not authenticate. Please try again later."
   },

@@ -134,7 +134,9 @@ const skeletonCount = computed(() => {
 		ref="stickyChromeRef"
 		class="browse-toolbar-chrome sticky top-0 z-20 flex flex-col gap-3 border-b border-solid border-surface-5 bg-surface-1"
 		:class="[
-			isChromeStuck && ctx.variant !== 'web' ? 'border-t' : '',
+			isChromeStuck && ctx.variant !== 'web'
+				? 'border-t shadow-[0_8px_16px_-12px_rgba(0,0,0,0.35)]'
+				: '',
 			ctx.variant === 'web'
 				? 'mb-3 rounded-xl p-3'
 				: '-mx-6 -mt-6 rounded-tl-[--radius-xl] rounded-tr-[--radius-xl] border-0',

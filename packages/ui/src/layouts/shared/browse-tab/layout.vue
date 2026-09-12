@@ -10,6 +10,7 @@ import Pagination from '#ui/components/base/Pagination.vue'
 import PopoutMenu from '#ui/components/base/PopoutMenu.vue'
 import StyledInput from '#ui/components/base/StyledInput.vue'
 import ProjectCard from '#ui/components/project/card/ProjectCard.vue'
+import ContentCardReveal from '#ui/components/project/ContentCardReveal.vue'
 import ProjectCardList from '#ui/components/project/ProjectCardList.vue'
 import ProjectCardSkeleton from '#ui/components/project/ProjectCardSkeleton.vue'
 import SearchFilterControl from '#ui/components/search/SearchFilterControl.vue'
@@ -109,6 +110,10 @@ const skeletonCount = computed(() => {
 	const max = ctx.maxResults?.value ?? 20
 	return Math.min(Math.max(max, 4), 12)
 })
+
+const hasRenderableHits = computed(() =>
+	ctx.isServerType.value ? ctx.serverHits.value.length > 0 : ctx.projectHits.value.length > 0,
+)
 </script>
 
 <template>
@@ -265,8 +270,22 @@ const skeletonCount = computed(() => {
 
 	<slot name="above-results" />
 
-	<div class="search" :class="{ 'pointer-events-none select-none opacity-70': ctx.loading.value }">
-		<section v-if="ctx.loading.value" class="offline" aria-busy="true" aria-live="polite">
+	<div class="search relative">
+		<div
+			v-if="ctx.loading.value && hasRenderableHits"
+			class="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-center gap-2 py-2 text-sm font-medium text-secondary"
+			aria-live="polite"
+		>
+			<SpinnerIcon class="size-4 animate-spin" />
+			{{ formatMessage(messages.loadingLabel) }}
+		</div>
+		<div
+			v-if="ctx.loading.value && hasRenderableHits"
+			class="pointer-events-none absolute inset-0 z-10 rounded-xl bg-surface-1/35 backdrop-blur-[1px]"
+			aria-hidden="true"
+		/>
+
+		<section v-if="ctx.loading.value && !hasRenderableHits" class="offline" aria-busy="true">
 			<div class="flex items-center justify-center gap-2 pb-3 text-sm font-medium text-secondary">
 				<SpinnerIcon class="size-4 animate-spin" />
 				{{ formatMessage(messages.loadingLabel) }}
@@ -295,134 +314,146 @@ const skeletonCount = computed(() => {
 
 		<ProjectCardList v-else :layout="ctx.effectiveLayout.value">
 			<template v-if="ctx.isServerType.value">
-				<ProjectCard
+				<ContentCardReveal
 					v-for="result in ctx.serverHits.value"
 					:key="`server-card-${result.project_id}`"
-					:title="result.name"
-					:icon-url="result.icon_url || undefined"
-					:summary="result.summary"
-					:tags="result.categories"
-					:link="ctx.getServerProjectLink(result)"
-					:server-online-players="result.minecraft_java_server?.ping?.data?.players_online ?? 0"
-					:server-region="result.minecraft_server?.region"
-					:server-recent-plays="result.minecraft_java_server?.verified_plays_2w ?? 0"
-					:server-modpack-content="ctx.getServerModpackContent?.(result)"
-					:server-ping="ctx.serverPings?.value?.[result.project_id]"
-					:server-status-online="!!result.minecraft_java_server?.ping?.data"
-					:hide-online-players-label="ctx.variant === 'app'"
-					:hide-recent-plays-label="ctx.variant === 'app'"
 					:layout="ctx.effectiveLayout.value"
-					:max-tags="2"
-					is-server-project
-					exclude-loaders
-					:color="result.color ?? undefined"
-					:banner="result.featured_gallery ?? undefined"
-					@contextmenu.prevent.stop="(event: MouseEvent) => ctx.onContextMenu?.(event, result)"
-					@mouseenter="ctx.onServerProjectHover?.(result)"
-					@mouseleave="ctx.onProjectHoverEnd?.()"
+					:ready="!ctx.loading.value"
+					:masking="ctx.loading.value"
 				>
-					<template v-if="ctx.getCardActions?.(result, ctx.projectType.value)?.length" #actions>
-						<div class="flex gap-2">
-							<ButtonStyled
-								v-for="action in ctx.getCardActions(result, ctx.projectType.value)"
-								:key="action.key"
-								:color="action.color"
-								:type="action.type"
-								:size="ctx.effectiveLayout.value === 'compact' ? 'small' : 'standard'"
-								:circular="action.circular"
-							>
-								<button
-									v-tooltip="action.tooltip"
-									:disabled="action.disabled"
-									@click.stop="action.onClick"
+					<ProjectCard
+						:title="result.name"
+						:icon-url="result.icon_url || undefined"
+						:summary="result.summary"
+						:tags="result.categories"
+						:link="ctx.getServerProjectLink(result)"
+						:server-online-players="result.minecraft_java_server?.ping?.data?.players_online ?? 0"
+						:server-region="result.minecraft_server?.region"
+						:server-recent-plays="result.minecraft_java_server?.verified_plays_2w ?? 0"
+						:server-modpack-content="ctx.getServerModpackContent?.(result)"
+						:server-ping="ctx.serverPings?.value?.[result.project_id]"
+						:server-status-online="!!result.minecraft_java_server?.ping?.data"
+						:hide-online-players-label="ctx.variant === 'app'"
+						:hide-recent-plays-label="ctx.variant === 'app'"
+						:layout="ctx.effectiveLayout.value"
+						:max-tags="2"
+						is-server-project
+						exclude-loaders
+						:color="result.color ?? undefined"
+						:banner="result.featured_gallery ?? undefined"
+						@contextmenu.prevent.stop="(event: MouseEvent) => ctx.onContextMenu?.(event, result)"
+						@mouseenter="ctx.onServerProjectHover?.(result)"
+						@mouseleave="ctx.onProjectHoverEnd?.()"
+					>
+						<template v-if="ctx.getCardActions?.(result, ctx.projectType.value)?.length" #actions>
+							<div class="flex gap-2">
+								<ButtonStyled
+									v-for="action in ctx.getCardActions(result, ctx.projectType.value)"
+									:key="action.key"
+									:color="action.color"
+									:type="action.type"
+									:size="ctx.effectiveLayout.value === 'compact' ? 'small' : 'standard'"
+									:circular="action.circular"
 								>
-									<component :is="action.icon" :class="action.iconClass" />
-									<template v-if="!action.circular">{{
-										ctx.effectiveLayout.value === 'compact'
-											? (action.compactLabel ?? action.label)
-											: action.label
-									}}</template>
-								</button>
-							</ButtonStyled>
-						</div>
-					</template>
-				</ProjectCard>
+									<button
+										v-tooltip="action.tooltip"
+										:disabled="action.disabled"
+										@click.stop="action.onClick"
+									>
+										<component :is="action.icon" :class="action.iconClass" />
+										<template v-if="!action.circular">{{
+											ctx.effectiveLayout.value === 'compact'
+												? (action.compactLabel ?? action.label)
+												: action.label
+										}}</template>
+									</button>
+								</ButtonStyled>
+							</div>
+						</template>
+					</ProjectCard>
+				</ContentCardReveal>
 			</template>
 			<template v-else>
-				<ProjectCard
+				<ContentCardReveal
 					v-for="result in ctx.projectHits.value"
 					:key="`${result.provider}:${result.project_id}`"
-					:link="ctx.getProjectLink(result)"
-					:title="result.title"
-					:icon-url="result.icon_url"
-					:author="{
-						name: result.organization == null ? result.author : result.organization,
-						link:
-							result.provider === 'curseforge'
-								? result.author_url
-								: result.provider === 'modrinth'
-									? result.organization_id == null
-										? ctx.variant === 'web'
-											? `/user/${result.author_id ?? result.author}`
-											: `https://modrinth.com/user/${result.author_id ?? result.author}`
-										: ctx.variant === 'web'
-											? `/organization/${result.organization_id}`
-											: `https://modrinth.com/organization/${result.organization_id}`
-									: undefined,
-					}"
-					:date-updated="result.date_modified"
-					:date-published="result.date_created"
-					:displayed-date="
-						ctx.effectiveCurrentSortType.value.name === 'newest' ? 'published' : 'updated'
-					"
-					:downloads="result.downloads"
-					:summary="result.description"
-					:tags="result.display_categories"
-					:all-tags="result.categories"
-					:deprioritized-tags="ctx.deprioritizedTags.value"
-					:exclude-loaders="ctx.excludeLoaders.value"
-					:banner="result.featured_gallery ?? undefined"
-					:color="result.color ?? undefined"
-					:provider="result.provider"
-					:environment="
-						['mod', 'modpack'].includes(ctx.projectType.value)
-							? {
-									clientSide: result.client_side as Labrinth.Projects.v2.Environment,
-									serverSide: result.server_side as Labrinth.Projects.v2.Environment,
-								}
-							: undefined
-					"
 					:layout="ctx.effectiveLayout.value"
-					@contextmenu.prevent.stop="(event: MouseEvent) => ctx.onContextMenu?.(event, result)"
-					@mouseenter="ctx.onProjectHover?.(result)"
-					@mouseleave="ctx.onProjectHoverEnd?.()"
+					:ready="!ctx.loading.value"
+					:masking="ctx.loading.value"
 				>
-					<template v-if="ctx.getCardActions?.(result, ctx.projectType.value)?.length" #actions>
-						<div class="flex gap-2">
-							<ButtonStyled
-								v-for="action in ctx.getCardActions(result, ctx.projectType.value)"
-								:key="action.key"
-								:color="action.color"
-								:type="action.type"
-								:size="ctx.effectiveLayout.value === 'compact' ? 'small' : 'standard'"
-								:circular="action.circular"
-							>
-								<button
-									v-tooltip="action.tooltip"
-									:disabled="action.disabled"
-									@click.stop="action.onClick"
+					<ProjectCard
+						:link="ctx.getProjectLink(result)"
+						:title="result.title"
+						:icon-url="result.icon_url"
+						:author="{
+							name: result.organization == null ? result.author : result.organization,
+							link:
+								result.provider === 'curseforge'
+									? result.author_url
+									: result.provider === 'modrinth'
+										? result.organization_id == null
+											? ctx.variant === 'web'
+												? `/user/${result.author_id ?? result.author}`
+												: `https://modrinth.com/user/${result.author_id ?? result.author}`
+											: ctx.variant === 'web'
+												? `/organization/${result.organization_id}`
+												: `https://modrinth.com/organization/${result.organization_id}`
+										: undefined,
+						}"
+						:date-updated="result.date_modified"
+						:date-published="result.date_created"
+						:displayed-date="
+							ctx.effectiveCurrentSortType.value.name === 'newest' ? 'published' : 'updated'
+						"
+						:downloads="result.downloads"
+						:summary="result.description"
+						:tags="result.display_categories"
+						:all-tags="result.categories"
+						:deprioritized-tags="ctx.deprioritizedTags.value"
+						:exclude-loaders="ctx.excludeLoaders.value"
+						:banner="result.featured_gallery ?? undefined"
+						:color="result.color ?? undefined"
+						:provider="result.provider"
+						:environment="
+							['mod', 'modpack'].includes(ctx.projectType.value)
+								? {
+										clientSide: result.client_side as Labrinth.Projects.v2.Environment,
+										serverSide: result.server_side as Labrinth.Projects.v2.Environment,
+									}
+								: undefined
+						"
+						:layout="ctx.effectiveLayout.value"
+						@contextmenu.prevent.stop="(event: MouseEvent) => ctx.onContextMenu?.(event, result)"
+						@mouseenter="ctx.onProjectHover?.(result)"
+						@mouseleave="ctx.onProjectHoverEnd?.()"
+					>
+						<template v-if="ctx.getCardActions?.(result, ctx.projectType.value)?.length" #actions>
+							<div class="flex gap-2">
+								<ButtonStyled
+									v-for="action in ctx.getCardActions(result, ctx.projectType.value)"
+									:key="action.key"
+									:color="action.color"
+									:type="action.type"
+									:size="ctx.effectiveLayout.value === 'compact' ? 'small' : 'standard'"
+									:circular="action.circular"
 								>
-									<component :is="action.icon" :class="action.iconClass" />
-									<template v-if="!action.circular">{{
-										ctx.effectiveLayout.value === 'compact'
-											? (action.compactLabel ?? action.label)
-											: action.label
-									}}</template>
-								</button>
-							</ButtonStyled>
-						</div>
-					</template>
-				</ProjectCard>
+									<button
+										v-tooltip="action.tooltip"
+										:disabled="action.disabled"
+										@click.stop="action.onClick"
+									>
+										<component :is="action.icon" :class="action.iconClass" />
+										<template v-if="!action.circular">{{
+											ctx.effectiveLayout.value === 'compact'
+												? (action.compactLabel ?? action.label)
+												: action.label
+										}}</template>
+									</button>
+								</ButtonStyled>
+							</div>
+						</template>
+					</ProjectCard>
+				</ContentCardReveal>
 			</template>
 		</ProjectCardList>
 

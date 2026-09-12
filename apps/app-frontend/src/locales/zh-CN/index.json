@@ -7047,7 +7047,7 @@
     "message": "游戏"
   },
   "app.settings.groups.launcher": {
-    "message": "启动器"
+    "message": "界面"
   },
   "app.settings.groups.support": {
     "message": "应用与支持"
@@ -7605,7 +7605,7 @@
     "message": "关于"
   },
   "app.settings.tabs.ai": {
-    "message": "AI"
+    "message": "AI 功能"
   },
   "app.settings.tabs.content-downloads": {
     "message": "内容与下载"
@@ -7617,7 +7617,7 @@
     "message": "首页与导航"
   },
   "app.settings.tabs.interface": {
-    "message": "界面与外观"
+    "message": "外观"
   },
   "app.settings.tabs.java-installations": {
     "message": "Java 安装"
@@ -7632,7 +7632,7 @@
     "message": "语言与翻译"
   },
   "app.settings.tabs.shortcut-settings": {
-    "message": "快捷键管理"
+    "message": "键盘快捷键"
   },
   "app.shortcut-settings.change-shortcut": {
     "message": "更改「{action}」的快捷键"
@@ -7737,10 +7737,10 @@
     "message": "快速滚动"
   },
   "app.settings.tabs.launch-defaults": {
-    "message": "启动与实例默认值"
+    "message": "启动默认值"
   },
   "app.settings.tabs.logs": {
-    "message": "日志"
+    "message": "日志与诊断"
   },
   "app.settings.tabs.network-multiplayer": {
     "message": "网络与多人游戏"

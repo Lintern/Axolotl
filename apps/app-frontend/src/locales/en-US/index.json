@@ -218,6 +218,15 @@
   "app.ai-settings.description": {
     "message": "Configure text models once, then use them across launcher features."
   },
+  "app.ai-settings.looking-for-translation": {
+    "message": "Looking for content translation?"
+  },
+  "app.ai-settings.looking-for-translation.description": {
+    "message": "Translating project titles and descriptions is configured under Language & translation. AI providers here can power that feature when you pick the AI translation service."
+  },
+  "app.ai-settings.open-language-translation": {
+    "message": "Open Language & translation"
+  },
   "app.ai-settings.disabled": {
     "message": "Disabled"
   },
@@ -455,8 +464,14 @@
   "app.appearance-settings.custom-background.choose": {
     "message": "Choose image"
   },
+  "app.appearance-settings.custom-background.choose-or-drop": {
+    "message": "Click to choose, or drop an image here"
+  },
   "app.appearance-settings.custom-background.description": {
-    "message": "Choose a custom image and fine-tune how it blends with the launcher interface."
+    "message": "Choose or drop a custom image, then fine-tune how it blends with the launcher interface."
+  },
+  "app.appearance-settings.custom-background.drop-hint": {
+    "message": "Drop image here"
   },
   "app.appearance-settings.custom-background.empty": {
     "message": "No custom background selected"
@@ -5753,6 +5768,9 @@
   "app.onboarding.action.start": {
     "message": "Take the tour"
   },
+  "app.onboarding.action.click-language-tab": {
+    "message": "Open Language & translation to continue"
+  },
   "app.onboarding.ai.description": {
     "message": "Connect text-model providers once, choose the models you want available, or switch every AI feature off in one place."
   },
@@ -5760,7 +5778,7 @@
     "message": "Bring your own AI provider"
   },
   "app.onboarding.appearance.description": {
-    "message": "Theme, accent, backgrounds, and window effects all live here. Make the launcher feel familiar."
+    "message": "Theme, accent, custom launcher background, and window effects all live here. Make the launcher feel familiar."
   },
   "app.onboarding.appearance.title": {
     "message": "Set the vibe"
@@ -5910,7 +5928,10 @@
     "message": "Useful tools, built in"
   },
   "app.onboarding.language.description": {
-    "message": "Pick the launcher language and manage translations. No decoder ring required."
+    "message": "Pick the launcher language, or keep System language to follow this device. Content translation lives on the same page if you need it later."
+  },
+  "app.onboarding.language.select-description": {
+    "message": "Choose System language to keep following this device, or pick a specific language. If you change it now, the launcher restarts so everything applies cleanly."
   },
   "app.onboarding.language.title": {
     "message": "Speak your language"
@@ -5943,7 +5964,7 @@
     "message": "Do not cook the computer"
   },
   "app.onboarding.settings.description": {
-    "message": "The useful controls live here: launcher preferences, game launch behavior, content downloads, and privacy."
+    "message": "Appearance, language, AI providers, launch defaults, content downloads, and privacy all live here."
   },
   "app.onboarding.settings.title": {
     "message": "Make it yours"
@@ -5977,6 +5998,9 @@
   },
   "app.onboarding.welcome.footer": {
     "message": "Your last next launcher."
+  },
+  "app.onboarding.welcome.language-label": {
+    "message": "Language"
   },
   "app.onboarding.welcome.title": {
     "message": "Everything is ready"
@@ -7510,6 +7534,18 @@
   },
   "app.settings.search.empty": {
     "message": "No settings match your search."
+  },
+  "app.settings.language.system": {
+    "message": "System language"
+  },
+  "app.settings.language.system.description": {
+    "message": "Follow the language of this device"
+  },
+  "app.settings.language.system.disabled-tooltip": {
+    "message": "Turn on to follow the language of this device automatically."
+  },
+  "app.settings.language.system.enabled-tooltip": {
+    "message": "Following this device. Open the language list or turn this off to pick manually."
   },
   "app.settings.search.placeholder": {
     "message": "Search settings"

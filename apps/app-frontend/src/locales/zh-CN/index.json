@@ -362,6 +362,15 @@
   "app.ai-settings.description": {
     "message": "统一配置文本模型，然后在启动器的各项功能中使用。"
   },
+  "app.ai-settings.looking-for-translation": {
+    "message": "在找内容翻译？"
+  },
+  "app.ai-settings.looking-for-translation.description": {
+    "message": "项目标题与描述的翻译在「语言与翻译」中配置。选择 AI 翻译服务时，这里配置的模型供应商会驱动该功能。"
+  },
+  "app.ai-settings.open-language-translation": {
+    "message": "打开语言与翻译"
+  },
   "app.ai-settings.disabled": {
     "message": "已禁用"
   },
@@ -599,8 +608,14 @@
   "app.appearance-settings.custom-background.choose": {
     "message": "选择图片"
   },
+  "app.appearance-settings.custom-background.choose-or-drop": {
+    "message": "点击选择，或拖放图片到此处"
+  },
   "app.appearance-settings.custom-background.description": {
-    "message": "选择自定义图片，并调整它与启动器界面的融合效果。"
+    "message": "选择或拖入自定义图片，并调整它与启动器界面的融合效果。"
+  },
+  "app.appearance-settings.custom-background.drop-hint": {
+    "message": "拖放图片到此处"
   },
   "app.appearance-settings.custom-background.empty": {
     "message": "尚未选择自定义背景"
@@ -5804,6 +5819,9 @@
   "app.onboarding.action.click-lab": {
     "message": "点击实验室，继续"
   },
+  "app.onboarding.action.click-language-tab": {
+    "message": "打开语言与翻译，继续"
+  },
   "app.onboarding.action.click-library": {
     "message": "点击实例库，继续"
   },
@@ -5850,7 +5868,7 @@
     "message": "连接你的 AI 供应商"
   },
   "app.onboarding.appearance.description": {
-    "message": "主题、强调色、背景和窗口效果都在这里。把启动器调成你熟悉的样子。"
+    "message": "主题、强调色、自定义启动器背景和窗口效果都在这里。把启动器调成你熟悉的样子。"
   },
   "app.onboarding.appearance.title": {
     "message": "调成你的顺眼样子"
@@ -6000,7 +6018,10 @@
     "message": "内置的实用工具"
   },
   "app.onboarding.language.description": {
-    "message": "在这里选择启动器语言和管理翻译。不需要翻译腔。"
+    "message": "在这里切换启动器界面语言，或保留「系统语言」。项目页内容翻译也在这一页配置。"
+  },
+  "app.onboarding.language.select-description": {
+    "message": "可选择「系统语言」继续跟随本机，或指定一种语言。若现在更改，启动器会自动重启以完整生效。"
   },
   "app.onboarding.language.title": {
     "message": "说你的语言"
@@ -6033,7 +6054,7 @@
     "message": "别把电脑烤熟"
   },
   "app.onboarding.settings.description": {
-    "message": "这里集中管理启动器偏好、游戏启动、内容下载和隐私设置。"
+    "message": "外观、语言、AI 供应商、启动默认项、内容下载和隐私都在这里。"
   },
   "app.onboarding.settings.title": {
     "message": "按你的方式使用"
@@ -6067,6 +6088,9 @@
   },
   "app.onboarding.welcome.footer": {
     "message": "你的最后一款启动器"
+  },
+  "app.onboarding.welcome.language-label": {
+    "message": "语言"
   },
   "app.onboarding.welcome.title": {
     "message": "一切就绪"
@@ -7495,6 +7519,18 @@
   },
   "app.settings.save-status.saving": {
     "message": "正在保存…"
+  },
+  "app.settings.language.system": {
+    "message": "系统语言"
+  },
+  "app.settings.language.system.description": {
+    "message": "跟随本机语言"
+  },
+  "app.settings.language.system.disabled-tooltip": {
+    "message": "开启后自动跟随本机语言。"
+  },
+  "app.settings.language.system.enabled-tooltip": {
+    "message": "正在跟随本机语言。打开语言列表或关闭开关即可手动选择。"
   },
   "app.settings.search.clear": {
     "message": "清除设置搜索"

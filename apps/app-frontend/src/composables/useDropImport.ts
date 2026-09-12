@@ -112,6 +112,8 @@ export interface DropImportOptions {
 	onSkinsPage: ComputedRef<boolean>
 	/** Whether currently on schematic workshop page */
 	onSchematicWorkshopPage: ComputedRef<boolean>
+	/** Whether currently on the settings page */
+	onSettingsPage: ComputedRef<boolean>
 	/** Check if path is a schematic file */
 	isSchematicFile: (path: string) => boolean
 	/** Track analytics event */
@@ -134,6 +136,7 @@ export interface DropImportOptions {
  *   fileDrop,
  *   onSkinsPage,
  *   onSchematicWorkshopPage,
+ *   onSettingsPage,
  *   isSchematicFile,
  *   trackEvent,
  *   router,
@@ -150,6 +153,7 @@ export function useDropImport(options: DropImportOptions) {
 		fileDrop,
 		onSkinsPage,
 		onSchematicWorkshopPage,
+		onSettingsPage,
 		isSchematicFile,
 		trackEvent,
 		router,
@@ -159,6 +163,9 @@ export function useDropImport(options: DropImportOptions) {
 	const dropDebug = useDebugLogger('DropFlow')
 	const { addNotification } = notificationManager
 	const { addPopupNotification } = popupNotificationManager
+
+	const isSettingsImagePath = (path: string) =>
+		/\.(png|jpe?g|webp|gif|avif|bmp)$/i.test(path.split(/[/\\]/).pop() ?? '')
 
 	// ── Instance context ──────────────────────────────────────────────────
 	const { isInInstance, instanceId } = useInstanceContext()
@@ -544,6 +551,9 @@ export function useDropImport(options: DropImportOptions) {
 			return { item_type: 'unknown' as const, file_path: path, reason: 'skipped' }
 		}
 		if (onSchematicWorkshopPage.value && isSchematicFile(path)) {
+			return { item_type: 'unknown' as const, file_path: path, reason: 'skipped' }
+		}
+		if (onSettingsPage.value && isSettingsImagePath(path)) {
 			return { item_type: 'unknown' as const, file_path: path, reason: 'skipped' }
 		}
 		return classifyDroppedItem(path)
@@ -2305,6 +2315,7 @@ export function useDropImport(options: DropImportOptions) {
 			onClassifyStart: (fileName) => {
 				if (onSkinsPage.value) return
 				if (onSchematicWorkshopPage.value && isSchematicFile(fileName)) return
+				if (onSettingsPage.value && isSettingsImagePath(fileName)) return
 				dropProcessingNotificationId.value = addNotification({
 					title: formatMessage(messages.dropProcessing, { name: fileName }),
 					type: 'info',

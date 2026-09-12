@@ -162,7 +162,7 @@ import {
 	setRestartAfterPendingUpdate,
 } from '@/helpers/utils.js'
 import { start_join_server, start_join_singleplayer_world } from '@/helpers/worlds.ts'
-import i18n, { resolveInitialLocale } from '@/i18n.config'
+import i18n, { applyLocalePreference, setFollowSystemLocale } from '@/i18n.config'
 import {
 	appUpdateState,
 	downloadAvailableAppUpdate,
@@ -198,6 +198,7 @@ const router = useRouter()
 const route = useRoute()
 const onSkinsPage = computed(() => route.path === '/skins')
 const onSchematicWorkshopPage = computed(() => route.path === '/lab/schematic-preview')
+const onSettingsPage = computed(() => route.path.startsWith('/settings'))
 const isSchematicFile = (path: string) => /\.(litematic|schematic|schem)$/i.test(path)
 const APP_LEFT_NAV_WIDTH = '4rem'
 
@@ -1303,12 +1304,12 @@ async function setupApp() {
 		pending_update_toast_for_version,
 	} = initialSettings
 
-	// Initialize locale from saved settings
-	if (locale) {
-		i18n.global.locale.value = locale
-	} else {
-		const resolvedLocale = resolveInitialLocale(navigator.languages)
-		i18n.global.locale.value = resolvedLocale
+	// Initialize locale from saved settings. Empty/'system' (or the follow-system
+	// flag) keeps tracking the OS language and stores a concrete locale for backend
+	// checks that compare against codes like `zh-CN`.
+	if (!locale) setFollowSystemLocale(true)
+	const resolvedLocale = applyLocalePreference(locale)
+	if (!locale || locale !== resolvedLocale) {
 		initialSettings.locale = resolvedLocale
 		await setSettings(initialSettings)
 	}
@@ -1934,6 +1935,7 @@ const dropImport = useDropImport({
 	fileDrop,
 	onSkinsPage,
 	onSchematicWorkshopPage,
+	onSettingsPage,
 	isSchematicFile,
 	trackEvent,
 	router,
@@ -3029,7 +3031,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 
 	<!-- Global drop overlay -->
 	<div
-		v-if="isDragging && !onSkinsPage"
+		v-if="isDragging && !onSkinsPage && !onSettingsPage"
 		class="fixed inset-0 z-[9999] bg-black/40 flex items-center justify-center pointer-events-none"
 	>
 		<div class="rounded-2xl border-2 border-dashed border-brand bg-surface-2/90 p-8 text-center">
@@ -3040,7 +3042,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 
 	<!-- Processing overlay -->
 	<div
-		v-if="(isProcessing || scanningInstances) && !isDragging && !onSkinsPage && !batchActive"
+		v-if="(isProcessing || scanningInstances) && !isDragging && !onSkinsPage && !onSettingsPage && !batchActive"
 		class="fixed inset-0 z-[9999] bg-black/20 flex items-center justify-center"
 	>
 		<div class="flex flex-col items-center gap-3">

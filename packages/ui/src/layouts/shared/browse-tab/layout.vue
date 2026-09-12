@@ -110,10 +110,6 @@ const skeletonCount = computed(() => {
 	const max = ctx.maxResults?.value ?? 20
 	return Math.min(Math.max(max, 4), 12)
 })
-
-const hasRenderableHits = computed(() =>
-	ctx.isServerType.value ? ctx.serverHits.value.length > 0 : ctx.projectHits.value.length > 0,
-)
 </script>
 
 <template>
@@ -271,21 +267,7 @@ const hasRenderableHits = computed(() =>
 	<slot name="above-results" />
 
 	<div class="search relative">
-		<div
-			v-if="ctx.loading.value && hasRenderableHits"
-			class="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-center gap-2 py-2 text-sm font-medium text-secondary"
-			aria-live="polite"
-		>
-			<SpinnerIcon class="size-4 animate-spin" />
-			{{ formatMessage(messages.loadingLabel) }}
-		</div>
-		<div
-			v-if="ctx.loading.value && hasRenderableHits"
-			class="pointer-events-none absolute inset-0 z-10 rounded-xl bg-surface-1/35 backdrop-blur-[1px]"
-			aria-hidden="true"
-		/>
-
-		<section v-if="ctx.loading.value && !hasRenderableHits" class="offline" aria-busy="true">
+		<section v-if="ctx.loading.value" class="offline" aria-busy="true" aria-live="polite">
 			<div class="flex items-center justify-center gap-2 pb-3 text-sm font-medium text-secondary">
 				<SpinnerIcon class="size-4 animate-spin" />
 				{{ formatMessage(messages.loadingLabel) }}
@@ -317,9 +299,6 @@ const hasRenderableHits = computed(() =>
 				<ContentCardReveal
 					v-for="result in ctx.serverHits.value"
 					:key="`server-card-${result.project_id}`"
-					:layout="ctx.effectiveLayout.value"
-					:ready="!ctx.loading.value"
-					:masking="ctx.loading.value"
 				>
 					<ProjectCard
 						:title="result.name"
@@ -377,9 +356,6 @@ const hasRenderableHits = computed(() =>
 				<ContentCardReveal
 					v-for="result in ctx.projectHits.value"
 					:key="`${result.provider}:${result.project_id}`"
-					:layout="ctx.effectiveLayout.value"
-					:ready="!ctx.loading.value"
-					:masking="ctx.loading.value"
 				>
 					<ProjectCard
 						:link="ctx.getProjectLink(result)"

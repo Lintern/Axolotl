@@ -2717,6 +2717,12 @@
   "omorphia.component.loading-indicator.label": {
     "defaultMessage": "加载中"
   },
+  "pagination.go-to-page": {
+    "defaultMessage": "跳转到页码"
+  },
+  "pagination.go-to-page.placeholder": {
+    "defaultMessage": "页码"
+  },
   "payment-method.amazon_pay": {
     "defaultMessage": "Amazon 支付"
   },

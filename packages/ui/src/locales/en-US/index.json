@@ -3020,6 +3020,12 @@
   "omorphia.component.loading-indicator.label": {
     "defaultMessage": "Loading"
   },
+  "pagination.go-to-page": {
+    "defaultMessage": "Go to page"
+  },
+  "pagination.go-to-page.placeholder": {
+    "defaultMessage": "Page"
+  },
   "payment-method.amazon_pay": {
     "defaultMessage": "Amazon Pay"
   },

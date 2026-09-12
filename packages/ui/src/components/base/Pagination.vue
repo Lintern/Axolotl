@@ -22,9 +22,35 @@
 			}"
 			class="page-number-container"
 		>
-			<div v-if="item === '-'" class="rotate-90 grid place-content-center">
-				<EllipsisVerticalIcon />
-			</div>
+			<template v-if="item === '-'">
+				<input
+					v-if="activeGapIndex === index"
+					ref="gapInput"
+					v-model="gapInputValue"
+					class="h-8 w-12 rounded-full border border-solid border-brand bg-surface-1 px-2 text-center text-sm text-contrast outline-none focus-visible:ring-4 focus-visible:ring-brand-shadow"
+					type="number"
+					inputmode="numeric"
+					min="1"
+					:max="count"
+					:placeholder="formatMessage(messages.goToPagePlaceholder)"
+					:aria-label="formatMessage(messages.goToPage)"
+					@keydown.enter.prevent="commitGapInput"
+					@keydown.esc.prevent="closeGapInput"
+					@blur="commitGapInput"
+				/>
+				<button
+					v-else
+					type="button"
+					class="grid h-8 w-8 place-content-center rounded-full text-secondary transition-colors hover:bg-surface-3 hover:text-contrast focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-shadow"
+					:aria-label="formatMessage(messages.goToPage)"
+					:aria-expanded="false"
+					@click="openGapInput(index)"
+				>
+					<span class="rotate-90 grid place-content-center">
+						<EllipsisVerticalIcon />
+					</span>
+				</button>
+			</template>
 			<ButtonStyled
 				v-else
 				circular
@@ -66,8 +92,9 @@
 </template>
 <script setup lang="ts">
 import { ChevronLeftIcon, ChevronRightIcon, EllipsisVerticalIcon } from '@modrinth/assets'
-import { computed } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 
+import { defineMessages, useVIntl } from '../../composables/i18n'
 import ButtonStyled from './ButtonStyled.vue'
 
 const emit = defineEmits<{
@@ -85,6 +112,19 @@ const props = withDefaults(
 		count: 1,
 	},
 )
+
+const { formatMessage } = useVIntl()
+
+const messages = defineMessages({
+	goToPage: {
+		id: 'pagination.go-to-page',
+		defaultMessage: 'Go to page',
+	},
+	goToPagePlaceholder: {
+		id: 'pagination.go-to-page.placeholder',
+		defaultMessage: 'Page',
+	},
+})
 
 const pages = computed(() => {
 	const pages: ('-' | number)[] = []
@@ -118,6 +158,41 @@ const pages = computed(() => {
 
 	return pages
 })
+
+const activeGapIndex = ref<number | null>(null)
+const gapInputValue = ref('')
+const gapInput = ref<HTMLInputElement[] | HTMLInputElement>()
+
+async function openGapInput(index: number) {
+	activeGapIndex.value = index
+	gapInputValue.value = ''
+	await nextTick()
+	const el = Array.isArray(gapInput.value) ? gapInput.value[0] : gapInput.value
+	el?.focus()
+	el?.select()
+}
+
+function closeGapInput() {
+	activeGapIndex.value = null
+	gapInputValue.value = ''
+}
+
+function commitGapInput() {
+	if (activeGapIndex.value === null) return
+
+	const parsed = Number.parseInt(gapInputValue.value, 10)
+	if (Number.isFinite(parsed) && parsed >= 1 && parsed <= props.count && parsed !== props.page) {
+		switchPage(parsed)
+	}
+	closeGapInput()
+}
+
+watch(
+	() => props.page,
+	() => {
+		closeGapInput()
+	},
+)
 
 function switchPage(newPage: number) {
 	emit('switch-page', Math.min(Math.max(newPage, 1), props.count))

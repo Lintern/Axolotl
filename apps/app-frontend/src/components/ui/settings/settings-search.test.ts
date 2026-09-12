@@ -176,7 +176,7 @@ test('settings navigation groups preserve the intended Axolotl information archi
 		'network-multiplayer',
 	])
 	assert.deepEqual(categoriesForGroup('data-privacy'), ['storage-backups', 'privacy-data'])
-	assert.deepEqual(categoriesForGroup('support'), ['updates', 'about', 'logs', 'reset-export'])
+	assert.deepEqual(categoriesForGroup('support'), ['updates', 'about', 'logs'])
 	assert.deepEqual(categoriesForGroup('developer'), [])
 	assert.deepEqual(categoriesForGroup('developer', true), ['feature-flags'])
 })

@@ -91,10 +91,6 @@ const categoryContent: Record<SettingsCategoryId, Pick<SettingsCategory, 'icon' 
 		icon: FileTextIcon,
 		content: defineAsyncComponent(() => import('./LogsSettings.vue')),
 	},
-	'reset-export': {
-		icon: ArchiveIcon,
-		content: defineAsyncComponent(() => import('./ResetSettings.vue')),
-	},
 	about: { icon: InfoIcon, content: defineAsyncComponent(() => import('./AboutSettings.vue')) },
 	'feature-flags': {
 		icon: ToggleRightIcon,

@@ -107,8 +107,8 @@ const selectedDisplayMode = computed(() =>
 const skeletonCount = computed(() => {
 	const layout = ctx.effectiveLayout.value
 	if (layout === 'grid' || layout === 'gallery') return 6
-	const max = ctx.maxResults?.value ?? 20
-	return Math.min(Math.max(max, 4), 12)
+	// Match the visible list density without stacking a full viewport of rows.
+	return Math.min(ctx.maxResults?.value ?? 8, 8)
 })
 </script>
 
@@ -267,7 +267,7 @@ const skeletonCount = computed(() => {
 	<slot name="above-results" />
 
 	<div class="search relative">
-		<section v-if="ctx.loading.value" class="offline" aria-busy="true" aria-live="polite">
+		<section v-if="ctx.loading.value" class="py-1" aria-busy="true" aria-live="polite">
 			<div class="flex items-center justify-center gap-2 pb-3 text-sm font-medium text-secondary">
 				<SpinnerIcon class="size-4 animate-spin" />
 				{{ formatMessage(messages.loadingLabel) }}

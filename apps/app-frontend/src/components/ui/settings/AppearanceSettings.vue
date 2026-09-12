@@ -571,7 +571,7 @@ watch(
 						type="button"
 						role="radio"
 						:aria-checked="settings.accent_color === accentColor.value"
-						class="flex min-w-0 items-center gap-2 overflow-hidden rounded-lg border border-solid px-1 py-2.5 @2xl:px-2 @4xl:px-3 font-semibold transition-all active:scale-[0.97]"
+						class="flex min-w-0 items-center justify-center gap-2 overflow-hidden rounded-lg border border-solid px-1 py-2.5 @2xl:px-2 @4xl:px-3 font-semibold transition-all active:scale-[0.97]"
 						:class="
 							settings.accent_color === accentColor.value
 								? 'border-brand bg-brand-highlight text-brand'
@@ -588,7 +588,7 @@ watch(
 							class="size-4 shrink-0 rounded-full ring-2 ring-white/20"
 							:style="{ backgroundColor: accentColor.color }"
 						/>
-						<span class="hidden min-w-0 flex-1 truncate text-center @xl:inline">{{
+						<span class="hidden min-w-0 flex-1 truncate text-center @xl:block">{{
 							formatMessage(accentColor.label)
 						}}</span>
 						<CheckIcon
@@ -608,7 +608,7 @@ watch(
 									: messages.accentColorSystem,
 							)
 						"
-						class="flex min-w-0 items-center gap-2 overflow-hidden rounded-lg border border-solid px-1 py-2.5 @2xl:px-2 @4xl:px-3 font-semibold transition-all enabled:active:scale-[0.97]"
+						class="flex min-w-0 items-center justify-center gap-2 overflow-hidden rounded-lg border border-solid px-1 py-2.5 @2xl:px-2 @4xl:px-3 font-semibold transition-all enabled:active:scale-[0.97]"
 						:class="
 							themeStore.systemAccentSupported !== true
 								? 'cursor-not-allowed border-surface-4 bg-surface-2 text-secondary opacity-60'
@@ -644,7 +644,7 @@ watch(
 						type="button"
 						role="radio"
 						:aria-checked="isCustomAccent"
-						class="flex min-w-0 items-center gap-2 overflow-hidden rounded-lg border border-solid px-1 py-2.5 @2xl:px-2 @4xl:px-3 font-semibold transition-all active:scale-[0.97]"
+						class="flex min-w-0 items-center justify-center gap-2 overflow-hidden rounded-lg border border-solid px-1 py-2.5 @2xl:px-2 @4xl:px-3 font-semibold transition-all active:scale-[0.97]"
 						:class="
 							isCustomAccent
 								? 'border-brand bg-brand-highlight text-brand'
@@ -660,7 +660,7 @@ watch(
 									: 'conic-gradient(#ef4444, #f59e0b, #22c55e, #06b6d4, #6366f1, #ec4899, #ef4444)',
 							}"
 						/>
-						<span class="hidden min-w-0 flex-1 truncate text-center @xl:inline">{{
+						<span class="hidden min-w-0 flex-1 truncate text-center @xl:block">{{
 							formatMessage(messages.accentColorCustom)
 						}}</span>
 						<CheckIcon v-if="isCustomAccent" class="hidden size-4 shrink-0 @xl:block" />

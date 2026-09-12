@@ -5,7 +5,6 @@ import {
 	defineMessages,
 	EmptyState,
 	injectNotificationManager,
-	SettingsSection,
 	useVIntl,
 } from '@modrinth/ui'
 import { computed, onBeforeUnmount, ref } from 'vue'
@@ -15,6 +14,7 @@ import {
 	getVisibleSettingsCategories,
 	getVisibleSettingsGroups,
 } from '@/components/ui/settings/settings-registry'
+import SettingsSection from '@/components/ui/settings/SettingsSection.vue'
 import { type AppSettings, get, set } from '@/helpers/settings'
 import {
 	DEFAULT_APP_SETTINGS,

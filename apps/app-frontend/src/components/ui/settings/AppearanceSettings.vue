@@ -561,7 +561,7 @@ watch(
 			</template>
 			<div class="flex flex-col gap-4 p-4 @container">
 				<div
-					class="grid grid-cols-4 gap-1 @2xl:gap-2 @4xl:grid-cols-7"
+					class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,7.5rem),1fr))] gap-1 @2xl:gap-2"
 					role="radiogroup"
 					:aria-label="formatMessage(messages.accentColorTitle)"
 				>
@@ -571,7 +571,7 @@ watch(
 						type="button"
 						role="radio"
 						:aria-checked="settings.accent_color === accentColor.value"
-						class="flex min-w-0 items-center justify-center gap-2 rounded-lg border border-solid px-1 py-2.5 @2xl:px-2 @4xl:px-3 font-semibold transition-all active:scale-[0.97]"
+						class="flex min-w-0 items-center gap-2 overflow-hidden rounded-lg border border-solid px-1 py-2.5 @2xl:px-2 @4xl:px-3 font-semibold transition-all active:scale-[0.97]"
 						:class="
 							settings.accent_color === accentColor.value
 								? 'border-brand bg-brand-highlight text-brand'
@@ -588,10 +588,12 @@ watch(
 							class="size-4 shrink-0 rounded-full ring-2 ring-white/20"
 							:style="{ backgroundColor: accentColor.color }"
 						/>
-						<span class="hidden truncate @xl:inline">{{ formatMessage(accentColor.label) }}</span>
+						<span class="hidden min-w-0 flex-1 truncate text-center @xl:inline">{{
+							formatMessage(accentColor.label)
+						}}</span>
 						<CheckIcon
 							v-if="settings.accent_color === accentColor.value"
-							class="ml-auto hidden size-4 shrink-0 @4xl:block"
+							class="hidden size-4 shrink-0 @xl:block"
 						/>
 					</button>
 					<button
@@ -606,7 +608,7 @@ watch(
 									: messages.accentColorSystem,
 							)
 						"
-						class="flex min-w-0 items-center justify-center gap-2 rounded-lg border border-solid px-1 py-2.5 @2xl:px-2 @4xl:px-3 font-semibold transition-all enabled:active:scale-[0.97]"
+						class="flex min-w-0 items-center gap-2 overflow-hidden rounded-lg border border-solid px-1 py-2.5 @2xl:px-2 @4xl:px-3 font-semibold transition-all enabled:active:scale-[0.97]"
 						:class="
 							themeStore.systemAccentSupported !== true
 								? 'cursor-not-allowed border-surface-4 bg-surface-2 text-secondary opacity-60'
@@ -627,7 +629,7 @@ watch(
 								backgroundColor: themeStore.systemAccentColor ?? 'var(--color-pink)',
 							}"
 						/>
-						<span class="hidden min-w-0 flex-col truncate text-start leading-tight @xl:flex">
+						<span class="hidden min-w-0 flex-1 flex-col text-start leading-tight @xl:flex">
 							<span class="truncate">{{ formatMessage(messages.accentColorSystem) }}</span>
 							<span
 								v-if="themeStore.systemAccentSupported === false"
@@ -636,13 +638,13 @@ watch(
 								{{ formatMessage(messages.accentColorSystemUnsupported) }}
 							</span>
 						</span>
-						<CheckIcon v-if="isSystemAccent" class="ml-auto hidden size-4 shrink-0 @4xl:block" />
+						<CheckIcon v-if="isSystemAccent" class="hidden size-4 shrink-0 @xl:block" />
 					</button>
 					<button
 						type="button"
 						role="radio"
 						:aria-checked="isCustomAccent"
-						class="flex min-w-0 items-center justify-center gap-2 rounded-lg border border-solid px-1 py-2.5 @2xl:px-2 @4xl:px-3 font-semibold transition-all active:scale-[0.97]"
+						class="flex min-w-0 items-center gap-2 overflow-hidden rounded-lg border border-solid px-1 py-2.5 @2xl:px-2 @4xl:px-3 font-semibold transition-all active:scale-[0.97]"
 						:class="
 							isCustomAccent
 								? 'border-brand bg-brand-highlight text-brand'
@@ -658,10 +660,10 @@ watch(
 									: 'conic-gradient(#ef4444, #f59e0b, #22c55e, #06b6d4, #6366f1, #ec4899, #ef4444)',
 							}"
 						/>
-						<span class="hidden truncate @xl:inline">{{
+						<span class="hidden min-w-0 flex-1 truncate text-center @xl:inline">{{
 							formatMessage(messages.accentColorCustom)
 						}}</span>
-						<CheckIcon v-if="isCustomAccent" class="ml-auto hidden size-4 shrink-0 @4xl:block" />
+						<CheckIcon v-if="isCustomAccent" class="hidden size-4 shrink-0 @xl:block" />
 					</button>
 				</div>
 

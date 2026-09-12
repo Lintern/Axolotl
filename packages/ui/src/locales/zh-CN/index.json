@@ -953,15 +953,6 @@
   "content.metadata-filter.source.shared-instance": {
     "defaultMessage": "共享实例"
   },
-  "content.metadata-filter.state": {
-    "defaultMessage": "状态"
-  },
-  "content.metadata-filter.state.disabled": {
-    "defaultMessage": "已禁用"
-  },
-  "content.metadata-filter.state.enabled": {
-    "defaultMessage": "已启用"
-  },
   "content.metadata-filter.toggle": {
     "defaultMessage": "筛选"
   },
@@ -970,15 +961,6 @@
   },
   "content.metadata-filter.unknown": {
     "defaultMessage": "未知"
-  },
-  "content.metadata-filter.update.available": {
-    "defaultMessage": "可更新"
-  },
-  "content.metadata-filter.update.up-to-date": {
-    "defaultMessage": "已是最新"
-  },
-  "content.metadata-filter.updates": {
-    "defaultMessage": "更新"
   },
   "content.page-layout.browse-content": {
     "defaultMessage": "浏览内容"

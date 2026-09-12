@@ -356,11 +356,7 @@ const pageTitle: MessageDescriptor = settingsPageTitle
 					:aria-label="formatMessage(messages.results)"
 					:aria-busy="searchResultsPending"
 				>
-					<div
-						v-if="searchResultsPending"
-						class="settings-search-skeleton"
-						aria-hidden="true"
-					>
+					<div v-if="searchResultsPending" class="settings-search-skeleton" aria-hidden="true">
 						<div v-for="row in 5" :key="row" class="settings-search-skeleton-row">
 							<div class="settings-search-skeleton-icon animate-pulse" />
 							<div class="settings-search-skeleton-copy">
@@ -368,9 +364,7 @@ const pageTitle: MessageDescriptor = settingsPageTitle
 									class="settings-search-skeleton-line animate-pulse"
 									:class="row % 2 === 0 ? 'is-wide' : 'is-medium'"
 								/>
-								<div
-									class="settings-search-skeleton-line is-short animate-pulse"
-								/>
+								<div class="settings-search-skeleton-line is-short animate-pulse" />
 							</div>
 						</div>
 					</div>
@@ -496,11 +490,7 @@ const pageTitle: MessageDescriptor = settingsPageTitle
 				>
 					<div class="settings-content-stage relative min-h-0">
 						<Transition name="settings-content-skeleton">
-							<div
-								v-if="isContentLoading"
-								class="settings-content-skeleton"
-								aria-hidden="true"
-							>
+							<div v-if="isContentLoading" class="settings-content-skeleton" aria-hidden="true">
 								<div class="settings-content-skeleton-inner">
 									<div class="h-6 w-40 animate-pulse rounded bg-surface-3" />
 									<div class="h-3 w-72 max-w-full animate-pulse rounded bg-surface-2" />
@@ -519,9 +509,7 @@ const pageTitle: MessageDescriptor = settingsPageTitle
 													class="h-4 animate-pulse rounded bg-surface-3"
 													:class="row % 2 === 0 ? 'w-2/5' : 'w-1/3'"
 												/>
-												<div
-													class="h-3 w-3/5 animate-pulse rounded bg-surface-2"
-												/>
+												<div class="h-3 w-3/5 animate-pulse rounded bg-surface-2" />
 											</div>
 											<div class="h-8 w-16 shrink-0 animate-pulse rounded-lg bg-surface-3" />
 										</div>

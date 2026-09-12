@@ -67,7 +67,9 @@ const systemLocaleMeta = computed(() => {
 })
 
 const selectedLocale = computed(() =>
-	followSystem.value ? systemResolvedLocale.value : settings.value.locale || systemResolvedLocale.value,
+	followSystem.value
+		? systemResolvedLocale.value
+		: settings.value.locale || systemResolvedLocale.value,
 )
 
 const systemToggleTooltip = computed(() =>
@@ -177,9 +179,7 @@ function retrySave() {
 					<div class="min-w-0 flex-1">
 						<Combobox
 							:model-value="followSystem ? undefined : selectedLocale"
-							:display-value="
-								followSystem ? formatMessage(messages.systemLanguage) : undefined
-							"
+							:display-value="followSystem ? formatMessage(messages.systemLanguage) : undefined"
 							:options="localeOptions"
 							:disabled="$isChanging"
 							searchable
@@ -190,6 +190,7 @@ function retrySave() {
 						/>
 					</div>
 					<button
+						v-tooltip="systemToggleTooltip"
 						type="button"
 						role="switch"
 						class="language-system-toggle"
@@ -197,7 +198,6 @@ function retrySave() {
 						:aria-checked="followSystem"
 						:aria-label="formatMessage(messages.systemLanguage)"
 						:disabled="$isChanging"
-						v-tooltip="systemToggleTooltip"
 						@click="toggleFollowSystem"
 					>
 						<MonitorIcon class="size-4 shrink-0" />

@@ -127,6 +127,7 @@ import { type DirectLinkSyncReport, get as getInstance, run } from '@/helpers/in
 import { reconcileMojangAuthSourceAtStartup } from '@/helpers/mojang-auth'
 import { cancelLogin, get as getCreds, login, logout } from '@/helpers/mr_auth.ts'
 import { getNavShortcutEnabled } from '@/helpers/nav-shortcut-state'
+import { runWhenIdle } from '@/helpers/page-transition'
 import { mergeUrlQuery, parseModrinthLink } from '@/helpers/project-links.ts'
 import { getQuickScrollEnabled, getShowScrollTop } from '@/helpers/scroll-top-state'
 import {
@@ -158,11 +159,10 @@ import {
 	isDev,
 	isElevated,
 	isNetworkMetered,
-	restartApp,
 	setRestartAfterPendingUpdate,
 } from '@/helpers/utils.js'
 import { start_join_server, start_join_singleplayer_world } from '@/helpers/worlds.ts'
-import i18n, { applyLocalePreference, setFollowSystemLocale } from '@/i18n.config'
+import { applyLocalePreference, setFollowSystemLocale } from '@/i18n.config'
 import {
 	appUpdateState,
 	downloadAvailableAppUpdate,
@@ -213,12 +213,12 @@ function getPageTransitionKey(route: RouteLocationNormalizedLoaded) {
 		return `${transitionGroup}:${Array.isArray(routeId) ? routeId.join('/') : routeId}`
 	}
 
-	// Browse-style routes use :projectType instead of :id. Keying on that lets
-	// tab switches remount cleanly while query-only pagination keeps the same
-	// SPA instance (loading mask / skeleton instead of a full page transition).
-	const projectType = route.params.projectType
-	if (typeof projectType === 'string') {
-		return `${transitionGroup}:${projectType}`
+	// Browse-style routes use :projectType instead of :id. Keep tab switches on
+	// the same SPA instance (Browse already watches the param) so only the
+	// results area refreshes — no full page transition. Favorites is a different
+	// component under the same group; give it its own key so it still remounts.
+	if (route.name === 'Favorites') {
+		return `${transitionGroup}:favorites`
 	}
 
 	return `${transitionGroup}:`
@@ -716,9 +716,12 @@ onMounted(async () => {
 	document.querySelector('body').addEventListener('auxclick', handleAuxClick)
 	window.addEventListener(DIRECT_LINKS_SYNCED_EVENT, handleDirectLinkSyncReport)
 
-	checkUpdates()
-	void warnIfRunningElevated()
-	startDirectLinkSync()
+	// Background maintenance must not compete with first paint / route enter.
+	runWhenIdle(() => {
+		void checkUpdates()
+		void warnIfRunningElevated()
+		startDirectLinkSync()
+	})
 })
 
 let directLinkSync: (() => Promise<void>) | undefined
@@ -2847,23 +2850,15 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				{{ formatMessage(messages.authUnreachableBody) }}
 			</Admonition>
 			<div class="page-transition-grid grid min-h-full">
-				<RouterView v-slot="{ Component, route }">
+				<RouterView v-slot="{ Component, route: pageRoute }">
 					<!--
 						Enter animation is keyed only on the route (see getPageTransitionKey).
 						The layer mounts as soon as the URL changes — not when the async page
 						Suspense resolves — so nav switches stay smooth while data loads.
 					-->
-					<Transition
-						name="page-slide"
-						:css="themeStore.getFeatureFlag('page_transitions')"
-						appear
-					>
-						<div :key="getPageTransitionKey(route)" class="page-transition-layer">
-							<Suspense
-								v-if="Component"
-								@pending="onSuspensePending"
-								@resolve="onSuspenseResolve"
-							>
+					<Transition name="page-slide" :css="themeStore.getFeatureFlag('page_transitions')" appear>
+						<div :key="getPageTransitionKey(pageRoute)" class="page-transition-layer">
+							<Suspense v-if="Component" @pending="onSuspensePending" @resolve="onSuspenseResolve">
 								<component :is="Component"></component>
 							</Suspense>
 						</div>
@@ -3055,7 +3050,13 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 
 	<!-- Processing overlay -->
 	<div
-		v-if="(isProcessing || scanningInstances) && !isDragging && !onSkinsPage && !onSettingsPage && !batchActive"
+		v-if="
+			(isProcessing || scanningInstances) &&
+			!isDragging &&
+			!onSkinsPage &&
+			!onSettingsPage &&
+			!batchActive
+		"
 		class="fixed inset-0 z-[9999] bg-black/20 flex items-center justify-center"
 	>
 		<div class="flex flex-col items-center gap-3">

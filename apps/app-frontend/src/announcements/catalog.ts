@@ -1,12 +1,7 @@
 export type AnnouncementLocale = 'en-US' | 'zh-CN'
 
 export type AnnouncementChangeType =
-	| 'added'
-	| 'changed'
-	| 'deprecated'
-	| 'removed'
-	| 'fixed'
-	| 'security'
+	'added' | 'changed' | 'deprecated' | 'removed' | 'fixed' | 'security'
 
 export type LocalizedAnnouncementText = Readonly<Record<AnnouncementLocale, string>>
 

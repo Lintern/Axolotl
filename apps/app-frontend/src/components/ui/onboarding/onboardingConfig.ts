@@ -672,10 +672,15 @@ export const onboardingTours: Record<OnboardingMode, OnboardingStep[]> = {
 			control('nav-settings', '/settings'),
 		),
 		...settingsTourSteps.map((entry, index) =>
-			step(entry.id, 'activate', copy(entry.title, entry.description, onboardingMessages.clickTab), {
-				...control(entry.targetId),
-				closeSettingsAfter: index === settingsTourSteps.length - 1,
-			}),
+			step(
+				entry.id,
+				'activate',
+				copy(entry.title, entry.description, onboardingMessages.clickTab),
+				{
+					...control(entry.targetId),
+					closeSettingsAfter: index === settingsTourSteps.length - 1,
+				},
+			),
 		),
 		step(
 			'library-navigation',

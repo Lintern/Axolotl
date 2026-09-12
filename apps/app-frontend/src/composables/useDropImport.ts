@@ -13,9 +13,9 @@ import type {
 	SymlinkMethodChoice,
 } from '@modrinth/ui'
 import { useDebugLogger, useGlobalDrop, useInstanceContext, useVIntl } from '@modrinth/ui'
+import { join } from '@tauri-apps/api/path'
 import { computed, type ComputedRef, nextTick, ref } from 'vue'
 import type { Router } from 'vue-router'
-import { join } from '@tauri-apps/api/path'
 
 import {
 	classifyDroppedItem,
@@ -49,11 +49,7 @@ import type { ContentInstallContext } from '@/providers/content-install'
 export type { ClassificationResult, ModrinthLookupResult, ScanResult }
 
 export type ContentFileProjectType =
-	| 'mod'
-	| 'resourcepack'
-	| 'datapack'
-	| 'shaderpack'
-	| 'schematic'
+	'mod' | 'resourcepack' | 'datapack' | 'shaderpack' | 'schematic'
 
 export interface PendingInstall {
 	type: string
@@ -1429,7 +1425,7 @@ export function useDropImport(options: DropImportOptions) {
 
 	function resolvedInstancePath(
 		inst: SelectedInstance,
-		ctx: ImportContext | null,
+		_ctx: ImportContext | null,
 	): string | undefined {
 		if (inst.compatibleMode) return inst.versionPath
 		return inst.path

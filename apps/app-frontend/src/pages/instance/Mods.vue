@@ -1402,8 +1402,7 @@ async function getUpdaterProjectVersions(
 
 	if (!versions) {
 		versions = (await get_project_versions(projectId).catch(() => null)) as
-			| Labrinth.Versions.v2.Version[]
-			| null
+			Labrinth.Versions.v2.Version[] | null
 	}
 
 	if (!versions && fetchError) {
@@ -2803,8 +2802,8 @@ provideContentManager({
 			const instanceLink = props.instance.link
 			const projectPath =
 				instanceLink?.type === 'curseforge_modpack'
-				? `/project/curseforge/${instanceLink.project_id}`
-				: `/project/${linkedModpackProject.value.slug ?? linkedModpackProject.value.id}`
+					? `/project/curseforge/${instanceLink.project_id}`
+					: `/project/${linkedModpackProject.value.slug ?? linkedModpackProject.value.id}`
 
 			return {
 				project: displayedModpackProject.value ?? linkedModpackProject.value,

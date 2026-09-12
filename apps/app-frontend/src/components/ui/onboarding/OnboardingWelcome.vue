@@ -167,15 +167,12 @@ async function toggleFollowSystem() {
 								<option v-if="followSystem" value="" disabled>
 									{{ formatMessage(messages.systemLanguage) }}
 								</option>
-								<option
-									v-for="option in localeOptions"
-									:key="option.value"
-									:value="option.value"
-								>
+								<option v-for="option in localeOptions" :key="option.value" :value="option.value">
 									{{ option.label }}
 								</option>
 							</select>
 							<button
+								v-tooltip="systemToggleTooltip"
 								type="button"
 								role="switch"
 								class="onboarding-welcome-language-system"
@@ -183,7 +180,6 @@ async function toggleFollowSystem() {
 								:aria-checked="followSystem"
 								:aria-label="formatMessage(messages.systemLanguage)"
 								:disabled="applyingLocale"
-								v-tooltip="systemToggleTooltip"
 								@click="toggleFollowSystem"
 							>
 								<MonitorIcon class="size-4 shrink-0" />

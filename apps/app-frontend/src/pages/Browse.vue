@@ -663,7 +663,9 @@ function shouldHideInstalledProject(projectId: string): boolean {
 	if (isServerContext.value) {
 		return serverHideInstalled.value && hiddenServerContentProjectIds.value.has(projectId)
 	}
-	return !!activeInstance.value && instanceHideInstalled.value && allInstalledIds.value.has(projectId)
+	return (
+		!!activeInstance.value && instanceHideInstalled.value && allInstalledIds.value.has(projectId)
+	)
 }
 
 function syncHiddenServerContentProjectIds() {
@@ -1013,7 +1015,13 @@ const browseTitle = computed(() =>
 				: messages.discoverContent,
 	),
 )
-breadcrumbs.setName('BrowseTitle', browseTitle.value)
+watch(
+	browseTitle,
+	(title) => {
+		breadcrumbs.setName('BrowseTitle', title)
+	},
+	{ immediate: true },
+)
 if (instance.value) {
 	const instanceLink = `/instance/${encodeURIComponent(instance.value.id)}`
 	const instanceIcon = getDisplayInstanceIcon(instance.value.icon_path, instance.value.loader).url
@@ -1072,6 +1080,8 @@ watch(
 
 		debugLog('projectType route param changed', { from: projectType.value, to: newType })
 		projectType.value = newType
+		// SPA tab switch reuses this instance; remount used to reset scroll.
+		document.querySelector('.app-viewport')?.scrollTo({ top: 0 })
 	},
 )
 
@@ -1207,11 +1217,7 @@ function projectInstallingKey(projectId: string, instanceId?: string | null) {
 	return `${instanceId ?? activeInstance.value?.id ?? ''}\0${projectId}`
 }
 
-function setProjectInstalling(
-	projectId: string,
-	installing: boolean,
-	instanceId?: string | null,
-) {
+function setProjectInstalling(projectId: string, installing: boolean, instanceId?: string | null) {
 	const key = projectInstallingKey(projectId, instanceId)
 	const next = new Set(installingProjectIds.value)
 	if (installing) {

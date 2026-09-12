@@ -47,7 +47,9 @@ function scrollTargetIntoView(target: HTMLElement, reservedBottom: number) {
 	const maxBottom = window.innerHeight - reservedBottom
 	if (rect.bottom > maxBottom) {
 		const delta = rect.bottom - maxBottom + 12
-		const scroller = target.closest<HTMLElement>('[data-onboarding-scroll], .overflow-y-auto, .settings-content-scroll, .app-viewport')
+		const scroller = target.closest<HTMLElement>(
+			'[data-onboarding-scroll], .overflow-y-auto, .settings-content-scroll, .app-viewport',
+		)
 		if (scroller && scroller.scrollHeight > scroller.clientHeight) {
 			scroller.scrollTop += delta
 		} else {
@@ -55,7 +57,9 @@ function scrollTargetIntoView(target: HTMLElement, reservedBottom: number) {
 		}
 	} else if (rect.top < safeTopInset()) {
 		const delta = safeTopInset() - rect.top + 12
-		const scroller = target.closest<HTMLElement>('[data-onboarding-scroll], .overflow-y-auto, .settings-content-scroll, .app-viewport')
+		const scroller = target.closest<HTMLElement>(
+			'[data-onboarding-scroll], .overflow-y-auto, .settings-content-scroll, .app-viewport',
+		)
 		if (scroller && scroller.scrollTop > 0) {
 			scroller.scrollTop = Math.max(0, scroller.scrollTop - delta)
 		} else {
@@ -116,7 +120,10 @@ export function useOnboardingTour(
 		const safeInset = 16
 		const topInset = safeTopInset()
 		const bubbleWidth = Math.min(bubbleSize.value.width, window.innerWidth - safeInset * 2)
-		const bubbleHeight = Math.min(bubbleSize.value.height, window.innerHeight - topInset - safeInset)
+		const bubbleHeight = Math.min(
+			bubbleSize.value.height,
+			window.innerHeight - topInset - safeInset,
+		)
 		const gap = 20
 		const positions = [
 			{

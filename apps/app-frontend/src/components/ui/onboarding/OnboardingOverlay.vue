@@ -39,7 +39,11 @@ const {
 </script>
 
 <template>
-	<div v-if="visible" class="fixed inset-0 z-[10001] overflow-hidden pointer-events-none" aria-live="polite">
+	<div
+		v-if="visible"
+		class="fixed inset-0 z-[10001] overflow-hidden pointer-events-none"
+		aria-live="polite"
+	>
 		<div v-if="showSpotlight" class="onboarding-mask" aria-hidden="true">
 			<div class="onboarding-mask-hole" :style="spotlightStyle" />
 		</div>

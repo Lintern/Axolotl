@@ -42,9 +42,7 @@ export const SYSTEM_LOCALE_VALUE = 'system'
 const FOLLOW_SYSTEM_LOCALE_KEY = 'axolotl.follow-system-locale'
 
 function preferredNavigatorLocales(): readonly string[] {
-	return navigator.languages?.length
-		? navigator.languages
-		: [navigator.language ?? 'en-US']
+	return navigator.languages?.length ? navigator.languages : [navigator.language ?? 'en-US']
 }
 
 export function getSystemResolvedLocale(): string {

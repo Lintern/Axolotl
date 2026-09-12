@@ -1454,6 +1454,9 @@
   "app.downloads.local": {
     "message": "本地"
   },
+  "app.downloads.manual-download-project-file": {
+    "message": "项目 {projectId} · 文件 {fileId}"
+  },
   "app.downloads.manual-download-required": {
     "message": "CurseForge 要求手动下载此文件。"
   },
@@ -1573,6 +1576,9 @@
   },
   "app.downloads.open-instance": {
     "message": "打开实例"
+  },
+  "app.downloads.open-manual-download": {
+    "message": "打开"
   },
   "app.downloads.operation.upgrade": {
     "message": "升级"
@@ -4643,6 +4649,201 @@
   "app.lab.seed-map.biome-group.taiga": {
     "message": "针叶林"
   },
+  "app.lab.seed-map.biome.ocean": {
+    "message": "海洋"
+  },
+  "app.lab.seed-map.biome.plains": {
+    "message": "平原"
+  },
+  "app.lab.seed-map.biome.desert": {
+    "message": "沙漠"
+  },
+  "app.lab.seed-map.biome.windswept-hills": {
+    "message": "风袭丘陵"
+  },
+  "app.lab.seed-map.biome.forest": {
+    "message": "森林"
+  },
+  "app.lab.seed-map.biome.taiga": {
+    "message": "针叶林"
+  },
+  "app.lab.seed-map.biome.swamp": {
+    "message": "沼泽"
+  },
+  "app.lab.seed-map.biome.river": {
+    "message": "河流"
+  },
+  "app.lab.seed-map.biome.nether-wastes": {
+    "message": "下界荒地"
+  },
+  "app.lab.seed-map.biome.the-end": {
+    "message": "末地"
+  },
+  "app.lab.seed-map.biome.frozen-ocean": {
+    "message": "冻洋"
+  },
+  "app.lab.seed-map.biome.frozen-river": {
+    "message": "冻河"
+  },
+  "app.lab.seed-map.biome.snowy-plains": {
+    "message": "雪原"
+  },
+  "app.lab.seed-map.biome.mushroom-fields": {
+    "message": "蘑菇岛"
+  },
+  "app.lab.seed-map.biome.beach": {
+    "message": "沙滩"
+  },
+  "app.lab.seed-map.biome.jungle": {
+    "message": "丛林"
+  },
+  "app.lab.seed-map.biome.sparse-jungle": {
+    "message": "稀疏丛林"
+  },
+  "app.lab.seed-map.biome.deep-ocean": {
+    "message": "深海"
+  },
+  "app.lab.seed-map.biome.stony-shore": {
+    "message": "石岸"
+  },
+  "app.lab.seed-map.biome.snowy-beach": {
+    "message": "雪滩"
+  },
+  "app.lab.seed-map.biome.birch-forest": {
+    "message": "白桦林"
+  },
+  "app.lab.seed-map.biome.dark-forest": {
+    "message": "黑森林"
+  },
+  "app.lab.seed-map.biome.snowy-taiga": {
+    "message": "雪原针叶林"
+  },
+  "app.lab.seed-map.biome.old-growth-pine-taiga": {
+    "message": "原始松木针叶林"
+  },
+  "app.lab.seed-map.biome.windswept-forest": {
+    "message": "风袭森林"
+  },
+  "app.lab.seed-map.biome.savanna": {
+    "message": "热带草原"
+  },
+  "app.lab.seed-map.biome.savanna-plateau": {
+    "message": "高原草原"
+  },
+  "app.lab.seed-map.biome.badlands": {
+    "message": "恶地"
+  },
+  "app.lab.seed-map.biome.wooded-badlands": {
+    "message": "疏林恶地"
+  },
+  "app.lab.seed-map.biome.small-end-islands": {
+    "message": "末地小型岛屿"
+  },
+  "app.lab.seed-map.biome.end-midlands": {
+    "message": "末地中部之地"
+  },
+  "app.lab.seed-map.biome.end-highlands": {
+    "message": "末地高地"
+  },
+  "app.lab.seed-map.biome.end-barrens": {
+    "message": "末地荒地"
+  },
+  "app.lab.seed-map.biome.warm-ocean": {
+    "message": "暖水海洋"
+  },
+  "app.lab.seed-map.biome.lukewarm-ocean": {
+    "message": "温水海洋"
+  },
+  "app.lab.seed-map.biome.cold-ocean": {
+    "message": "冷水海洋"
+  },
+  "app.lab.seed-map.biome.deep-lukewarm-ocean": {
+    "message": "深海温水海洋"
+  },
+  "app.lab.seed-map.biome.deep-cold-ocean": {
+    "message": "深海冷水海洋"
+  },
+  "app.lab.seed-map.biome.deep-frozen-ocean": {
+    "message": "深海冻洋"
+  },
+  "app.lab.seed-map.biome.sunflower-plains": {
+    "message": "向日葵平原"
+  },
+  "app.lab.seed-map.biome.windswept-gravelly-hills": {
+    "message": "风袭砂砾丘陵"
+  },
+  "app.lab.seed-map.biome.flower-forest": {
+    "message": "繁花森林"
+  },
+  "app.lab.seed-map.biome.ice-spikes": {
+    "message": "冰刺之地"
+  },
+  "app.lab.seed-map.biome.old-growth-birch-forest": {
+    "message": "原始白桦林"
+  },
+  "app.lab.seed-map.biome.old-growth-spruce-taiga": {
+    "message": "原始云杉针叶林"
+  },
+  "app.lab.seed-map.biome.windswept-savanna": {
+    "message": "风袭热带草原"
+  },
+  "app.lab.seed-map.biome.eroded-badlands": {
+    "message": "被侵蚀的恶地"
+  },
+  "app.lab.seed-map.biome.bamboo-jungle": {
+    "message": "竹林"
+  },
+  "app.lab.seed-map.biome.soul-sand-valley": {
+    "message": "灵魂沙峡谷"
+  },
+  "app.lab.seed-map.biome.crimson-forest": {
+    "message": "绯红森林"
+  },
+  "app.lab.seed-map.biome.warped-forest": {
+    "message": "诡异森林"
+  },
+  "app.lab.seed-map.biome.basalt-deltas": {
+    "message": "玄武岩三角洲"
+  },
+  "app.lab.seed-map.biome.dripstone-caves": {
+    "message": "溶洞"
+  },
+  "app.lab.seed-map.biome.lush-caves": {
+    "message": "繁茂洞穴"
+  },
+  "app.lab.seed-map.biome.meadow": {
+    "message": "草甸"
+  },
+  "app.lab.seed-map.biome.grove": {
+    "message": "雪林"
+  },
+  "app.lab.seed-map.biome.snowy-slopes": {
+    "message": "雪坡"
+  },
+  "app.lab.seed-map.biome.jagged-peaks": {
+    "message": "尖峭山峰"
+  },
+  "app.lab.seed-map.biome.frozen-peaks": {
+    "message": "冰封山峰"
+  },
+  "app.lab.seed-map.biome.stony-peaks": {
+    "message": "裸岩山峰"
+  },
+  "app.lab.seed-map.biome.deep-dark": {
+    "message": "深暗之域"
+  },
+  "app.lab.seed-map.biome.mangrove-swamp": {
+    "message": "红树林沼泽"
+  },
+  "app.lab.seed-map.biome.cherry-grove": {
+    "message": "樱花树林"
+  },
+  "app.lab.seed-map.biome.pale-garden": {
+    "message": "苍白之园"
+  },
+  "app.lab.seed-map.biome.sulfur-caves": {
+    "message": "硫磺洞穴"
+  },
   "app.lab.seed-map.biome-highlight": {
     "message": "群系高亮"
   },
@@ -5819,9 +6020,6 @@
   "app.onboarding.action.click-lab": {
     "message": "点击实验室，继续"
   },
-  "app.onboarding.action.click-language-tab": {
-    "message": "打开语言与翻译，继续"
-  },
   "app.onboarding.action.click-library": {
     "message": "点击实例库，继续"
   },
@@ -6019,9 +6217,6 @@
   },
   "app.onboarding.language.description": {
     "message": "在这里切换启动器界面语言，或保留「系统语言」。项目页内容翻译也在这一页配置。"
-  },
-  "app.onboarding.language.select-description": {
-    "message": "可选择「系统语言」继续跟随本机，或指定一种语言。若现在更改，启动器会自动重启以完整生效。"
   },
   "app.onboarding.language.title": {
     "message": "说你的语言"
@@ -6310,9 +6505,6 @@
   },
   "app.servers.card.type": {
     "message": "{type} · {version}"
-  },
-  "app.servers.console.command-echo": {
-    "message": "> {command}"
   },
   "app.servers.console.forge-command-placeholder": {
     "message": "发送命令，支持 Tab 补全"
@@ -6712,6 +6904,9 @@
   },
   "app.servers.settings.memory": {
     "message": "内存"
+  },
+  "app.servers.settings.memory-mb": {
+    "message": "内存 (MB)"
   },
   "app.servers.settings.name": {
     "message": "服务器名称"
@@ -7919,9 +8114,6 @@
   "app.settings.updates.checking": {
     "message": "正在检查更新……"
   },
-  "app.settings.updates.cnb": {
-    "message": "CNB 渠道"
-  },
   "app.settings.updates.current-version": {
     "message": "当前版本 {version}"
   },
@@ -7933,9 +8125,6 @@
   },
   "app.settings.updates.latest-version-loading": {
     "message": "正在获取"
-  },
-  "app.settings.updates.description": {
-    "message": "选择 Axolotl 检查启动器更新的渠道。"
   },
   "app.settings.updates.disabled": {
     "message": "此构建已禁用更新功能。"
@@ -7951,12 +8140,6 @@
   },
   "app.settings.updates.immediate-fetch.beta-description": {
     "message": "Beta 更新始终立即可用。"
-  },
-  "app.settings.updates.github": {
-    "message": "GitHub 渠道"
-  },
-  "app.settings.updates.miawa": {
-    "message": "柠泽资源站"
   },
   "app.settings.updates.offline": {
     "message": "请连接到互联网后检查更新。"
@@ -8390,9 +8573,6 @@
   "app.update-popup.body.download-complete": {
     "message": "Axolotl Launcher v{version} 更新已下载完成！立即重启更新，或退出时自动安装。"
   },
-  "app.update-popup.body.linux": {
-    "message": "Axolotl Launcher v{version} 现已发布。请使用你的软件包管理器进行更新，获取最新功能与修复！"
-  },
   "app.update-popup.body.metered": {
     "message": "Axolotl Launcher v{version} 现已发布！由于你正在使用按流量计费的网络，该更新未自动下载。"
   },
@@ -8401,9 +8581,6 @@
   },
   "app.update-popup.download": {
     "message": "下载（{size}）"
-  },
-  "app.update-popup.apt-update": {
-    "message": "更新"
   },
   "app.update-popup.download-complete": {
     "message": "下载完成"

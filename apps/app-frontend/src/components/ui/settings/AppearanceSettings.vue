@@ -19,9 +19,9 @@ import {
 	useVIntl,
 } from '@modrinth/ui'
 import { convertFileSrc, invoke } from '@tauri-apps/api/core'
+import { appDataDir, join } from '@tauri-apps/api/path'
 import type { DragDropEvent } from '@tauri-apps/api/webview'
 import { getCurrentWebview } from '@tauri-apps/api/webview'
-import { appDataDir, join } from '@tauri-apps/api/path'
 import { open } from '@tauri-apps/plugin-dialog'
 import { exists, mkdir, readFile, remove, writeFile } from '@tauri-apps/plugin-fs'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
@@ -838,9 +838,7 @@ watch(
 					ref="backgroundPreviewRef"
 					class="group relative h-44 cursor-pointer overflow-hidden rounded-lg border border-solid transition-colors"
 					:class="
-						isBackgroundDragActive
-							? 'border-brand bg-surface-2'
-							: 'border-surface-4 bg-surface-1'
+						isBackgroundDragActive ? 'border-brand bg-surface-2' : 'border-surface-4 bg-surface-1'
 					"
 					role="button"
 					tabindex="0"

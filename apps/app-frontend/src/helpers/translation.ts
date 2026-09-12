@@ -175,11 +175,7 @@ export async function getGoogleIpPoolSize(): Promise<number> {
 }
 
 export type TranslationErrorKind =
-	| 'rate-limited'
-	| 'authentication'
-	| 'content-too-long'
-	| 'network'
-	| 'provider'
+	'rate-limited' | 'authentication' | 'content-too-long' | 'network' | 'provider'
 
 function translationErrorMessage(error: unknown): string {
 	if (error instanceof Error) return error.message

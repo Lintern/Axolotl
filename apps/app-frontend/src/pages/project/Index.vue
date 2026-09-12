@@ -408,6 +408,7 @@ import {
 	PlusIcon,
 	ReportIcon,
 	SearchIcon,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by temporarily commented start-server button
 	ServerIcon,
 	SpinnerIcon,
 	StopCircleIcon,
@@ -592,7 +593,7 @@ const messages = defineMessages({
 	favoritesLoading: {
 		id: 'app.content-favorites.loading',
 		defaultMessage: 'Updating favorites…',
-},
+	},
 	viewDependents: {
 		id: 'project.actions.view-dependents',
 		defaultMessage: 'View dependents',
@@ -644,6 +645,8 @@ const favoriteSaved = computed(() =>
 	data.value ? contentFavorites.isFavorite('modrinth', data.value.id) : false,
 )
 
+// Used by the temporarily commented start-server button.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const serverCapableModpack = computed(
 	() => data.value?.project_type === 'modpack' && data.value.server_side !== 'unsupported',
 )

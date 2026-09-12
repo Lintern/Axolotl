@@ -190,11 +190,7 @@ import Avatar from '../base/Avatar.vue'
 import ButtonStyled from '../base/ButtonStyled.vue'
 
 type NotificationToastType =
-	| 'friend-request'
-	| 'server-invite'
-	| 'instance-invite'
-	| 'instance-download'
-	| 'instance-ready'
+	'friend-request' | 'server-invite' | 'instance-invite' | 'instance-download' | 'instance-ready'
 
 const props = withDefaults(
 	defineProps<{

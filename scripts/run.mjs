@@ -14,7 +14,12 @@ if (!scriptName) {
 
 const scriptPath = join(__dirname, `${scriptName}.ts`)
 
-const child = spawn('pnpx', ['tsx', scriptPath, ...args], {
+// Pass a single shell string so Node does not warn about unescaped args with shell:true.
+const quote = (value) =>
+	/[\s"%]/.test(value) ? `"${String(value).replace(/"/g, '\\"')}"` : String(value)
+const command = ['pnpx', 'tsx', scriptPath, ...args].map(quote).join(' ')
+
+const child = spawn(command, {
 	stdio: 'inherit',
 	shell: true,
 })

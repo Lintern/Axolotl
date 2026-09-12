@@ -772,7 +772,9 @@ onMounted(async () => {
 				</button>
 
 				<div v-if="enabledProviderItems.length" class="flex flex-none flex-col gap-1">
-					<p class="m-0 flex items-center justify-between px-2 pb-1 pt-2 text-xs font-semibold text-secondary">
+					<p
+						class="m-0 flex items-center justify-between px-2 pb-1 pt-2 text-xs font-semibold text-secondary"
+					>
 						<span>{{ formatMessage(messages.enabledProviders) }}</span>
 						<span>{{ enabledProviderItems.length }}</span>
 					</p>
@@ -793,7 +795,9 @@ onMounted(async () => {
 				</div>
 
 				<div v-if="sponsoredProviderItems.length" class="flex flex-none flex-col gap-1">
-					<p class="m-0 flex items-center justify-between px-2 pb-1 pt-2 text-xs font-semibold text-secondary">
+					<p
+						class="m-0 flex items-center justify-between px-2 pb-1 pt-2 text-xs font-semibold text-secondary"
+					>
 						<span>{{ formatMessage(messages.sponsoredProviders) }}</span>
 						<span>{{ sponsoredProviderItems.length }}</span>
 					</p>
@@ -814,7 +818,9 @@ onMounted(async () => {
 				</div>
 
 				<div v-if="disabledProviderItems.length" class="flex flex-none flex-col gap-1">
-					<p class="m-0 flex items-center justify-between px-2 pb-1 pt-2 text-xs font-semibold text-secondary">
+					<p
+						class="m-0 flex items-center justify-between px-2 pb-1 pt-2 text-xs font-semibold text-secondary"
+					>
 						<span>{{ formatMessage(messages.disabledProviders) }}</span>
 						<span>{{ disabledProviderItems.length }}</span>
 					</p>
@@ -894,7 +900,9 @@ onMounted(async () => {
 								{{ providerDescription(definition.id) }}
 							</span>
 						</button>
-						<div class="mt-auto flex min-h-11 items-center justify-between gap-3 bg-transparent px-4 text-xs font-semibold text-secondary">
+						<div
+							class="mt-auto flex min-h-11 items-center justify-between gap-3 bg-transparent px-4 text-xs font-semibold text-secondary"
+						>
 							<span>
 								<span class="capitalize">{{ definition.protocol }}</span>
 								·
@@ -942,7 +950,9 @@ onMounted(async () => {
 								{{ providerDescription(definition.id) }}
 							</span>
 						</button>
-						<div class="mt-auto flex min-h-11 items-center justify-between gap-3 bg-transparent px-4 text-xs font-semibold text-secondary">
+						<div
+							class="mt-auto flex min-h-11 items-center justify-between gap-3 bg-transparent px-4 text-xs font-semibold text-secondary"
+						>
 							<span>
 								<span class="capitalize">{{ definition.protocol }}</span>
 								·
@@ -987,7 +997,9 @@ onMounted(async () => {
 								{{ providerDescription(definition.id) }}
 							</span>
 						</button>
-						<div class="mt-auto flex min-h-11 items-center justify-between gap-3 bg-transparent px-4 text-xs font-semibold text-secondary">
+						<div
+							class="mt-auto flex min-h-11 items-center justify-between gap-3 bg-transparent px-4 text-xs font-semibold text-secondary"
+						>
 							<span>
 								<span class="capitalize">{{ definition.protocol }}</span>
 								·

@@ -15,6 +15,7 @@ export type SettingsCategoryId =
 	| 'updates'
 	| 'about'
 	| 'logs'
+	| 'reset-export'
 	| 'feature-flags'
 
 export type SettingsGroupId = 'launcher' | 'game' | 'data-privacy' | 'support' | 'developer'
@@ -163,6 +164,15 @@ export const settingsCategoryDefinitions: SettingsCategoryDefinition[] = [
 		}),
 		group: 'support',
 		onboardingId: 'settings-tab-logs',
+	},
+	{
+		id: 'reset-export',
+		name: defineMessage({
+			id: 'app.settings.tabs.reset-export',
+			defaultMessage: 'Reset & export',
+		}),
+		group: 'support',
+		onboardingId: 'settings-tab-reset-export',
 	},
 	{
 		id: 'feature-flags',

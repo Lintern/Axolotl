@@ -7247,6 +7247,96 @@
   "app.settings.privacy.telemetry-description": {
     "message": "发送匿名每日活跃信号以优化使用统计。绝不上传 Minecraft 日志或账户凭据。"
   },
+  "app.settings.reset.applying": {
+    "message": "正在恢复默认值……"
+  },
+  "app.settings.reset.back": {
+    "message": "返回"
+  },
+  "app.settings.reset.cancel": {
+    "message": "取消"
+  },
+  "app.settings.reset.category": {
+    "message": "设置页"
+  },
+  "app.settings.reset.confirm": {
+    "message": "恢复默认值"
+  },
+  "app.settings.reset.confirm.body": {
+    "message": "所选设置将恢复为出厂默认值。不会删除实例文件、账户或下载内容。"
+  },
+  "app.settings.reset.confirm.title": {
+    "message": "确认重置这些设置？"
+  },
+  "app.settings.reset.continue": {
+    "message": "继续"
+  },
+  "app.settings.reset.description": {
+    "message": "可按设置页、分组或全部，将启动器设置恢复为默认值。若以后可能需要还原，请先导出备份。"
+  },
+  "app.settings.reset.done": {
+    "message": "完成"
+  },
+  "app.settings.reset.export": {
+    "message": "导出当前设置"
+  },
+  "app.settings.reset.export.hint": {
+    "message": "将当前启动器设置保存为 JSON 快照。"
+  },
+  "app.settings.reset.failed.title": {
+    "message": "重置失败"
+  },
+  "app.settings.reset.field-count": {
+    "message": "{count, plural, other {将重置 # 项设置}}"
+  },
+  "app.settings.reset.group": {
+    "message": "分组"
+  },
+  "app.settings.reset.leave": {
+    "message": "离开"
+  },
+  "app.settings.reset.leave.body": {
+    "message": "已选择重置范围，但尚未执行。"
+  },
+  "app.settings.reset.leave.stay": {
+    "message": "留下"
+  },
+  "app.settings.reset.leave.title": {
+    "message": "未重置就离开？"
+  },
+  "app.settings.reset.scope": {
+    "message": "重置范围"
+  },
+  "app.settings.reset.scope.all": {
+    "message": "全部设置"
+  },
+  "app.settings.reset.scope.category": {
+    "message": "单个设置页"
+  },
+  "app.settings.reset.scope.group": {
+    "message": "单个设置分组"
+  },
+  "app.settings.reset.step.applying": {
+    "message": "正在应用重置"
+  },
+  "app.settings.reset.step.confirm": {
+    "message": "确认重置"
+  },
+  "app.settings.reset.step.result": {
+    "message": "结果"
+  },
+  "app.settings.reset.step.select": {
+    "message": "选择要重置的内容"
+  },
+  "app.settings.reset.success.body": {
+    "message": "所选设置已恢复为默认值。"
+  },
+  "app.settings.reset.success.title": {
+    "message": "设置已重置"
+  },
+  "app.settings.reset.title": {
+    "message": "重置与导出"
+  },
   "app.settings.resources.app-cache": {
     "message": "应用缓存"
   },
@@ -7741,6 +7831,9 @@
   },
   "app.settings.tabs.logs": {
     "message": "日志与诊断"
+  },
+  "app.settings.tabs.reset-export": {
+    "message": "重置与导出"
   },
   "app.settings.tabs.network-multiplayer": {
     "message": "网络与多人游戏"

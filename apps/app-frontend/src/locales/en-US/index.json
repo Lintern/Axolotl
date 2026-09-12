@@ -7256,6 +7256,96 @@
   "app.settings.privacy.telemetry-description": {
     "message": "Send one anonymous daily activity signal to improve usage statistics. Minecraft logs and account credentials are never uploaded."
   },
+  "app.settings.reset.applying": {
+    "message": "Restoring defaults…"
+  },
+  "app.settings.reset.back": {
+    "message": "Back"
+  },
+  "app.settings.reset.cancel": {
+    "message": "Cancel"
+  },
+  "app.settings.reset.category": {
+    "message": "Settings page"
+  },
+  "app.settings.reset.confirm": {
+    "message": "Reset to defaults"
+  },
+  "app.settings.reset.confirm.body": {
+    "message": "This restores the selected settings to their factory defaults. Instance files, accounts, and downloads are not deleted."
+  },
+  "app.settings.reset.confirm.title": {
+    "message": "Reset these settings?"
+  },
+  "app.settings.reset.continue": {
+    "message": "Continue"
+  },
+  "app.settings.reset.description": {
+    "message": "Reset launcher settings to their defaults by page, group, or everything. Export a backup first if you may want to restore values later."
+  },
+  "app.settings.reset.done": {
+    "message": "Done"
+  },
+  "app.settings.reset.export": {
+    "message": "Export current settings"
+  },
+  "app.settings.reset.export.hint": {
+    "message": "Saves a JSON snapshot of the current launcher settings."
+  },
+  "app.settings.reset.failed.title": {
+    "message": "Reset failed"
+  },
+  "app.settings.reset.field-count": {
+    "message": "{count, plural, one {# setting will be reset} other {# settings will be reset}}"
+  },
+  "app.settings.reset.group": {
+    "message": "Group"
+  },
+  "app.settings.reset.leave": {
+    "message": "Leave"
+  },
+  "app.settings.reset.leave.body": {
+    "message": "You have selected a reset scope but have not applied it yet."
+  },
+  "app.settings.reset.leave.stay": {
+    "message": "Stay"
+  },
+  "app.settings.reset.leave.title": {
+    "message": "Leave without resetting?"
+  },
+  "app.settings.reset.scope": {
+    "message": "Reset scope"
+  },
+  "app.settings.reset.scope.all": {
+    "message": "All settings"
+  },
+  "app.settings.reset.scope.category": {
+    "message": "One settings page"
+  },
+  "app.settings.reset.scope.group": {
+    "message": "One settings group"
+  },
+  "app.settings.reset.step.applying": {
+    "message": "Applying reset"
+  },
+  "app.settings.reset.step.confirm": {
+    "message": "Confirm reset"
+  },
+  "app.settings.reset.step.result": {
+    "message": "Result"
+  },
+  "app.settings.reset.step.select": {
+    "message": "Choose what to reset"
+  },
+  "app.settings.reset.success.body": {
+    "message": "The selected settings were restored to their defaults."
+  },
+  "app.settings.reset.success.title": {
+    "message": "Settings reset"
+  },
+  "app.settings.reset.title": {
+    "message": "Reset & export"
+  },
   "app.settings.resources.add-minecraft-directory": {
     "message": "Add .minecraft directory"
   },
@@ -7741,6 +7831,9 @@
   },
   "app.settings.tabs.logs": {
     "message": "Logs & diagnostics"
+  },
+  "app.settings.tabs.reset-export": {
+    "message": "Reset & export"
   },
   "app.settings.tabs.network-multiplayer": {
     "message": "Network & multiplayer"

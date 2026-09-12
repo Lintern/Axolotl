@@ -208,7 +208,19 @@ function getPageTransitionKey(route: RouteLocationNormalizedLoaded) {
 	if (typeof transitionGroup !== 'string') return route.fullPath
 
 	const routeId = route.params.id
-	return `${transitionGroup}:${Array.isArray(routeId) ? routeId.join('/') : (routeId ?? '')}`
+	if (routeId !== undefined) {
+		return `${transitionGroup}:${Array.isArray(routeId) ? routeId.join('/') : routeId}`
+	}
+
+	// Browse-style routes use :projectType instead of :id. Keying on that lets
+	// tab switches remount cleanly while query-only pagination keeps the same
+	// SPA instance (loading mask / skeleton instead of a full page transition).
+	const projectType = route.params.projectType
+	if (typeof projectType === 'string') {
+		return `${transitionGroup}:${projectType}`
+	}
+
+	return `${transitionGroup}:`
 }
 const APP_SIDEBAR_WIDTH = 300
 const credentials = ref()

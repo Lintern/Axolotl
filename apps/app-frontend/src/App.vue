@@ -2770,7 +2770,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					<AxolotlLogo class="h-full w-auto shrink-0 pointer-events-none" />
 					<span
 						v-if="isBetaBuild"
-						class="inline-flex shrink-0 rounded-full bg-[#b6e9ff] px-2 py-0.5 text-xs font-semibold leading-none text-[#005bda]"
+						class="inline-flex shrink-0 rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold leading-none text-blue-700"
 					>
 						{{ formatMessage(messages.betaBuild) }}
 					</span>

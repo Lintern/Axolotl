@@ -1236,7 +1236,7 @@ watch(
 		height: 1.25rem;
 		border-radius: 50%;
 		background: var(--color-brand);
-		border: 0.1875rem solid #ffffff;
+		border: 0.1875rem solid var(--surface-4);
 		box-shadow: var(--shadow-button);
 	}
 
@@ -1245,7 +1245,7 @@ watch(
 		height: 1.25rem;
 		border-radius: 50%;
 		background: var(--color-brand);
-		border: 0.1875rem solid #ffffff;
+		border: 0.1875rem solid var(--surface-4);
 		box-shadow: var(--shadow-button);
 	}
 }

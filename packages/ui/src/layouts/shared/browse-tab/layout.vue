@@ -5,6 +5,7 @@ import { computed, ref, toValue } from 'vue'
 
 import ButtonStyled from '#ui/components/base/ButtonStyled.vue'
 import Combobox, { type ComboboxOption } from '#ui/components/base/Combobox.vue'
+import EmptyState from '#ui/components/base/EmptyState.vue'
 import NavTabs from '#ui/components/base/NavTabs.vue'
 import Pagination from '#ui/components/base/Pagination.vue'
 import PopoutMenu from '#ui/components/base/PopoutMenu.vue'
@@ -59,6 +60,10 @@ const messages = defineMessages({
 		id: 'browse.offline',
 		defaultMessage: 'You are currently offline. Connect to the internet to browse Modrinth!',
 	},
+	offlineHeading: {
+		id: 'browse.offline.heading',
+		defaultMessage: 'No connection',
+	},
 	loadingLabel: {
 		id: 'browse.loading-results',
 		defaultMessage: 'Loading results…',
@@ -66,6 +71,18 @@ const messages = defineMessages({
 	noResults: {
 		id: 'browse.no-results',
 		defaultMessage: 'No results found for your query!',
+	},
+	noResultsHeading: {
+		id: 'browse.no-results.heading',
+		defaultMessage: 'Nothing here yet',
+	},
+	clearSearchLabel: {
+		id: 'browse.clear-search',
+		defaultMessage: 'Clear search',
+	},
+	retryLabel: {
+		id: 'browse.retry',
+		defaultMessage: 'Try again',
 	},
 	sortRelevance: { id: 'browse.sort.relevance', defaultMessage: 'Relevance' },
 	sortDownloads: { id: 'browse.sort.downloads', defaultMessage: 'Downloads' },
@@ -280,8 +297,17 @@ const skeletonCount = computed(() => {
 				/>
 			</ProjectCardList>
 		</section>
-		<section v-else-if="ctx.offline?.value && ctx.totalHits.value === 0" class="offline">
-			{{ formatMessage(messages.offline) }}
+		<section v-else-if="ctx.offline?.value && ctx.totalHits.value === 0" class="py-8">
+			<EmptyState type="offline" compact :heading="formatMessage(messages.offlineHeading)">
+				<template #description>{{ formatMessage(messages.offline) }}</template>
+				<template #actions>
+					<ButtonStyled>
+						<button type="button" @click="ctx.refreshSearch()">
+							{{ formatMessage(messages.retryLabel) }}
+						</button>
+					</ButtonStyled>
+				</template>
+			</EmptyState>
 		</section>
 		<section
 			v-else-if="
@@ -289,9 +315,22 @@ const skeletonCount = computed(() => {
 					? ctx.serverHits.value.length === 0
 					: ctx.projectHits.value.length === 0
 			"
-			class="offline"
+			class="py-8"
 		>
-			<p>{{ formatMessage(messages.noResults) }}</p>
+			<EmptyState
+				type="no-results"
+				compact
+				:heading="formatMessage(messages.noResultsHeading)"
+				:description="formatMessage(messages.noResults)"
+			>
+				<template v-if="ctx.query.value" #actions>
+					<ButtonStyled>
+						<button type="button" @click="ctx.clearSearch()">
+							{{ formatMessage(messages.clearSearchLabel) }}
+						</button>
+					</ButtonStyled>
+				</template>
+			</EmptyState>
 		</section>
 
 		<ProjectCardList v-else :layout="ctx.effectiveLayout.value">

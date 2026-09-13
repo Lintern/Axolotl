@@ -1,5 +1,5 @@
-use super::*;
 use super::super::model::InstallContentBatchItem;
+use super::*;
 
 pub(super) async fn run_request(
     job_id: Uuid,
@@ -555,9 +555,7 @@ pub(super) async fn run_request(
             Ok(InstallExecutionOutcome::Completed(Some(instance_id)))
         }
         InstallRequest::InstallContentBatch {
-            instance_id,
-            items,
-            ..
+            instance_id, items, ..
         } => {
             update_progress(
                 job_id,
@@ -567,7 +565,8 @@ pub(super) async fn run_request(
                 InstallPhaseDetails::Empty,
             )
             .await?;
-            let reporter = InstallProgressReporter::new(job_id, job_state.clone());
+            let reporter =
+                InstallProgressReporter::new(job_id, job_state.clone());
             let results = futures::stream::iter(items)
                 .map(|item| {
                     let reporter = reporter.clone();

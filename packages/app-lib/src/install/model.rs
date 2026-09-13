@@ -1640,7 +1640,9 @@ impl InstallRequest {
                 }
             }
             Self::InstallContentBatch { instance_id, .. } => {
-                InstallTarget::ExistingInstance { instance_id: instance_id.clone() }
+                InstallTarget::ExistingInstance {
+                    instance_id: instance_id.clone(),
+                }
             }
             _ => InstallTarget::NewInstance { instance_id: None },
         }
@@ -2444,9 +2446,17 @@ impl InstallJobState {
                 InstallJobProvider::Modrinth
             }
             InstallRequest::InstallContentBatch { items, .. } => {
-                if items.iter().all(|item| matches!(item, InstallContentBatchItem::Modrinth { .. })) {
+                if items.iter().all(|item| {
+                    matches!(item, InstallContentBatchItem::Modrinth { .. })
+                }) {
                     InstallJobProvider::Modrinth
-                } else if items.iter().all(|item| matches!(item, InstallContentBatchItem::CurseForge { .. } | InstallContentBatchItem::CurseForgeWorld { .. })) {
+                } else if items.iter().all(|item| {
+                    matches!(
+                        item,
+                        InstallContentBatchItem::CurseForge { .. }
+                            | InstallContentBatchItem::CurseForgeWorld { .. }
+                    )
+                }) {
                     InstallJobProvider::CurseForge
                 } else {
                     InstallJobProvider::Application

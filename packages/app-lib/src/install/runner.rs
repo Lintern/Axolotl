@@ -1,15 +1,15 @@
 use super::events::{InstallProgressReporter, emit_install_job};
 use super::model::{
-    InstallContentBatchItem,
-    InstallCleanup, InstallContinuationState, InstallErrorContext,
-    InstallErrorView, InstallJavaStep, InstallJobDisplay, InstallJobEventKind,
-    InstallJobSnapshot, InstallJobState, InstallJobStatus, InstallPauseReason,
-    InstallPhaseDetails, InstallPhaseId, InstallPostInstallEdit,
-    InstallProgress, InstallRequest, InstallRollbackState, InstallTarget,
-    InstanceUpgradeCompatibilityWarning, InstanceUpgradeDisplayNames,
-    InstanceUpgradeExecution, InstanceUpgradeExternalChange,
-    InstanceUpgradeExternalChangeKind, InstanceUpgradeResult,
-    InstanceUpgradeWatchBaseline, SharedUpgradeMode, initial_phase_for_request,
+    InstallCleanup, InstallContentBatchItem, InstallContinuationState,
+    InstallErrorContext, InstallErrorView, InstallJavaStep, InstallJobDisplay,
+    InstallJobEventKind, InstallJobSnapshot, InstallJobState, InstallJobStatus,
+    InstallPauseReason, InstallPhaseDetails, InstallPhaseId,
+    InstallPostInstallEdit, InstallProgress, InstallRequest,
+    InstallRollbackState, InstallTarget, InstanceUpgradeCompatibilityWarning,
+    InstanceUpgradeDisplayNames, InstanceUpgradeExecution,
+    InstanceUpgradeExternalChange, InstanceUpgradeExternalChangeKind,
+    InstanceUpgradeResult, InstanceUpgradeWatchBaseline, SharedUpgradeMode,
+    initial_phase_for_request,
 };
 use super::{diagnostics, recovery, store};
 use crate::ErrorKind;

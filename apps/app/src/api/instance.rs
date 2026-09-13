@@ -13,8 +13,10 @@ use theseus::data::{
     InstanceInstallTarget, InstanceLaunchOverridesPatch,
     InstanceLink as CoreInstanceLink, InstanceMetadata, LinkedModpackInfo,
 };
-use theseus::instance::{InstallContentBatchRequest, InstallProjectWithDependenciesRequest};
 use theseus::instance::QuickPlayType;
+use theseus::instance::{
+    InstallContentBatchRequest, InstallProjectWithDependenciesRequest,
+};
 use theseus::pack::import::ImportLauncherType;
 use theseus::prelude::*;
 use theseus::server_address::ServerAddress;

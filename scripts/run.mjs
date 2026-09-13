@@ -14,14 +14,16 @@ if (!scriptName) {
 
 const scriptPath = join(__dirname, `${scriptName}.ts`)
 
-// Pass a single shell string so Node does not warn about unescaped args with shell:true.
-const quote = (value) =>
-	/[\s"%]/.test(value) ? `"${String(value).replace(/"/g, '\\"')}"` : String(value)
-const command = ['pnpx', 'tsx', scriptPath, ...args].map(quote).join(' ')
-
-const child = spawn(command, {
+// Keep arguments out of a shell so metacharacters cannot become commands.
+const pnpx =
+	process.platform === 'win32'
+		? join(dirname(process.execPath), 'node_modules', 'corepack', 'dist', 'pnpx.js')
+		: 'pnpx'
+const command = process.platform === 'win32' ? process.execPath : pnpx
+const commandArgs =
+	process.platform === 'win32' ? [pnpx, 'tsx', scriptPath, ...args] : ['tsx', scriptPath, ...args]
+const child = spawn(command, commandArgs, {
 	stdio: 'inherit',
-	shell: true,
 })
 
 child.on('exit', (code) => {

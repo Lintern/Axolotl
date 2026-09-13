@@ -215,7 +215,7 @@ type LegacyMirrorSettings = {
 
 function normalizeDownloadSettings(settings: AppSettings & LegacyMirrorSettings): AppSettings {
 	settings.close_behavior ??= 'ask'
-	settings.log_level ??= 'trace'
+	settings.log_level ??= 'info'
 	const hasLegacySettings =
 		typeof settings.use_minecraft_mirror === 'boolean' &&
 		typeof settings.use_modrinth_mirror === 'boolean' &&

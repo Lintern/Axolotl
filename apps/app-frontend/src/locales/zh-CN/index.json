@@ -7431,7 +7431,10 @@
     "message": "ERROR"
   },
   "app.settings.logs.level.hint": {
-    "message": "TRACE 会记录全部内容且为默认值，便于反馈问题时保留完整细节；等级越高，日志文件越小。"
+    "message": "默认使用 INFO。DEBUG 和 TRACE 会记录更多细节，同时生成更大的日志文件。"
+  },
+  "app.settings.logs.level.hint-beta": {
+    "message": "Beta 默认使用 DEBUG，且仅允许选择 DEBUG 或 TRACE，以便诊断时保留足够细节。"
   },
   "app.settings.logs.level.info": {
     "message": "INFO"

@@ -9,7 +9,7 @@ import {
 } from '@modrinth/ui'
 import { computed, ref, watch } from 'vue'
 
-import { get, set } from '@/helpers/settings.ts'
+import { get, getUpdateChannel, set } from '@/helpers/settings.ts'
 import { showLauncherLogsFolder } from '@/helpers/utils'
 
 import LogExportModal from './LogExportModal.vue'
@@ -19,7 +19,9 @@ import SettingsSection from './SettingsSection.vue'
 const { formatMessage } = useVIntl()
 const { handleError } = injectNotificationManager()
 
-const settings = ref(await get())
+const [initialSettings, updateChannel] = await Promise.all([get(), getUpdateChannel()])
+const settings = ref(initialSettings)
+const isBeta = updateChannel === 'beta'
 const exportModal = ref<InstanceType<typeof LogExportModal>>()
 
 const messages = defineMessages({
@@ -31,7 +33,12 @@ const messages = defineMessages({
 	levelHint: {
 		id: 'app.settings.logs.level.hint',
 		defaultMessage:
-			'Trace captures everything and is the default, so reports keep their full detail. Higher levels write smaller files.',
+			'Info is the default. Debug and Trace record more detail and create larger log files.',
+	},
+	levelHintBeta: {
+		id: 'app.settings.logs.level.hint-beta',
+		defaultMessage:
+			'Beta uses Debug by default and only allows Debug or Trace so diagnostics retain enough detail.',
 	},
 	levelError: { id: 'app.settings.logs.level.error', defaultMessage: 'Error' },
 	levelWarn: { id: 'app.settings.logs.level.warn', defaultMessage: 'Warning' },
@@ -57,13 +64,24 @@ const messages = defineMessages({
 	openFolder: { id: 'app.settings.logs.open-folder', defaultMessage: 'Open logs folder' },
 })
 
-const logLevelOptions = computed(() => [
-	{ value: 'error', label: formatMessage(messages.levelError) },
-	{ value: 'warn', label: formatMessage(messages.levelWarn) },
-	{ value: 'info', label: formatMessage(messages.levelInfo) },
-	{ value: 'debug', label: formatMessage(messages.levelDebug) },
-	{ value: 'trace', label: formatMessage(messages.levelTrace) },
-])
+const logLevelOptions = computed(() => {
+	const verboseOptions = [
+		{ value: 'debug', label: formatMessage(messages.levelDebug) },
+		{ value: 'trace', label: formatMessage(messages.levelTrace) },
+	]
+	if (isBeta) return verboseOptions
+
+	return [
+		{ value: 'error', label: formatMessage(messages.levelError) },
+		{ value: 'warn', label: formatMessage(messages.levelWarn) },
+		{ value: 'info', label: formatMessage(messages.levelInfo) },
+		...verboseOptions,
+	]
+})
+
+const levelHint = computed(() =>
+	formatMessage(isBeta ? messages.levelHintBeta : messages.levelHint),
+)
 
 watch(
 	settings,
@@ -101,7 +119,7 @@ async function openLogsFolder() {
 				<template #label>
 					<span>{{ formatMessage(messages.levelTitle) }}</span>
 				</template>
-				<template #description>{{ formatMessage(messages.levelHint) }}</template>
+				<template #description>{{ levelHint }}</template>
 				<template #control>
 					<div class="w-full">
 						<Combobox

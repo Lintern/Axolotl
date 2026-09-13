@@ -7509,7 +7509,10 @@
     "message": "Error"
   },
   "app.settings.logs.level.hint": {
-    "message": "Trace captures everything and is the default, so reports keep their full detail. Higher levels write smaller files."
+    "message": "Info is the default. Debug and Trace record more detail and create larger log files."
+  },
+  "app.settings.logs.level.hint-beta": {
+    "message": "Beta uses Debug by default and only allows Debug or Trace so diagnostics retain enough detail."
   },
   "app.settings.logs.level.info": {
     "message": "Info"

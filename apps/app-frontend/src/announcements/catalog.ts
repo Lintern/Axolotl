@@ -33,6 +33,28 @@ export const ANNOUNCEMENT_CHANGE_TYPES: readonly AnnouncementChangeType[] = [
 
 export const launcherAnnouncements: readonly LauncherAnnouncement[] = [
 	{
+		id: 'launcher-1.9.7-beta.7',
+		version: '1.9.7-beta.7',
+		publishedAt: '2026-09-13',
+		title: {
+			'en-US': 'Axolotl Launcher 1.9.7-beta.7',
+			'zh-CN': 'Axolotl Launcher 1.9.7-beta.7',
+		},
+		changes: {
+			fixed: [
+				{
+					'en-US':
+						'Fixed launcher-wide stuttering during high-speed downloads, including while browsing other pages.',
+					'zh-CN': '修复高速下载时整个启动器周期性卡顿、切换到其他页面仍受影响的问题。',
+				},
+				{
+					'zh-CN': '修复下载时速度计算可能偏高的问题。',
+					'en-US': 'Fixed an issue where download speed calculations could be overestimated.',
+				},
+			],
+		},
+	},
+	{
 		id: 'launcher-1.9.6-beta.6',
 		version: '1.9.6-beta.6',
 		publishedAt: '2026-09-13',

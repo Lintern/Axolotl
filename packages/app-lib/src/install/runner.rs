@@ -1,5 +1,6 @@
 use super::events::{InstallProgressReporter, emit_install_job};
 use super::model::{
+    InstallContentBatchItem,
     InstallCleanup, InstallContinuationState, InstallErrorContext,
     InstallErrorView, InstallJavaStep, InstallJobDisplay, InstallJobEventKind,
     InstallJobSnapshot, InstallJobState, InstallJobStatus, InstallPauseReason,
@@ -276,6 +277,21 @@ pub async fn install_curseforge_world(
 ) -> crate::Result<InstallJobSnapshot> {
     start(InstallRequest::InstallCurseForgeWorld {
         request,
+        display_title,
+        display_icon,
+    })
+    .await
+}
+
+pub async fn install_content_batch(
+    instance_id: String,
+    items: Vec<InstallContentBatchItem>,
+    display_title: String,
+    display_icon: Option<String>,
+) -> crate::Result<InstallJobSnapshot> {
+    start(InstallRequest::InstallContentBatch {
+        instance_id,
+        items,
         display_title,
         display_icon,
     })

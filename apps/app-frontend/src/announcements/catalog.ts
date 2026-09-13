@@ -33,12 +33,12 @@ export const ANNOUNCEMENT_CHANGE_TYPES: readonly AnnouncementChangeType[] = [
 
 export const launcherAnnouncements: readonly LauncherAnnouncement[] = [
 	{
-		id: 'launcher-1.9.7-beta.7',
-		version: '1.9.7-beta.7',
+		id: 'launcher-1.9.6-beta.7',
+		version: '1.9.6-beta.7',
 		publishedAt: '2026-09-13',
 		title: {
-			'en-US': 'Axolotl Launcher 1.9.7-beta.7',
-			'zh-CN': 'Axolotl Launcher 1.9.7-beta.7',
+			'en-US': 'Axolotl Launcher 1.9.6-beta.7',
+			'zh-CN': 'Axolotl Launcher 1.9.6-beta.7',
 		},
 		changes: {
 			fixed: [

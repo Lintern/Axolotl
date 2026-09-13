@@ -17,8 +17,8 @@ import { inject, nextTick, ref, watch } from 'vue'
 import UpdateAnnouncementHistory from '@/components/ui/announcement/UpdateAnnouncementHistory.vue'
 import {
 	betaDatabaseExists,
-	copyReleaseDatabaseToBeta,
 	copyDatabaseBetweenChannels,
+	copyReleaseDatabaseToBeta,
 	getCurrentAppDatabasePath,
 	getUpdateChannel,
 	getUpdatePreferences,
@@ -454,7 +454,7 @@ async function confirmDatabaseOperation() {
 						: formatMessage(messages.betaDatabase),
 			}),
 		})
-	} catch (error) {
+	} catch {
 		handleError(
 			new Error(
 				targetChannel === activeChannel

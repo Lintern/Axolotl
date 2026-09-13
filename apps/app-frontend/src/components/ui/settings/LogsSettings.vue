@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { FolderOpenIcon, UploadIcon } from '@modrinth/assets'
-import { ButtonStyled, Combobox, defineMessages, injectNotificationManager, useVIntl } from '@modrinth/ui'
+import {
+	ButtonStyled,
+	Combobox,
+	defineMessages,
+	injectNotificationManager,
+	useVIntl,
+} from '@modrinth/ui'
 import { computed, ref, watch } from 'vue'
 
 import { get, set } from '@/helpers/settings.ts'
@@ -80,7 +86,11 @@ async function openLogsFolder() {
 	<div class="flex flex-col gap-6">
 		<SettingsSection>
 			<template #header>
-				<h2 id="settings-target-logs-level" tabindex="-1" class="m-0 text-lg font-semibold text-contrast">
+				<h2
+					id="settings-target-logs-level"
+					tabindex="-1"
+					class="m-0 text-lg font-semibold text-contrast"
+				>
 					{{ formatMessage(messages.levelTitle) }}
 				</h2>
 				<p class="m-0 mt-1 text-sm leading-relaxed text-secondary">
@@ -118,7 +128,11 @@ async function openLogsFolder() {
 
 		<SettingsSection>
 			<template #header>
-				<h2 id="settings-target-logs-export" tabindex="-1" class="m-0 text-lg font-semibold text-contrast">
+				<h2
+					id="settings-target-logs-export"
+					tabindex="-1"
+					class="m-0 text-lg font-semibold text-contrast"
+				>
 					{{ formatMessage(messages.exportTitle) }}
 				</h2>
 				<p class="m-0 mt-1 text-sm leading-relaxed text-secondary">

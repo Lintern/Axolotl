@@ -682,7 +682,7 @@ watch(
 						}}</span>
 						<CheckIcon
 							v-if="settings.accent_color === accentColor.value"
-							class="absolute end-1.5 top-1.5 hidden size-3.5 shrink-0 @xl:block"
+							class="absolute end-2 top-1/2 hidden size-3.5 shrink-0 -translate-y-1/2 @xl:block"
 						/>
 					</button>
 					<button
@@ -729,7 +729,7 @@ watch(
 						</span>
 						<CheckIcon
 							v-if="isSystemAccent"
-							class="absolute end-1.5 top-1.5 hidden size-3.5 shrink-0 @xl:block"
+							class="absolute end-2 top-1/2 hidden size-3.5 shrink-0 -translate-y-1/2 @xl:block"
 						/>
 					</button>
 					<button
@@ -757,7 +757,7 @@ watch(
 						}}</span>
 						<CheckIcon
 							v-if="isCustomAccent"
-							class="absolute end-1.5 top-1.5 hidden size-3.5 shrink-0 @xl:block"
+							class="absolute end-2 top-1/2 hidden size-3.5 shrink-0 -translate-y-1/2 @xl:block"
 						/>
 					</button>
 				</div>

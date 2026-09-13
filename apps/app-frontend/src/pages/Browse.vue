@@ -1528,7 +1528,9 @@ function getCardActions(
 			{
 				key: 'install',
 				label: formatMessage(
-					isInstalling
+					isInstalled
+						? commonMessages.installedLabel
+						: isInstalling
 						? commonMessages.validatingLabel
 						: isSelected
 							? messages.selected
@@ -1537,10 +1539,10 @@ function getCardActions(
 								: messages.chooseInstance,
 				),
 				compactLabel:
-					!isInstalling && !isSelected && !activeInstance.value
+					!isInstalled && !isInstalling && !isSelected && !activeInstance.value
 						? formatMessage(messages.add)
 						: undefined,
-				icon: isInstalling ? SpinnerIcon : isSelected ? CheckIcon : PlusIcon,
+				icon: isInstalling ? SpinnerIcon : isSelected || isInstalled ? CheckIcon : PlusIcon,
 				iconClass: isInstalling ? 'animate-spin' : undefined,
 				disabled: isInstalled || isInstalling,
 				color: isSelected ? 'green' : 'brand',

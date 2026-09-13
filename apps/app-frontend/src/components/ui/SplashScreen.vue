@@ -107,7 +107,6 @@ loading_listener(async (e) => {
 	height: min(18rem, 45vh);
 	width: min(18rem, 45vw);
 	object-fit: contain;
-	filter: drop-shadow(0 0 2rem var(--color-brand-shadow));
 }
 
 .gradient-bg {
